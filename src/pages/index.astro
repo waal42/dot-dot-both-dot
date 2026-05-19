@@ -1,11 +1,40 @@
 ---
-import Welcome from '../components/Welcome.astro';
+// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
+import WhenWhere from '../components/WhenWhere.astro';
+import Schedule from '../components/Schedule.astro';
+import Gifts from '../components/Gifts.astro';
+import RsvpForm from '../components/RsvpForm.astro';
+import DressCode from '../components/DressCode.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Import SVG from Canva
+import { Image } from 'astro:assets';
+import fullMotif from '../assets/full-motif.svg'; // Hanka's design export
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Naše Svatba | Hanka & Filip">
+    <main class="pt-32 pb-20">
+        <header class="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center">
+
+            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter mb-8 leading-tight">Bereme se!</h1>
+            <p class="text-2xl md:text-4xl font-medium tracking-tight mb-16">Budeme rádi, když u toho budete s námi.</p>
+
+            <Image
+                src={fullMotif}
+                alt="Hanka & Filip Morse Code Motif"
+                class="w-full max-w-2xl mb-12"
+            />
+
+            <a href="#rsvp" class="mt-20 inline-flex items-center gap-3 bg-wedding-black text-wedding-white text-lg font-medium px-12 py-6 hover:bg-wedding-gray transition-colors shadow-lg border-2 border-wedding-black">
+                Potvrdit účast
+                <span class="text-wedding-gray font-bold tracking-widest">⋅⋅∸⋅</span>
+            </a>
+        </header>
+
+        <WhenWhere />
+        <Schedule />
+        <Gifts />
+        <RsvpForm />
+        <DressCode />
+    </main>
 </Layout>

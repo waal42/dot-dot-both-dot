@@ -1,0 +1,74 @@
+---
+import Navigation from './Navigation.astro';
+import { Image } from 'astro:assets';
+import morseMotif from '../assets/morse-motif.svg';
+---
+
+<header class="bg-wedding-white fixed top-0 w-full z-50 border-b border-wedding-gray/20">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+        <Image src={morseMotif} alt="H & F Morse Code" class="h-6 md:h-8 w-auto" />
+        <a href="#top" id="logo-link" class="text-2xl font-bold ml-2">Hanka & Filip</a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button
+      id="menu-toggle"
+      class="md:hidden flex flex-col gap-1.5 z-50 p-2"
+      aria-label="Toggle Menu"
+    >
+      <span class="w-7 h-1 bg-wedding-black transition-all duration-300 origin-center"></span>
+      <span class="w-7 h-1 bg-wedding-black transition-all duration-300"></span>
+      <span class="w-7 h-1 bg-wedding-black transition-all duration-300 origin-center"></span>
+    </button>
+
+    <Navigation />
+  </div>
+</header>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+  const menuSpans = menuToggle?.querySelectorAll('span');
+
+  // Smooth scroll for logo
+  const logoLink = document.getElementById('logo-link');
+  logoLink?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    // Update URL without reload
+    history.pushState(null, '', '/');
+  });
+
+  menuToggle?.addEventListener('click', () => {
+    navMenu?.classList.toggle('hidden');
+    navMenu?.classList.toggle('flex');
+
+    // Animate hamburger to X
+    if (menuSpans) {
+      menuSpans[0].classList.toggle('rotate-45');
+      menuSpans[0].classList.toggle('translate-y-2.5');
+      menuSpans[1].classList.toggle('opacity-0');
+      menuSpans[2].classList.toggle('-rotate-45');
+      menuSpans[2].classList.toggle('-translate-y-2.5');
+    }
+  });
+
+  // Close menu when clicking a link
+  const navLinks = navMenu?.querySelectorAll('a');
+  navLinks?.forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu?.classList.add('hidden');
+      navMenu?.classList.remove('flex');
+
+      if (menuSpans) {
+        menuSpans[0].classList.remove('rotate-45', 'translate-y-2.5');
+        menuSpans[1].classList.remove('opacity-0');
+        menuSpans[2].classList.remove('-rotate-45', '-translate-y-2.5');
+      }
+    });
+  });
+</script>
