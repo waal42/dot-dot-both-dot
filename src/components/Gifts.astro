@@ -1,9 +1,47 @@
-<section id="dary" class="py-24 max-w-4xl mx-auto px-6 border-t border-wedding-gray/30 scroll-mt-24">
-    <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 flex items-center justify-center gap-2">Svatební dary
-      <span class="text-xl md:text-2xl text-wedding-gray">⋅⋅∸⋅</span>
+---
+const giftInfo = {
+    title: "Svatební dary",
+    description: "Největším darem pro nás bude vaše přítomnost.",
+    secondaryDescription: "Pokud byste nás přesto chtěli obdarovat, budeme vděční za příspěvek na naši svatební cestu nebo společné bydlení.",
+    links: [
+        { label: "Náš Dárkovník", url: "https://darkovnik.cz/vase-id", icon: "🎁" }
+    ],
+    accountNumber: "123456789 / 0100"
+};
+---
+
+<section id="dary" class="py-24 max-w-4xl mx-auto px-6 scroll-mt-24">
+    <h2 class="text-4xl md:text-5xl font-bold text-center mb-20 flex items-center justify-center gap-4">
+        <span class="text-wedding-gray opacity-20 text-2xl md:text-3xl tracking-tighter">−··</span>
+        {giftInfo.title}
+        <span class="text-wedding-gray opacity-20 text-2xl md:text-3xl tracking-tighter">−·−−</span>
     </h2>
-    <div class="bg-wedding-white border-2 border-wedding-black p-10 text-center shadow-xl">
-        <p>Největším darem pro nás bude vaše přítomnost.</p>
-        <p class="text-wedding-gray mt-3 text-sm">Zde budou informace k darům a odkaz na váš Dárkovník.</p>
+
+    <div class="border border-wedding-gray/20 bg-wedding-white p-12 md:p-20 text-center shadow-sm">
+        <p class="text-2xl font-bold mb-6">{giftInfo.description}</p>
+        <p class="text-wedding-gray text-lg italic font-medium opacity-90 mb-12 max-w-xl mx-auto">
+            {giftInfo.secondaryDescription}
+        </p>
+
+        <div class="flex flex-col items-center gap-8">
+            <div class="space-y-2">
+                <p class="text-xs font-bold uppercase tracking-[0.3em] text-wedding-gray opacity-80">Číslo účtu</p>
+                <p class="text-xl font-bold tracking-widest">{giftInfo.accountNumber}</p>
+            </div>
+
+            <div class="w-12 h-px bg-wedding-gray/20"></div>
+
+            {giftInfo.links.map(link => (
+                <a
+                    href={link.url}
+                    target="_blank"
+                    class="inline-flex items-center gap-3 bg-transparent text-wedding-black text-sm font-bold px-10 py-4 border border-wedding-black hover:bg-wedding-black hover:text-wedding-white transition-all duration-300 uppercase tracking-widest group"
+                >
+                    <span>{link.icon}</span>
+                    {link.label}
+                    <span class="ml-2 text-wedding-gray opacity-30 group-hover:text-wedding-white group-hover:opacity-60 transition-all">··</span>
+                </a>
+            ))}
+        </div>
     </div>
 </section>

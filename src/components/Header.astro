@@ -1,14 +1,15 @@
 ---
 import Navigation from './Navigation.astro';
-import { Image } from 'astro:assets';
-import morseMotif from '../assets/morse-motif.svg';
 ---
 
-<header class="bg-wedding-white fixed top-0 w-full z-50 border-b border-wedding-gray/20">
+<header id="main-header" class="bg-wedding-white sticky top-0 w-full z-50 border-b border-wedding-gray/20 transition-all duration-300">
   <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-        <Image src={morseMotif} alt="H & F Morse Code" class="h-6 md:h-8 w-auto" />
-        <a href="#top" id="logo-link" class="text-2xl font-bold ml-2">Hanka & Filip</a>
+    <div class="flex items-center shrink-0">
+        <a href="#top" id="logo-link" class="flex items-center gap-4 text-xl md:text-2xl font-bold whitespace-nowrap group">
+            <span>Hanka</span>
+            <span class="text-wedding-gray opacity-30 group-hover:opacity-60 transition-opacity tracking-widest text-sm md:text-base">···· &nbsp; ·−·−</span>
+            <span>Filip</span>
+        </a>
     </div>
 
     <!-- Mobile Menu Button -->

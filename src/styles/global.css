@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-wedding-black: #000000;
-  --color-wedding-white: #ffffff;
-  --color-wedding-gray: #aaaaaa;
+  --color-wedding-black: #2c2925;
+  --color-wedding-white: #fcfaf8;
+  --color-wedding-gray: #5a544e;
   --font-sans:
     "Capsuula", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";

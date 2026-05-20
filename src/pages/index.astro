@@ -1,40 +1,75 @@
 ---
 // src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
 import WhenWhere from '../components/WhenWhere.astro';
 import Schedule from '../components/Schedule.astro';
 import Gifts from '../components/Gifts.astro';
 import RsvpForm from '../components/RsvpForm.astro';
 import DressCode from '../components/DressCode.astro';
+import AboutUs from '../components/AboutUs.astro';
 
-// Import SVG from Canva
-import { Image } from 'astro:assets';
-import fullMotif from '../assets/full-motif.svg'; // Hanka's design export
+
+// Import Assets
+import fullMotif from '../assets/full-motif.svg';
+import heroImageDesktop from '../assets/my-u-more.jpg';
+import heroImageMobile from '../assets/my-ve-vytahu.jpg';
+import morseMotif from '../assets/morse-motif.svg';
 ---
 
 <Layout title="Naše Svatba | Hanka & Filip">
-    <main class="pt-32 pb-20">
-        <header class="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center">
-
-            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter mb-8 leading-tight">Bereme se!</h1>
-            <p class="text-2xl md:text-4xl font-medium tracking-tight mb-16">Budeme rádi, když u toho budete s námi.</p>
-
-            <Image
-                src={fullMotif}
+    <!-- Hero Cover Section -->
+    <section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-wedding-black">
+        <!-- Mobile Image -->
+        <img
+            src={heroImageMobile.src}
+            alt="Hanka & Filip"
+            class="absolute inset-0 w-full h-full object-cover object-center md:hidden opacity-60"
+        />
+        <!-- Desktop Image -->
+        <img
+            src={heroImageDesktop.src}
+            alt="Hanka & Filip"
+            class="absolute inset-0 w-full h-full object-cover object-center hidden md:block opacity-60"
+        />
+        <div class="relative z-10 text-center text-wedding-white px-6 flex flex-col items-center">
+            <h2 class="text-xl md:text-2xl font-bold uppercase tracking-[0.5em] mb-12 opacity-80">Save the date</h2>
+            <img
+                src={fullMotif.src}
                 alt="Hanka & Filip Morse Code Motif"
-                class="w-full max-w-2xl mb-12"
+                class="w-full max-w-md md:max-w-xl invert opacity-100 drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]"
             />
+            <p class="text-2xl md:text-4xl font-bold tracking-tight opacity-90 mt-12">15. srpna 2026 • Šlapanice</p>
+        </div>
+        <a href="#main-header" class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 hover:opacity-100 transition-opacity">
+            <span class="text-wedding-white text-3xl">↓</span>
+        </a>
+    </section>
 
-            <a href="#rsvp" class="mt-20 inline-flex items-center gap-3 bg-wedding-black text-wedding-white text-lg font-medium px-12 py-6 hover:bg-wedding-gray transition-colors shadow-lg border-2 border-wedding-black">
+    <Header />
+
+    <main class="pb-20">
+        <header class="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center py-20">
+            <h1 class="text-6xl md:text-8xl font-bold tracking-tight mb-8">Bereme se!</h1>
+            <p class="text-xl md:text-2xl font-medium tracking-tight mb-16 opacity-80 uppercase">Budeme rádi, když u toho budete s námi.</p>
+
+            <a href="#rsvp" class="mt-8 inline-flex items-center gap-3 bg-transparent text-wedding-black text-lg font-bold px-12 py-5 border border-wedding-black hover:bg-wedding-black hover:text-wedding-white transition-all duration-300 uppercase tracking-widest">
+                <img src={morseMotif.src} alt="" class="h-10 w-auto opacity-60 tracking-widest ml-2" />
                 Potvrdit účast
-                <span class="text-wedding-gray font-bold tracking-widest">⋅⋅∸⋅</span>
+                <img src={morseMotif.src} alt="" class="h-10 w-auto opacity-60 tracking-widest ml-2" />
             </a>
         </header>
 
+        <AboutUs />
+
         <WhenWhere />
+
         <Schedule />
+
         <Gifts />
+
         <RsvpForm />
+
         <DressCode />
     </main>
 </Layout>

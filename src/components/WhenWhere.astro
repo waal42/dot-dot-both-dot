@@ -1,21 +1,156 @@
 ---
-const misto = "Sokec, Šlapanice";
-const datum = "15. srpna 2026 v 15.00";
+const venue = {
+    name: "Sokec, Šlapanice",
+    address: "Smetanova 405, 664 51 Šlapanice",
+    coords: [49.163212, 16.726418],
+    googleMapsUrl: "https://maps.app.goo.gl/AJ5MkMekiaeEhSGf6"
+};
+
+const locations = [
+    {
+        label: "Místo konání",
+        value: venue.name,
+        detail: venue.address,
+        type: "venue"
+    },
+    {
+        label: "Doprava & Parkování",
+        value: "Vlakem i autem",
+        detail: "Vlakem (S2) z Brna, autem parkování u Sokecu.",
+        type: "transport"
+    }
+];
+
+// Custom markers for the map
+const mapMarkers = [
+    { coords: venue.coords, title: "Sokec (Místo obřadu a oslavy)", type: "wedding", icon: "ring" },
+    { coords: [49.164320, 16.724850], title: "Vlaková stanice Šlapanice", type: "train", icon: "train" },
+    { coords: [49.162500, 16.727500], title: "Parkoviště u Sokecu", type: "parking", icon: "parking" },
+];
 ---
-<section id="kdy-a-kde" class="py-24 max-w-4xl mx-auto px-6 border-t border-wedding-gray/30 scroll-mt-24">
-    <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 flex items-center justify-center gap-2">Kdy a kde
-      <span class="text-xl md:text-2xl text-wedding-gray">⋅⋅∸⋅</span>
+
+<section id="kdy-a-kde" class="py-24 max-w-6xl mx-auto px-6 scroll-mt-24">
+    <h2 class="text-4xl md:text-5xl font-bold text-center mb-20 flex items-center justify-center gap-4">
+        <span class="text-wedding-gray opacity-20 text-2xl md:text-3xl tracking-tighter">−·−</span>
+        Kdy a kde
+        <span class="text-wedding-gray opacity-20 text-2xl md:text-3xl tracking-tighter">−−·−</span>
     </h2>
 
-    <div class="grid md:grid-cols-2 gap-10">
-        <div class="bg-wedding-white border-2 border-wedding-black p-10 flex flex-col items-center justify-center text-center shadow-xl">
-            <p class="text-wedding-gray text-sm mb-1">Datum a čas</p>
-            <p class="text-2xl font-bold">{datum}</p>
+    <div class="grid lg:grid-cols-5 gap-8 items-stretch">
+        <!-- Text Info -->
+        <div class="lg:col-span-2 flex flex-col gap-4">
+            {locations.map((item) => (
+                <div class="bg-wedding-white border border-wedding-gray/20 p-10 flex flex-col items-center justify-center text-center flex-1 shadow-sm">
+                    <p class="text-wedding-gray font-bold uppercase text-[10px] mb-4 tracking-[0.4em]">{item.label}</p>
+                    <p class="text-2xl font-bold mb-2">{item.value}</p>
+                    <p class="text-sm text-wedding-gray italic font-medium opacity-90">{item.detail}</p>
+                </div>
+            ))}
         </div>
-        <div class="bg-wedding-white border-2 border-wedding-black p-10 flex flex-col items-center justify-center text-center shadow-xl">
-            <p class="text-wedding-gray text-sm mb-1">Místo</p>
-            <p class="text-2xl font-bold">{misto}</p>
+
+        <!-- Custom Map Container -->
+        <div class="lg:col-span-3 border border-wedding-gray/20 bg-wedding-white p-4 h-112.5 relative shadow-sm group">
+            <div id="map" class="w-full h-full grayscale hover:grayscale-0 transition-all duration-700 z-10"></div>
+            <div class="absolute inset-0 flex items-center justify-center bg-wedding-white z-0">
+                <p class="text-xs uppercase tracking-widest text-wedding-gray opacity-40">Načítám mapu...</p>
+            </div>
         </div>
     </div>
-    <p class="text-center text-wedding-gray mt-16 p-10 border border-wedding-gray/20 shadow-inner">Sem pak přidáme mapu, adresu a případně odkaz na ubytování.</p>
+
+    <div class="mt-16 text-center">
+        <a
+            href={venue.googleMapsUrl}
+            target="_blank"
+            class="inline-flex items-center gap-6 bg-transparent text-wedding-black text-sm font-bold px-12 py-5 border border-wedding-black hover:bg-wedding-black hover:text-wedding-white transition-all duration-300 uppercase tracking-widest group"
+        >
+            <span class="text-wedding-gray opacity-30 group-hover:text-wedding-white group-hover:opacity-60 transition-all">·−</span>
+            Navigovat k místu
+            <span class="text-wedding-gray opacity-30 group-hover:text-wedding-white group-hover:opacity-60 transition-all">−·</span>
+        </a>
+    </div>
 </section>
+
+<!-- Leaflet.js Assets -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script is:inline define:vars={{ venue, mapMarkers }}>
+    // We use is:inline to ensure Leaflet is available when script runs
+    document.addEventListener('DOMContentLoaded', () => {
+        const map = L.map('map', {
+            center: venue.coords,
+            zoom: 16,
+            scrollWheelZoom: false
+        });
+
+        // Use a clean, minimal map style (CartoDB Positron)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+        // SVG Icons
+        const icons = {
+            ring: `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ring"><path d="M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 6V2"/><path d="m10 2 2 2 2-2"/></svg>
+            `,
+            train: `
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-train-front"><path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
+            `,
+            parking: `
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-parking"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+            `
+        };
+
+        const createCustomIcon = (type, isWedding = false) => {
+            const size = isWedding ? 40 : 32;
+            const color = isWedding ? '#000' : '#5a544e';
+            const iconSvg = icons[type] || '';
+
+            return L.divIcon({
+                className: 'custom-map-icon',
+                html: `
+                    <div style="
+                        background-color: white;
+                        width: ${size}px;
+                        height: ${size}px;
+                        border: 2px solid ${color};
+                        border-radius: 50%;
+                        display: flex;
+                        items-center;
+                        justify-content: center;
+                        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+                        color: ${color};
+                        padding: 6px;
+                    ">
+                        ${iconSvg}
+                    </div>
+                `,
+                iconSize: [size, size],
+                iconAnchor: [size/2, size/2],
+                popupAnchor: [0, -size/2]
+            });
+        };
+
+        // Add Markers
+        mapMarkers.forEach(m => {
+            const icon = createCustomIcon(m.icon, m.type === 'wedding');
+            L.marker(m.coords, { icon })
+                .addTo(map)
+                .bindPopup(`<b style="font-family: sans-serif; font-size: 14px;">${m.title}</b>`);
+        });
+
+        // Force a resize fix for hidden elements
+        setTimeout(() => map.invalidateSize(), 100);
+    });
+</script>
+
+<style is:global>
+    .leaflet-popup-content-wrapper {
+        border-radius: 0 !important;
+        border: 1px solid #5a544e33;
+        box-shadow: none !important;
+    }
+    .leaflet-popup-tip {
+        display: none;
+    }
+</style>

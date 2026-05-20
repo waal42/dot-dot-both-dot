@@ -1,8 +1,53 @@
-<section id="harmonogram" class="py-24 max-w-4xl mx-auto px-6 border-t border-wedding-gray/30 scroll-mt-24">
-    <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 flex items-center justify-center gap-2">Harmonogram dne
-      <span class="text-xl md:text-2xl text-wedding-gray">⋅⋅∸⋅</span>
+---
+// src/components/Schedule.astro
+const schedule = [
+  { time: "13:00", title: "Rodinný oběd", description: "Nejprve nakrmíme rodinu." },
+  { time: "14:30", title: "Příprava na obřad", description: "Příchod, přivítání a usazení hostů." },
+  { time: "15:00", title: "Obřad", description: "Vstoupíme do toho společně." },
+  { time: "16:40", title: "Dort", description: "Čas na mlsání." },
+  { time: "17:00", title: "Večerní raut", description: "Jídlo, pití a dobrá nálada." },
+  { time: "19:00", title: "První tanec", description: "A zahájení večerní party." },
+];
+---
+
+<section id="harmonogram" class="py-24 max-w-6xl mx-auto px-6 scroll-mt-24">
+    <h2 class="text-4xl md:text-5xl font-bold text-center mb-24 flex items-center justify-center gap-4">
+        <span class="text-wedding-gray opacity-20 text-2xl md:text-3xl tracking-tighter">····</span>
+        Harmonogram
+        <span class="text-wedding-gray opacity-20 text-2xl md:text-3xl tracking-tighter">−−−−</span>
     </h2>
-    <div class="bg-wedding-white border-2 border-wedding-black p-10 shadow-xl">
-        <p>Místo pro časovou osu událostí.</p>
+
+    <div class="relative max-w-2xl mx-auto">
+        <!-- Vertical Line -->
+        <div class="absolute left-3.75 md:left-1/2 top-0 bottom-0 w-px bg-wedding-gray/30 -translate-x-1/2"></div>
+
+        <div class="space-y-16">
+            {schedule.map((item, index) => (
+                <div class={`relative flex flex-col md:flex-row items-start ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+
+                    <!-- Timeline Marker (Alternating Dot and Dash) -->
+                    <div class="absolute left-0 md:left-1/2 top-0 w-8 h-8 bg-wedding-white border border-wedding-gray/50 rounded-full -translate-x-1/2 flex items-center justify-center z-10">
+                        {index % 2 === 0 ? (
+                            <div class="w-1.5 h-1.5 bg-wedding-black rounded-full"></div>
+                        ) : (
+                            <div class="w-3 h-1 bg-wedding-black rounded-sm"></div>
+                        )}
+                    </div>
+
+                    <!-- Content -->
+                    <div class={`w-full md:w-1/2 pl-12 md:pl-0 ${index % 2 === 0 ? 'md:pr-20 md:text-right' : 'md:pl-20'}`}>
+                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-wedding-gray mb-1 leading-none">{item.time}</p>
+                        <h3 class="text-xl font-bold mb-1">{item.title}</h3>
+                        <p class="text-sm text-wedding-gray italic font-medium opacity-90">{item.description}</p>
+                    </div>
+                    <!-- Spacer for the other side on desktop -->
+                    <div class="hidden md:block md:w-1/2"></div>
+                </div>
+            ))}
+        </div>
+    </div>
+
+    <div class="mt-24 text-center">
+        <p class="text-xs text-wedding-gray uppercase tracking-widest opacity-80">⋅⋅∸⋅ Změna programu vyhrazena ⋅⋅∸⋅</p>
     </div>
 </section>
