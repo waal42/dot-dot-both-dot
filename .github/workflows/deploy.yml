@@ -16,9 +16,12 @@ jobs:
     steps:
       - name: Checkout your repository
         uses: actions/checkout@v4
+        
       - name: Install, build, and upload your site
         uses: withastro/action@v3
-        # If you are using pnpm or yarn, specify it here. Otherwise, npm is the default.
+        with:
+          node-version: 24 # This forces the runner to use the required Node version
+
 
   deploy:
     needs: build
