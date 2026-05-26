@@ -6,6 +6,7 @@ import imgSifrovacka from "../assets/my-na-sifrovacce.jpg";
 import imgMyvali from "../assets/my-jsme-myvali.jpg";
 import imgSaline from "../assets/my-v-saline.jpg";
 import imgFabar from "../assets/my-ve-fabaru.jpg";
+import imgVytah from "../assets/my-ve-vytahu.jpg";
 import imgVytah2 from "../assets/my-ve-vytahu-2.jpg";
 import imgPlac from "../assets/my-v-placi.jpg";
 
@@ -19,14 +20,14 @@ const galleryItems = [
     alt: "",
     type: "text",
     title: "Hanka & Filip",
-    detail: "Už nějaký ten pátek...",
+    detail: "nějakej totálně cringe text",
     size: "small",
   },
   { src: imgSaline, alt: "Hanka a Filip v Šalině", size: "horizontal" },
   { src: imgPlac, alt: "Hanka a Filip v Pláči", size: "horizontal" },
   { src: imgMyvali, alt: "My jsme mývalové", size: "small" },
-  // Add more items here as needed:
-  // { src: imgFabar, alt: "Ve Fabaru", size: "small" },
+  { src: imgFabar, alt: "Ve Fabaru", size: "horizontal" },
+  { src: imgVytah, alt: "Ve Výtahu", size: "small" },
 ];
 
 const getSizeClasses = (size: string) => {
@@ -90,7 +91,7 @@ const getSizeClasses = (size: string) => {
     <p class="text-lg leading-relaxed font-medium italic opacity-90 md:text-xl">
       "Jsme dva, co se našli u kódu, šifer a dobrého kafe. Naše cesta nás
       zavedla z brněnských uliček až k tomuto dni, o který se s vámi chceme
-      podělit."
+      podělit." -Gemini
     </p>
   </div>
 </section>

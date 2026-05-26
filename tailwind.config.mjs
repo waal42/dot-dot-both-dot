@@ -12,7 +12,6 @@ export default {
         },
       },
       fontFamily: {
-        // Přepsání výchozího sans fontu na Capsuula
         sans: ["Capsuula", "sans-serif"],
       },
     },
