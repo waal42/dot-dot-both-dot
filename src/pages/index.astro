@@ -1,75 +1,106 @@
 ---
 // src/pages/index.astro
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import WhenWhere from '../components/WhenWhere.astro';
-import Schedule from '../components/Schedule.astro';
-import Gifts from '../components/Gifts.astro';
-import RsvpForm from '../components/RsvpForm.astro';
-import DressCode from '../components/DressCode.astro';
-import AboutUs from '../components/AboutUs.astro';
-
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import WhenWhere from "../components/WhenWhere.astro";
+import Schedule from "../components/Schedule.astro";
+import Gifts from "../components/Gifts.astro";
+import RsvpForm from "../components/RsvpForm.astro";
+import DressCode from "../components/DressCode.astro";
+import AboutUs from "../components/AboutUs.astro";
 
 // Import Assets
-import fullMotif from '../assets/full-motif.svg';
-import heroImageDesktop from '../assets/my-u-more.jpg';
-import heroImageMobile from '../assets/my-ve-vytahu.jpg';
-import morseMotif from '../assets/morse-motif.svg';
+import fullMotif from "../assets/full-motif.svg";
+import heroImageDesktop from "../assets/my-u-more.jpg";
+import heroImageMobile from "../assets/my-ve-vytahu.jpg";
+import morseMotif from "../assets/morse-motif.svg";
 ---
 
 <Layout title="Naše Svatba | Hanka & Filip">
-    <!-- Hero Cover Section -->
-    <section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-wedding-black">
-        <!-- Mobile Image -->
+  <!-- Hero Cover Section -->
+  <section
+    class="bg-wedding-black relative flex h-screen w-full items-center justify-center overflow-hidden"
+  >
+    <!-- Mobile Image -->
+    <img
+      src={heroImageMobile.src}
+      alt="Hanka & Filip"
+      class="absolute inset-0 h-full w-full object-cover object-center opacity-60 md:hidden"
+    />
+    <!-- Desktop Image -->
+    <img
+      src={heroImageDesktop.src}
+      alt="Hanka & Filip"
+      class="absolute inset-0 hidden h-full w-full object-cover object-center opacity-60 md:block"
+    />
+    <div
+      class="text-wedding-white relative z-10 flex flex-col items-center px-6 text-center"
+    >
+      <h2
+        class="mb-12 text-xl font-bold tracking-[0.5em] uppercase opacity-80 md:text-2xl"
+      >
+        Save the date
+      </h2>
+      <img
+        src={fullMotif.src}
+        alt="Hanka & Filip Morse Code Motif"
+        class="w-full max-w-md opacity-100 drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)] invert md:max-w-xl"
+      />
+      <p class="mt-12 text-2xl font-bold tracking-tight opacity-90 md:text-4xl">
+        15. srpna 2026 • Šlapanice
+      </p>
+    </div>
+    <a
+      href="#main-header"
+      class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 transition-opacity hover:opacity-100"
+    >
+      <span class="text-wedding-white text-3xl">↓</span>
+    </a>
+  </section>
+
+  <Header />
+
+  <main class="pb-20">
+    <header
+      class="flex min-h-[60vh] flex-col items-center justify-center px-6 py-20 text-center"
+    >
+      <h1 class="mb-8 text-6xl font-bold tracking-tight md:text-8xl">
+        Bereme se!
+      </h1>
+      <p
+        class="mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl"
+      >
+        Budeme rádi, když u toho budete s námi.
+      </p>
+
+      <a
+        href="#rsvp"
+        class="text-wedding-black border-wedding-black hover:bg-wedding-black hover:text-wedding-white mt-8 inline-flex items-center gap-3 border bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300"
+      >
         <img
-            src={heroImageMobile.src}
-            alt="Hanka & Filip"
-            class="absolute inset-0 w-full h-full object-cover object-center md:hidden opacity-60"
+          src={morseMotif.src}
+          alt=""
+          class="ml-2 h-10 w-auto tracking-widest opacity-60"
         />
-        <!-- Desktop Image -->
+        Potvrdit účast
         <img
-            src={heroImageDesktop.src}
-            alt="Hanka & Filip"
-            class="absolute inset-0 w-full h-full object-cover object-center hidden md:block opacity-60"
+          src={morseMotif.src}
+          alt=""
+          class="ml-2 h-10 w-auto tracking-widest opacity-60"
         />
-        <div class="relative z-10 text-center text-wedding-white px-6 flex flex-col items-center">
-            <h2 class="text-xl md:text-2xl font-bold uppercase tracking-[0.5em] mb-12 opacity-80">Save the date</h2>
-            <img
-                src={fullMotif.src}
-                alt="Hanka & Filip Morse Code Motif"
-                class="w-full max-w-md md:max-w-xl invert opacity-100 drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]"
-            />
-            <p class="text-2xl md:text-4xl font-bold tracking-tight opacity-90 mt-12">15. srpna 2026 • Šlapanice</p>
-        </div>
-        <a href="#main-header" class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 hover:opacity-100 transition-opacity">
-            <span class="text-wedding-white text-3xl">↓</span>
-        </a>
-    </section>
+      </a>
+    </header>
 
-    <Header />
+    <AboutUs />
 
-    <main class="pb-20">
-        <header class="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center py-20">
-            <h1 class="text-6xl md:text-8xl font-bold tracking-tight mb-8">Bereme se!</h1>
-            <p class="text-xl md:text-2xl font-medium tracking-tight mb-16 opacity-80 uppercase">Budeme rádi, když u toho budete s námi.</p>
+    <WhenWhere />
 
-            <a href="#rsvp" class="mt-8 inline-flex items-center gap-3 bg-transparent text-wedding-black text-lg font-bold px-12 py-5 border border-wedding-black hover:bg-wedding-black hover:text-wedding-white transition-all duration-300 uppercase tracking-widest">
-                <img src={morseMotif.src} alt="" class="h-10 w-auto opacity-60 tracking-widest ml-2" />
-                Potvrdit účast
-                <img src={morseMotif.src} alt="" class="h-10 w-auto opacity-60 tracking-widest ml-2" />
-            </a>
-        </header>
+    <Schedule />
 
-        <AboutUs />
+    <Gifts />
 
-        <WhenWhere />
+    <RsvpForm />
 
-        <Schedule />
-
-        <Gifts />
-
-        <RsvpForm />
-
-        <DressCode />
-    </main>
+    <DressCode />
+  </main>
 </Layout>

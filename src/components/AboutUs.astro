@@ -1,67 +1,96 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-import imgLublan from '../assets/my-v-lublani.jpg';
-import imgSifrovacka from '../assets/my-na-sifrovacce.jpg';
-import imgMyvali from '../assets/my-jsme-myvali.jpg';
-import imgSaline from '../assets/my-v-saline.jpg';
-import imgFabar from '../assets/my-ve-fabaru.jpg';
-import imgVytah2 from '../assets/my-ve-vytahu-2.jpg';
-import imgPlac from '../assets/my-v-placi.jpg';
+import imgLublan from "../assets/my-v-lublani.jpg";
+import imgSifrovacka from "../assets/my-na-sifrovacce.jpg";
+import imgMyvali from "../assets/my-jsme-myvali.jpg";
+import imgSaline from "../assets/my-v-saline.jpg";
+import imgFabar from "../assets/my-ve-fabaru.jpg";
+import imgVytah2 from "../assets/my-ve-vytahu-2.jpg";
+import imgPlac from "../assets/my-v-placi.jpg";
 
 // Gallery configuration for easy management
 const galleryItems = [
-    { src: imgLublan, alt: "Hanka a Filip v Lublani", size: "large" },
-    { src: imgSifrovacka, alt: "Hanka a Filip na šifrovačce", size: "small" },
-    { src: imgVytah2, alt: "Hanka a Filip ve výtahu", size: "vertical" },
-    { src: "", alt: "", type: "text", title: "Hanka & Filip", detail: "Už nějaký ten pátek...", size: "small" },
-    { src: imgSaline, alt: "Hanka a Filip v Šalině", size: "horizontal" },
-    { src: imgPlac, alt: "Hanka a Filip v Pláči", size: "horizontal" },
-    { src: imgMyvali, alt: "My jsme mývalové", size: "small" },
-    // Add more items here as needed:
-    // { src: imgFabar, alt: "Ve Fabaru", size: "small" },
+  { src: imgLublan, alt: "Hanka a Filip v Lublani", size: "large" },
+  { src: imgSifrovacka, alt: "Hanka a Filip na šifrovačce", size: "small" },
+  { src: imgVytah2, alt: "Hanka a Filip ve výtahu", size: "vertical" },
+  {
+    src: "",
+    alt: "",
+    type: "text",
+    title: "Hanka & Filip",
+    detail: "Už nějaký ten pátek...",
+    size: "small",
+  },
+  { src: imgSaline, alt: "Hanka a Filip v Šalině", size: "horizontal" },
+  { src: imgPlac, alt: "Hanka a Filip v Pláči", size: "horizontal" },
+  { src: imgMyvali, alt: "My jsme mývalové", size: "small" },
+  // Add more items here as needed:
+  // { src: imgFabar, alt: "Ve Fabaru", size: "small" },
 ];
 
 const getSizeClasses = (size: string) => {
-    switch(size) {
-        case "large": return "col-span-2 row-span-2";
-        case "vertical": return "col-span-1 row-span-2";
-        case "horizontal": return "col-span-2 row-span-1";
-        default: return "col-span-1 row-span-1";
-    }
+  switch (size) {
+    case "large":
+      return "col-span-2 row-span-2";
+    case "vertical":
+      return "col-span-1 row-span-2";
+    case "horizontal":
+      return "col-span-2 row-span-1";
+    default:
+      return "col-span-1 row-span-1";
+  }
 };
 ---
 
-<section id="o-nas" class="py-24 max-w-6xl mx-auto px-6 scroll-mt-24">
-    <h2 class="text-4xl md:text-5xl font-bold text-center mb-20 flex items-center justify-center gap-4">
-        <span class="text-wedding-gray opacity-20 text-2xl md:text-3xl tracking-tighter">−−·</span>
-        O nás
-        <span class="text-wedding-gray opacity-20 text-2xl md:text-3xl tracking-tighter">·−·−</span>
-    </h2>
+<section id="o-nas" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
+  <h2
+    class="mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
+  >
+    <span
+      class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+      >−−·</span
+    >
+    O nás
+    <span
+      class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+      >·−·−</span
+    >
+  </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] md:auto-rows-[300px]">
-        {galleryItems.map((item) => (
-            <div class={`${getSizeClasses(item.size)} group overflow-hidden bg-wedding-black/5`}>
-                {item.type === 'text' ? (
-                    <div class="flex flex-col justify-center items-center p-6 border border-wedding-gray/20 text-center bg-wedding-white h-full">
-                        <p class="text-xl font-bold mb-1">{item.title}</p>
-                        <div class="w-12 h-px bg-wedding-gray/40 my-3"></div>
-                        <p class="text-[10px] text-wedding-gray uppercase tracking-[0.3em] font-bold">{item.detail}</p>
-                    </div>
-                ) : (
-                    <Image
-                        src={item.src}
-                        alt={item.alt}
-                        class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
-                    />
-                )}
+  <div
+    class="grid auto-rows-[200px] grid-cols-2 gap-4 md:auto-rows-[300px] md:grid-cols-4"
+  >
+    {
+      galleryItems.map((item) => (
+        <div
+          class={`${getSizeClasses(item.size)} group bg-wedding-black/5 overflow-hidden`}
+        >
+          {item.type === "text" ? (
+            <div class="border-wedding-gray/20 bg-wedding-white flex h-full flex-col items-center justify-center border p-6 text-center">
+              <p class="mb-1 text-xl font-bold">{item.title}</p>
+              <div class="bg-wedding-gray/40 my-3 h-px w-12" />
+              <p class="text-wedding-gray text-[10px] font-bold tracking-[0.3em] uppercase">
+                {item.detail}
+              </p>
             </div>
-        ))}
-    </div>
+          ) : (
+            <Image
+              src={item.src}
+              alt={item.alt}
+              class="h-full w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 hover:grayscale-0"
+            />
+          )}
+        </div>
+      ))
+    }
+  </div>
 
-    <div class="mt-20 max-w-2xl mx-auto text-center">
-        <p class="text-lg md:text-xl font-medium leading-relaxed italic opacity-90">
-            "Jsme dva, co se našli u kódu, šifer a dobrého kafe. Naše cesta nás zavedla z brněnských uliček až k tomuto dni, o který se s vámi chceme podělit."
-        </p>
-    </div>
+  <div class="mx-auto mt-20 max-w-2xl text-center">
+    <p class="text-lg leading-relaxed font-medium italic opacity-90 md:text-xl">
+      "Jsme dva, co se našli u kódu, šifer a dobrého kafe. Naše cesta nás
+      zavedla z brněnských uliček až k tomuto dni, o který se s vámi chceme
+      podělit."
+    </p>
+  </div>
 </section>

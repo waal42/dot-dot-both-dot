@@ -1,26 +1,40 @@
 ---
-import Navigation from './Navigation.astro';
+import Navigation from "./Navigation.astro";
 ---
 
-<header id="main-header" class="bg-wedding-white sticky top-0 w-full z-50 border-b border-wedding-gray/20 transition-all duration-300">
-  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-    <div class="flex items-center shrink-0">
-        <a href="#top" id="logo-link" class="flex items-center gap-4 text-xl md:text-2xl font-bold whitespace-nowrap group">
-            <span>Hanka</span>
-            <span class="text-wedding-gray opacity-30 group-hover:opacity-60 transition-opacity tracking-widest text-sm md:text-base">···· &nbsp; ·−·−</span>
-            <span>Filip</span>
-        </a>
+<header
+  id="main-header"
+  class="bg-wedding-white border-wedding-gray/20 sticky top-0 z-50 w-full border-b transition-all duration-300"
+>
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+    <div class="flex shrink-0 items-center">
+      <a
+        href="#top"
+        id="logo-link"
+        class="group flex items-center gap-4 text-xl font-bold whitespace-nowrap md:text-2xl"
+      >
+        <span>Hanka</span>
+        <span
+          class="text-wedding-gray text-sm tracking-widest opacity-30 transition-opacity group-hover:opacity-60 md:text-base"
+          >···· &nbsp; ·−·−</span
+        >
+        <span>Filip</span>
+      </a>
     </div>
 
     <!-- Mobile Menu Button -->
     <button
       id="menu-toggle"
-      class="md:hidden flex flex-col gap-1.5 z-50 p-2"
+      class="z-50 flex flex-col gap-1.5 p-2 md:hidden"
       aria-label="Toggle Menu"
     >
-      <span class="w-7 h-1 bg-wedding-black transition-all duration-300 origin-center"></span>
-      <span class="w-7 h-1 bg-wedding-black transition-all duration-300"></span>
-      <span class="w-7 h-1 bg-wedding-black transition-all duration-300 origin-center"></span>
+      <span
+        class="bg-wedding-black h-1 w-7 origin-center transition-all duration-300"
+      ></span>
+      <span class="bg-wedding-black h-1 w-7 transition-all duration-300"></span>
+      <span
+        class="bg-wedding-black h-1 w-7 origin-center transition-all duration-300"
+      ></span>
     </button>
 
     <Navigation />
@@ -28,47 +42,47 @@ import Navigation from './Navigation.astro';
 </header>
 
 <script>
-  const menuToggle = document.getElementById('menu-toggle');
-  const navMenu = document.getElementById('nav-menu');
-  const menuSpans = menuToggle?.querySelectorAll('span');
+  const menuToggle = document.getElementById("menu-toggle");
+  const navMenu = document.getElementById("nav-menu");
+  const menuSpans = menuToggle?.querySelectorAll("span");
 
   // Smooth scroll for logo
-  const logoLink = document.getElementById('logo-link');
-  logoLink?.addEventListener('click', (e) => {
+  const logoLink = document.getElementById("logo-link");
+  logoLink?.addEventListener("click", (e) => {
     e.preventDefault();
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
     // Update URL without reload
-    history.pushState(null, '', '/');
+    history.pushState(null, "", "/");
   });
 
-  menuToggle?.addEventListener('click', () => {
-    navMenu?.classList.toggle('hidden');
-    navMenu?.classList.toggle('flex');
+  menuToggle?.addEventListener("click", () => {
+    navMenu?.classList.toggle("hidden");
+    navMenu?.classList.toggle("flex");
 
     // Animate hamburger to X
     if (menuSpans) {
-      menuSpans[0].classList.toggle('rotate-45');
-      menuSpans[0].classList.toggle('translate-y-2.5');
-      menuSpans[1].classList.toggle('opacity-0');
-      menuSpans[2].classList.toggle('-rotate-45');
-      menuSpans[2].classList.toggle('-translate-y-2.5');
+      menuSpans[0].classList.toggle("rotate-45");
+      menuSpans[0].classList.toggle("translate-y-2.5");
+      menuSpans[1].classList.toggle("opacity-0");
+      menuSpans[2].classList.toggle("-rotate-45");
+      menuSpans[2].classList.toggle("-translate-y-2.5");
     }
   });
 
   // Close menu when clicking a link
-  const navLinks = navMenu?.querySelectorAll('a');
-  navLinks?.forEach(link => {
-    link.addEventListener('click', () => {
-      navMenu?.classList.add('hidden');
-      navMenu?.classList.remove('flex');
+  const navLinks = navMenu?.querySelectorAll("a");
+  navLinks?.forEach((link) => {
+    link.addEventListener("click", () => {
+      navMenu?.classList.add("hidden");
+      navMenu?.classList.remove("flex");
 
       if (menuSpans) {
-        menuSpans[0].classList.remove('rotate-45', 'translate-y-2.5');
-        menuSpans[1].classList.remove('opacity-0');
-        menuSpans[2].classList.remove('-rotate-45', '-translate-y-2.5');
+        menuSpans[0].classList.remove("rotate-45", "translate-y-2.5");
+        menuSpans[1].classList.remove("opacity-0");
+        menuSpans[2].classList.remove("-rotate-45", "-translate-y-2.5");
       }
     });
   });
