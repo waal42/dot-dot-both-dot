@@ -10,59 +10,15 @@ import DressCode from "../components/DressCode.astro";
 import AboutUs from "../components/AboutUs.astro";
 
 // Import Assets
-import fullMotif from "../assets/full-motif.svg";
-import heroImageDesktop from "../assets/my-u-more.jpg";
-import heroImageMobile from "../assets/my-ve-vytahu.jpg";
 import morseMotif from "../assets/morse-motif.svg";
 ---
 
 <Layout title="Naše Svatba | Hanka & Filip">
-  <!-- Hero Cover Section -->
-  <section
-    class="bg-wedding-dark relative flex h-screen w-full items-center justify-center overflow-hidden"
-  >
-    <!-- Background Images -->
-    <img
-      src={heroImageMobile.src}
-      alt="Hanka & Filip"
-      class="absolute inset-0 h-full w-full object-cover object-center opacity-40 md:hidden"
-    />
-    <img
-      src={heroImageDesktop.src}
-      alt="Hanka & Filip"
-      class="absolute inset-0 hidden h-full w-full object-cover object-center opacity-40 md:block"
-    />
-
-    <div
-      class="text-wedding-light relative z-10 flex w-full flex-col items-center px-6 text-center"
-    >
-      <h2
-        class="mb-12 text-xl font-bold tracking-[0.5em] uppercase opacity-80 md:text-2xl"
-      >
-        Save the date
-      </h2>
-      <img
-        src={fullMotif.src}
-        alt="Hanka & Filip Morse Code Motif"
-        class="w-full max-w-6xl opacity-70 drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)] invert"
-      />
-      <p class="mt-12 text-2xl font-bold tracking-tight opacity-90 md:text-4xl">
-        15. srpna 2026 • Šlapanice
-      </p>
-    </div>
-    <a
-      href="#main-header"
-      class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 transition-opacity hover:opacity-100"
-    >
-      <span class="text-wedding-light text-3xl">↓</span>
-    </a>
-  </section>
-
   <Header />
 
   <main class="pb-20">
     <header
-      class="flex min-h-[60vh] flex-col items-center justify-center px-6 py-20 text-center"
+      class="flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-6 py-20 text-center"
     >
       <h1
         class="text-wedding-dark mb-8 text-6xl font-bold tracking-tight md:text-8xl"
