@@ -1,34 +1,38 @@
-name: Deploy to GitHub Pages
+name: Deploy Wedding Website
 
 on:
   push:
-    branches: [master]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    branches:
+      - main # Spustí se při každém pushnutí do větve main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout your repository
+      # 1. Krok: Stažení kódu z repozitáře
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
+      # 2. Krok: Nastavení Node.js prostředí
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 24 # This forces the runner to use the required Node version
+          node-version: 22 # Odpovídá požadavku v package.json (>=22.12.0)
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      # 3. Krok: Instalace závislostí a sestavení Astro webu
+      - name: Install dependencies and Build
+        run: |
+          npm ci
+          npm run build
+
+      # 4. Krok: Nahrání vygenerovaných souborů na VPS přes rsync
+      - name: Deploy to VPS
+        uses: Burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: dist/ # Složka, kterou vygenerovalo Astro
+          remote_path: /var/www/mywalove/svatba/
+          remote_host: ${{ secrets.VPS_HOST }}
+          remote_user: ${{ secrets.VPS_USERNAME }}
+          remote_key: ${{ secrets.VPS_SSH_KEY }}
