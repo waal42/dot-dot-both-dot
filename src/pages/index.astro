@@ -19,22 +19,22 @@ import morseMotif from "../assets/morse-motif.svg";
 <Layout title="Naše Svatba | Hanka & Filip">
   <!-- Hero Cover Section -->
   <section
-    class="bg-wedding-black relative flex h-screen w-full items-center justify-center overflow-hidden"
+    class="bg-wedding-dark relative flex h-screen w-full items-center justify-center overflow-hidden"
   >
-    <!-- Mobile Image -->
+    <!-- Background Images -->
     <img
       src={heroImageMobile.src}
       alt="Hanka & Filip"
-      class="absolute inset-0 h-full w-full object-cover object-center opacity-60 md:hidden"
+      class="absolute inset-0 h-full w-full object-cover object-center opacity-40 md:hidden"
     />
-    <!-- Desktop Image -->
     <img
       src={heroImageDesktop.src}
       alt="Hanka & Filip"
-      class="absolute inset-0 hidden h-full w-full object-cover object-center opacity-60 md:block"
+      class="absolute inset-0 hidden h-full w-full object-cover object-center opacity-40 md:block"
     />
+
     <div
-      class="text-wedding-white relative z-10 flex flex-col items-center px-6 text-center"
+      class="text-wedding-light relative z-10 flex w-full flex-col items-center px-6 text-center"
     >
       <h2
         class="mb-12 text-xl font-bold tracking-[0.5em] uppercase opacity-80 md:text-2xl"
@@ -44,7 +44,7 @@ import morseMotif from "../assets/morse-motif.svg";
       <img
         src={fullMotif.src}
         alt="Hanka & Filip Morse Code Motif"
-        class="w-full max-w-md opacity-100 drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)] invert md:max-w-xl"
+        class="w-full max-w-6xl opacity-70 drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)] invert"
       />
       <p class="mt-12 text-2xl font-bold tracking-tight opacity-90 md:text-4xl">
         15. srpna 2026 • Šlapanice
@@ -54,7 +54,7 @@ import morseMotif from "../assets/morse-motif.svg";
       href="#main-header"
       class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 transition-opacity hover:opacity-100"
     >
-      <span class="text-wedding-white text-3xl">↓</span>
+      <span class="text-wedding-light text-3xl">↓</span>
     </a>
   </section>
 
@@ -64,18 +64,20 @@ import morseMotif from "../assets/morse-motif.svg";
     <header
       class="flex min-h-[60vh] flex-col items-center justify-center px-6 py-20 text-center"
     >
-      <h1 class="mb-8 text-6xl font-bold tracking-tight md:text-8xl">
+      <h1
+        class="text-wedding-dark mb-8 text-6xl font-bold tracking-tight md:text-8xl"
+      >
         Bereme se!
       </h1>
       <p
-        class="mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl"
+        class="text-wedding-medium mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl"
       >
         Budeme rádi, když u toho budete s námi.
       </p>
 
       <a
         href="#rsvp"
-        class="text-wedding-black border-wedding-black hover:bg-wedding-black hover:text-wedding-white mt-8 inline-flex items-center gap-3 border bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300"
+        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300"
       >
         <img
           src={morseMotif.src}

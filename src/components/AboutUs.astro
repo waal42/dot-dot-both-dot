@@ -46,15 +46,15 @@ const getSizeClasses = (size: string) => {
 
 <section id="o-nas" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
   <h2
-    class="mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
+    class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
   >
     <span
-      class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
       >−−·</span
     >
     O nás
     <span
-      class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
       >·−·−</span
     >
   </h2>
@@ -65,13 +65,15 @@ const getSizeClasses = (size: string) => {
     {
       galleryItems.map((item) => (
         <div
-          class={`${getSizeClasses(item.size)} group bg-wedding-black/5 overflow-hidden`}
+          class={`${getSizeClasses(item.size)} group bg-wedding-dark/5 overflow-hidden`}
         >
           {item.type === "text" ? (
-            <div class="border-wedding-gray/20 bg-wedding-white flex h-full flex-col items-center justify-center border p-6 text-center">
-              <p class="mb-1 text-xl font-bold">{item.title}</p>
-              <div class="bg-wedding-gray/40 my-3 h-px w-12" />
-              <p class="text-wedding-gray text-[10px] font-bold tracking-[0.3em] uppercase">
+            <div class="border-wedding-medium/20 bg-wedding-light flex h-full flex-col items-center justify-center border p-8 text-center">
+              <p class="text-wedding-dark mb-2 text-2xl font-bold">
+                {item.title}
+              </p>
+              <div class="morse-line text-wedding-medium/40 my-6 h-[2px] w-40" />
+              <p class="text-wedding-medium text-xs font-bold tracking-[0.3em] uppercase">
                 {item.detail}
               </p>
             </div>
@@ -88,7 +90,9 @@ const getSizeClasses = (size: string) => {
   </div>
 
   <div class="mx-auto mt-20 max-w-2xl text-center">
-    <p class="text-lg leading-relaxed font-medium italic opacity-90 md:text-xl">
+    <p
+      class="text-wedding-dark text-xl leading-relaxed font-medium italic md:text-2xl"
+    >
       "Jsme dva, co se našli u kódu, šifer a dobrého kafe. Naše cesta nás
       zavedla z brněnských uliček až k tomuto dni, o který se s vámi chceme
       podělit." -Gemini

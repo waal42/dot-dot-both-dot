@@ -1,18 +1,105 @@
 @import "tailwindcss";
 
 @theme {
-  --color-wedding-black: #2c2925;
-  --color-wedding-white: #fcfaf8;
-  --color-wedding-gray: #5a544e;
+  --color-wedding-dark: #2d3a2d; /* Forest Pine - Deep green */
+  --color-wedding-light: #f1f3eb; /* Sage Mist - Soft greenish cream */
+  --color-wedding-medium: #7a7084; /* Darker Dusty Lavender for better contrast */
   --font-sans:
-    "Capsuula", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Montserrat", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-@font-face {
-  font-family: "Capsuula";
-  src: url("../../public/fonts/capsuula.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+@utility morse-line {
+  background-image: repeating-linear-gradient(
+    to right,
+    currentColor,
+    currentColor 4px,
+    transparent 4px,
+    transparent 8px,
+    currentColor 8px,
+    currentColor 20px,
+    transparent 20px,
+    transparent 24px
+  );
+}
+
+@utility morse-line-vertical {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    currentColor,
+    currentColor 4px,
+    transparent 4px,
+    transparent 8px,
+    currentColor 8px,
+    currentColor 20px,
+    transparent 20px,
+    transparent 24px
+  );
+}
+
+@utility morse-border {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid currentColor;
+    pointer-events: none;
+    mask-image:
+      repeating-linear-gradient(
+        to right,
+        black,
+        black 12px,
+        transparent 12px,
+        transparent 16px,
+        black 16px,
+        black 20px,
+        transparent 20px,
+        transparent 24px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        black,
+        black 12px,
+        transparent 12px,
+        transparent 16px,
+        black 16px,
+        black 20px,
+        transparent 20px,
+        transparent 24px
+      ),
+      repeating-linear-gradient(
+        to right,
+        black,
+        black 12px,
+        transparent 12px,
+        transparent 16px,
+        black 16px,
+        black 20px,
+        transparent 20px,
+        transparent 24px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        black,
+        black 12px,
+        transparent 12px,
+        transparent 16px,
+        black 16px,
+        black 20px,
+        transparent 20px,
+        transparent 24px
+      );
+    mask-size:
+      100% 2px,
+      2px 100%,
+      100% 2px,
+      2px 100%;
+    mask-position:
+      0 0,
+      100% 0,
+      0 100%,
+      0 0;
+    mask-repeat: no-repeat;
+  }
 }

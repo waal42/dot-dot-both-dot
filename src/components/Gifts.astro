@@ -1,70 +1,129 @@
 ---
-const giftInfo = {
+import QRCode from "qrcode";
+import { composeIBAN } from "ibantools";
+
+// Centralized configuration for easy updates
+const giftConfig = {
+  accountNumber: "670100-2223828816 / 6210",
+  qrMessage: "DAR SVATEBNI", // Uppercase, no diacritics for SPAYD compatibility
   title: "Svatební dary",
   description: "Největším darem pro nás bude vaše přítomnost.",
   secondaryDescription:
-    "Pokud byste nás přesto chtěli obdarovat, budeme vděční za příspěvek na naši svatební cestu nebo společné bydlení.",
-  links: [
-    { label: "Náš Dárkovník", url: "https://darkovnik.cz/vase-id", icon: "🎁" },
-  ],
-  accountNumber: "123456789 / 0100",
+    "Pokud byste nás přesto chtěli obdarovat, budeme vděční za finanční příspěvek.",
 };
+
+// --- QR CODE LOGO CONNECTOR ---
+const QR_LOGO_CONFIG = {
+  hasLogo: false,
+  logoSrc: "",
+};
+
+// IBAN Generation Logic
+const [accFull, bankCodeRaw] = giftConfig.accountNumber.split(" / ");
+const [prefixPart, accPart] = accFull.includes("-")
+  ? accFull.split("-")
+  : ["", accFull];
+const bankCode = bankCodeRaw.trim().padStart(4, "0");
+const prefix = prefixPart.trim().padStart(6, "0");
+const account = accPart.trim().padStart(10, "0");
+const bban = bankCode + prefix + account;
+const iban = composeIBAN({ countryCode: "CZ", bban });
+
+// Generate QR Code
+const spayd = `SPD*1.0*ACC:${iban}*MSG:${giftConfig.qrMessage}`;
+const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
+  margin: 2,
+  width: 600,
+  errorCorrectionLevel: "M",
+  color: {
+    dark: "#2d3a2d", // wedding-dark
+    light: "#f1f3eb", // wedding-light
+  },
+});
 ---
 
 <section id="dary" class="mx-auto max-w-4xl scroll-mt-24 px-6 py-24">
   <h2
-    class="mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
+    class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
   >
     <span
-      class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
       >−··</span
     >
-    {giftInfo.title}
+    {giftConfig.title}
     <span
-      class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
       >−·−−</span
     >
   </h2>
 
-  <div
-    class="border-wedding-gray/20 bg-wedding-white border p-12 text-center shadow-sm md:p-20"
-  >
-    <p class="mb-6 text-2xl font-bold">{giftInfo.description}</p>
-    <p
-      class="text-wedding-gray mx-auto mb-12 max-w-xl text-lg font-medium italic opacity-90"
-    >
-      {giftInfo.secondaryDescription}
-    </p>
-
-    <div class="flex flex-col items-center gap-8">
-      <div class="space-y-2">
-        <p
-          class="text-wedding-gray text-xs font-bold tracking-[0.3em] uppercase opacity-80"
-        >
-          Číslo účtu
+  <div class="morse-border text-wedding-medium/30 bg-wedding-light shadow-sm">
+    <div class="px-8 py-16 text-center md:px-16 lg:px-24">
+      {/* 1. Introductory Text */}
+      <div class="mb-16 space-y-6">
+        <p class="text-wedding-dark text-3xl font-bold md:text-4xl">
+          {giftConfig.description}
         </p>
-        <p class="text-xl font-bold tracking-widest">
-          {giftInfo.accountNumber}
+        <p
+          class="text-wedding-dark mx-auto max-w-2xl text-xl leading-relaxed font-medium italic opacity-90"
+        >
+          {giftConfig.secondaryDescription}
         </p>
       </div>
 
-      <div class="bg-wedding-gray/20 h-px w-12"></div>
+      <div class="morse-line text-wedding-medium/20 mx-auto mb-16 h-[2px] w-32">
+      </div>
 
-      {
-        giftInfo.links.map((link) => (
-          <a
-            href={link.url}
-            target="_blank"
-            class="text-wedding-black border-wedding-black hover:bg-wedding-black hover:text-wedding-white group inline-flex items-center gap-3 border bg-transparent px-10 py-4 text-sm font-bold tracking-widest uppercase transition-all duration-300"
-          >
-            <span>{link.icon}</span>
-            {link.label}
-            <span class="text-wedding-gray group-hover:text-wedding-white ml-2 opacity-30 transition-all group-hover:opacity-60">
-              ··
-            </span>
-          </a>
-        ))
-      }
+      {/* 2. Bank Account Details */}
+      <div class="mb-16 space-y-4">
+        <p
+          class="text-wedding-medium text-sm font-bold tracking-[0.4em] uppercase opacity-70"
+        >
+          Číslo bankovního účtu
+        </p>
+        <p
+          class="text-wedding-dark text-2xl font-bold tracking-[0.1em] sm:text-3xl md:text-4xl"
+        >
+          {giftConfig.accountNumber}
+        </p>
+        <p
+          class="text-wedding-medium mx-auto max-w-md pt-2 text-sm font-medium italic opacity-80"
+        >
+          Při platbě prosím uveďte do poznámky vaše jméno.
+        </p>
+      </div>
+
+      {/* 3. QR Code Section */}
+      <div class="flex flex-col items-center">
+        <div
+          class="morse-border text-wedding-medium/20 bg-wedding-light relative mb-6 p-4 shadow-xl"
+        >
+          <div class="relative">
+            <img
+              src={qrCodeDataUrl}
+              alt="QR platba"
+              class="h-56 w-56 md:h-64 md:w-64"
+            />
+            {
+              QR_LOGO_CONFIG.hasLogo && (
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="bg-wedding-light h-12 w-12 rounded-lg p-1 shadow-sm">
+                    <img
+                      src={QR_LOGO_CONFIG.logoSrc}
+                      class="h-full w-full object-contain"
+                    />
+                  </div>
+                </div>
+              )
+            }
+          </div>
+        </div>
+        <p
+          class="text-wedding-medium text-xs font-bold tracking-[0.4em] uppercase opacity-60"
+        >
+          Rychlá QR platba
+        </p>
+      </div>
     </div>
   </div>
 </section>

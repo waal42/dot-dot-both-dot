@@ -10,28 +10,31 @@ const dressCode = {
 
 <section id="dress-code" class="mx-auto max-w-4xl scroll-mt-24 px-6 py-24">
   <h2
-    class="mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
+    class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
   >
     <span
-      class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
       >−··</span
     >
     {dressCode.title}
     <span
-      class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
       >−·−·</span
     >
   </h2>
   <div
-    class="border-wedding-gray/20 bg-wedding-white border p-16 text-center shadow-sm md:p-24"
+    class="morse-border text-wedding-medium/30 bg-wedding-light p-16 text-center shadow-sm md:p-24"
   >
-    <p class="mb-4 text-4xl font-bold tracking-tight">{dressCode.main}</p>
-    <p class="text-wedding-gray mb-6 text-xl font-medium italic opacity-90">
+    <p class="text-wedding-dark mb-6 text-5xl font-bold tracking-tight">
+      {dressCode.main}
+    </p>
+    <p class="text-wedding-dark mb-8 text-2xl font-medium italic">
       {dressCode.detail}
     </p>
-    <div class="bg-wedding-gray/20 mx-auto my-8 h-px w-12"></div>
+    <div class="morse-line text-wedding-medium/30 mx-auto my-12 h-[2px] w-64">
+    </div>
     <p
-      class="text-wedding-gray mx-auto max-w-sm text-xs leading-relaxed font-bold tracking-[0.2em] uppercase opacity-80"
+      class="text-wedding-dark mx-auto max-w-sm text-sm leading-relaxed font-bold tracking-[0.2em] uppercase"
     >
       {dressCode.subDetail}
     </p>

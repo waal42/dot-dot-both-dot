@@ -1,8 +1,4 @@
 ---
-import { containsServerDirective } from "astro/runtime/server/render/server-islands.js";
-import { redirectToDefaultLocale } from "astro:i18n";
-import { navigate } from "astro:transitions/client";
-
 // Fully schema-driven form configuration
 const formSchema = [
   {
@@ -44,8 +40,36 @@ const formSchema = [
         placeholder: null,
         options: [
           { value: "ano", label: "Ano, rád/a", checked: true },
-          { value: "ne", label: "Bohužel ne", checked: false},
+          { value: "ne", label: "Bohužel ne", checked: false },
         ],
+      },
+    ],
+  },
+  {
+    section: "children",
+    divider: true,
+    grid: true,
+    fields: [
+      {
+        id: "coming-with-children",
+        name: "coming_with_children",
+        label: "Přijdete s dětmi?",
+        type: "checkbox",
+        text: "Ano",
+        condition: null,
+        required: false,
+        placeholder: null,
+        options: [],
+      },
+      {
+        id: "how-many-children",
+        name: "how_many_children",
+        label: "Počet dětí",
+        type: "text",
+        condition: "coming-with-children",
+        required: false,
+        placeholder: "např. 2",
+        options: [],
       },
     ],
   },
@@ -58,27 +82,24 @@ const formSchema = [
         name: "is_lunch_guest",
         label: "Jste pozváni na rodinný oběd?",
         type: "checkbox",
-        text: "Ano, zúčastním se i oběda (13:00)",
+        text: "Ano",
         condition: null,
         required: false,
         placeholder: null,
         options: [],
       },
       {
-        id: "meal",
-        name: "meal",
-        label: "Výběr hlavního chodu",
-        type: "select",
-        condition: "is-lunch-guest",
-        required: true,
+        id: "coming-to-lunch",
+        name: "coming_to_lunch",
+        label: "Dorazíte na oběd?",
+        type: "radio",
+        condition: "is_lunch_guest",
+        conditionValue: null,
+        required: false,
         placeholder: null,
         options: [
-          { value: "svickova", label: "Tradiční svíčková na smetaně" },
-          { value: "kure", label: "Pečené kuřecí prsíčko, bramborová kaše" },
-          {
-            value: "vegetarian",
-            label: "Vegetariánské rizoto s lesními houbami",
-          },
+          { value: "yes", label: "Ano", checked: false },
+          { value: "no", label: "Ne", checked: false },
         ],
       },
     ],
@@ -115,34 +136,35 @@ const formSchema = [
 <section id="rsvp" class="mx-auto max-w-3xl scroll-mt-24 px-6 py-24">
   <div class="mb-16 text-center">
     <h2
-      class="mb-6 flex items-center justify-center gap-4 text-4xl font-bold md:text-5xl"
+      class="text-wedding-dark mb-6 flex items-center justify-center gap-4 text-4xl font-bold md:text-5xl"
     >
       <span
-        class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+        class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
         >··−</span
       >
       Účast
       <span
-        class="text-wedding-gray text-2xl tracking-tighter opacity-20 md:text-3xl"
+        class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
         >−·−·</span
       >
     </h2>
     <p
-      class="text-wedding-gray text-sm font-medium tracking-widest uppercase italic opacity-90"
+      class="text-wedding-dark text-base font-medium tracking-widest uppercase italic md:text-lg"
     >
       Prosíme o potvrzení účasti do 30. června 2026.
     </p>
   </div>
 
   <div
-    class="bg-wedding-white border-wedding-gray/20 border p-8 shadow-sm md:p-12"
+    class="morse-border text-wedding-medium/30 bg-wedding-light p-8 shadow-sm md:p-12"
   >
-    <form id="rsvp-form" class="space-y-8">
+    <form id="rsvp-form" class="space-y-12">
       {
         formSchema.map((section) => (
-          <div
-            class={`space-y-6 ${section.divider ? "border-wedding-gray/10 border-t pt-8" : ""}`}
-          >
+          <div class={`space-y-6 ${section.divider ? "relative pt-12" : ""}`}>
+            {section.divider && (
+              <div class="morse-line text-wedding-medium/20 absolute top-0 left-0 h-[2px] w-full" />
+            )}
             <div
               class={
                 section.grid
@@ -154,12 +176,14 @@ const formSchema = [
                 <div
                   id={`field-container-${field.id}`}
                   class={`space-y-2 ${field.condition ? "animate-in fade-in slide-in-from-top-2 hidden duration-500" : ""}`}
+                  data-condition={field.condition}
+                  data-condition-value={field.conditionValue}
                 >
                   {/* Label for most types */}
                   {field.type !== "checkbox" && (
                     <label
                       for={field.id}
-                      class="text-wedding-gray block text-xs font-bold tracking-widest uppercase"
+                      class="text-wedding-dark block text-sm font-bold tracking-widest uppercase"
                     >
                       {field.label}
                     </label>
@@ -173,15 +197,15 @@ const formSchema = [
                       name={field.name}
                       required={field.required}
                       placeholder={field.placeholder}
-                      class="border-wedding-gray/30 focus:border-wedding-black w-full border-b bg-transparent py-3 transition-colors outline-none"
+                      class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/60 w-full border-b bg-transparent py-4 text-lg transition-colors outline-none"
                     />
                   )}
 
                   {/* Radio Group */}
                   {field.type === "radio" && (
-                    <div class="flex gap-8 pt-2">
+                    <div class="flex flex-wrap gap-x-12 gap-y-6 pt-3">
                       {field.options?.map((opt) => (
-                        <label class="group flex cursor-pointer items-center gap-3">
+                        <label class="group flex cursor-pointer items-center gap-4">
                           <input
                             type="radio"
                             name={field.name}
@@ -189,10 +213,10 @@ const formSchema = [
                             checked={opt.checked}
                             class="peer hidden"
                           />
-                          <div class="border-wedding-gray/40 peer-checked:border-wedding-black flex h-5 w-5 items-center justify-center rounded-full border transition-all">
-                            <div class="bg-wedding-black h-2.5 w-2.5 scale-0 rounded-full transition-transform peer-checked:scale-100" />
+                          <div class="border-wedding-medium/60 peer-checked:border-wedding-dark flex h-7 w-7 items-center justify-center rounded-full border-2 transition-all peer-checked:[&>div]:scale-100">
+                            <div class="bg-wedding-dark h-3.5 w-3.5 scale-0 rounded-full transition-transform" />
                           </div>
-                          <span class="group-hover:text-wedding-gray font-medium transition-colors">
+                          <span class="group-hover:text-wedding-medium text-wedding-dark text-lg font-semibold transition-colors">
                             {opt.label}
                           </span>
                         </label>
@@ -205,30 +229,32 @@ const formSchema = [
                     <select
                       id={field.id}
                       name={field.name}
-                      class="border-wedding-gray/30 focus:border-wedding-black w-full border bg-transparent p-3 font-medium outline-none"
+                      class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark w-full border bg-transparent p-4 text-lg font-semibold outline-none"
                     >
                       {field.options?.map((opt) => (
-                        <option value={opt.value}>{opt.label}</option>
+                        <option value={opt.value} class="text-wedding-dark">
+                          {opt.label}
+                        </option>
                       ))}
                     </select>
                   )}
 
                   {/* Checkbox Input */}
                   {field.type === "checkbox" && (
-                    <div class="space-y-4">
-                      <p class="text-wedding-gray text-xs font-bold tracking-widest uppercase">
+                    <div class="space-y-6">
+                      <p class="text-wedding-dark text-sm font-bold tracking-widest uppercase">
                         {field.label}
                       </p>
-                      <label class="group flex cursor-pointer items-center gap-3">
+                      <label class="group flex cursor-pointer items-center gap-4">
                         <input
                           type="checkbox"
                           id={field.id}
                           name={field.name}
                           class="peer hidden"
                         />
-                        <div class="border-wedding-gray/40 peer-checked:border-wedding-black flex h-5 w-5 items-center justify-center border transition-all">
+                        <div class="border-wedding-medium/60 peer-checked:border-wedding-dark flex h-7 w-7 items-center justify-center border-2 transition-all peer-checked:[&>svg]:scale-100">
                           <svg
-                            class="text-wedding-black h-3.5 w-3.5 scale-0 transition-transform peer-checked:scale-100"
+                            class="text-wedding-dark h-5 w-5 scale-0 transition-transform"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -237,7 +263,7 @@ const formSchema = [
                             <path d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span class="group-hover:text-wedding-gray text-sm font-medium italic transition-colors">
+                        <span class="group-hover:text-wedding-medium text-wedding-dark text-lg font-semibold italic transition-colors">
                           {field.text}
                         </span>
                       </label>
@@ -253,15 +279,15 @@ const formSchema = [
       <button
         type="submit"
         id="submit-btn"
-        class="bg-wedding-black text-wedding-white hover:bg-wedding-gray group flex w-full items-center justify-center gap-6 px-8 py-5 font-bold tracking-[0.3em] uppercase transition-colors"
+        class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium group flex w-full items-center justify-center gap-6 px-8 py-5 font-bold tracking-[0.3em] uppercase transition-colors"
       >
         <span
-          class="text-wedding-gray group-hover:text-wedding-white opacity-30 transition-all group-hover:opacity-60"
+          class="text-wedding-medium group-hover:text-wedding-light opacity-30 transition-all group-hover:opacity-60"
           >···</span
         >
         Odeslat potvrzení
         <span
-          class="text-wedding-gray group-hover:text-wedding-white opacity-30 transition-all group-hover:opacity-60"
+          class="text-wedding-medium group-hover:text-wedding-light opacity-30 transition-all group-hover:opacity-60"
           >−−−</span
         >
       </button>
@@ -280,19 +306,56 @@ const formSchema = [
   const statusMsg = document.getElementById("form-status");
   const submitBtn = document.getElementById("submit-btn");
 
-  // Conditional logic based on schema
-  const lunchCheckbox = document.getElementById(
-    "is-lunch-guest",
-  ) as HTMLInputElement;
-  const mealField = document.getElementById("field-container-meal");
+  const updateVisibility = () => {
+    if (!form) return;
 
-  lunchCheckbox?.addEventListener("change", () => {
-    if (lunchCheckbox.checked) {
-      mealField?.classList.remove("hidden");
-    } else {
-      mealField?.classList.add("hidden");
-    }
-  });
+    document.querySelectorAll("[data-condition]").forEach((container) => {
+      const conditionKey = container.getAttribute("data-condition");
+      const conditionValue = container.getAttribute("data-condition-value");
+      if (!conditionKey) return;
+
+      // Try finding by ID first
+      let field = document.getElementById(
+        conditionKey,
+      ) as HTMLInputElement | null;
+
+      // If not found or if it's not a checkbox/radio, try finding by Name (for radio groups)
+      const inputsByName = form.querySelectorAll(
+        `input[name="${conditionKey}"]`,
+      ) as NodeListOf<HTMLInputElement>;
+
+      let isVisible = false;
+
+      if (inputsByName.length > 0) {
+        // Handle Radio Groups or multiple inputs with same name
+        const selectedInput = Array.from(inputsByName).find((i) => i.checked);
+        if (conditionValue && conditionValue !== "null") {
+          isVisible = selectedInput?.value === conditionValue;
+        } else {
+          isVisible =
+            !!selectedInput &&
+            (selectedInput.type !== "checkbox" || selectedInput.checked);
+        }
+      } else if (field) {
+        // Handle single input by ID (like a checkbox)
+        if (field.type === "checkbox") {
+          isVisible = field.checked;
+        } else {
+          isVisible = !!field.value;
+        }
+      }
+
+      if (isVisible) {
+        container.classList.remove("hidden");
+      } else {
+        container.classList.add("hidden");
+      }
+    });
+  };
+
+  form?.addEventListener("change", updateVisibility);
+  // Initial check
+  updateVisibility();
 
   // Handle Form Submission
   form?.addEventListener("submit", async (e) => {
@@ -300,6 +363,7 @@ const formSchema = [
     if (!submitBtn || !statusMsg) return;
 
     submitBtn.setAttribute("disabled", "true");
+    const originalBtnText = submitBtn.innerHTML;
     submitBtn.innerHTML = "Odesílám...";
 
     const formData = new FormData(form);
@@ -317,14 +381,14 @@ const formSchema = [
       statusMsg.classList.add("text-green-600");
 
       form.reset();
-      mealField?.classList.add("hidden");
+      updateVisibility();
     } catch (error) {
       statusMsg.textContent = "Chyba při odesílání. Zkuste to prosím znovu.";
       statusMsg.classList.remove("hidden", "text-green-600");
       statusMsg.classList.add("text-red-500");
     } finally {
       submitBtn.removeAttribute("disabled");
-      submitBtn.innerHTML = "Odeslat potvrzení";
+      submitBtn.innerHTML = originalBtnText;
     }
   });
 </script>
