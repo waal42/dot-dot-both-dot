@@ -31,11 +31,22 @@ const { metaTitle, hero } = weddingContent;
         {hero.title}
       </h1>
       <p
+        class="text-wedding-dark mb-8 text-4xl font-bold tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
+      >
+        {hero.date}
+      </p>
+      <p
         class="text-wedding-medium mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
       >
         {hero.subtitle}
       </p>
-
+      <p
+        class="text-wedding-dark mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
+      >
+        <span class="morse-decoder" data-decoded={hero.morseCodeText}>
+          {hero.morseCode}
+        </span>
+      </p>
       <a
         href="#rsvp"
         class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm"

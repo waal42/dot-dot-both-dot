@@ -66,6 +66,8 @@ export interface TransportOption {
   icon: "car" | "train" | "bus";
   /** Morse code subtitle decorations */
   morse: string;
+  /** Morse code subtitle */
+  morseText: string;
   title: string;
   /** Rich text detail of the transport method */
   detail: string;
@@ -127,7 +129,10 @@ export interface WeddingContent {
   /** Hero section shown immediately on page load */
   hero: {
     title: string;
+    date: string;
     subtitle: string;
+    morseCode: string;
+    morseCodeText: string;
     buttonText: string;
   };
   
@@ -217,7 +222,10 @@ export const weddingContent: WeddingContent = {
   // ==========================================
   hero: {
     title: "Bereme se!",
+    date: "15. srpna 2026",
     subtitle: "Budeme moc rádi, když u toho budete s námi.",
+    morseCode: "·− / −· / ---",
+    morseCodeText: "ANO",
     buttonText: "Potvrdit účast",
   },
 
@@ -241,7 +249,7 @@ export const weddingContent: WeddingContent = {
         id: "hrachovina",
         title: "Proč Hrachovina a Filipíny?",
         content: [
-          "Hanka a Filip rádi chodí na šifrovačky. Hrachovina a Filipíny jsou pomocná slova pro zápis morseovky, kde tečka reprezentuje krátký tón/slabiku a čárka dlouhý tón/slabiku (H: ····, F ··-·). Jak jste si asi všimli ve svatebním oznámení (nebo tady na webu), slovo Hrachovina obsahuje všechna písmena jména HANA a slovo FILIPíny všechna písmena jména FILIP, v obou případech ve správném pořadí. A to nemůže být náhoda!",
+          "Hanka a Filip rádi chodí na šifrovačky. Hrachovina a Filipíny jsou pomocná slova pro zápis morseovky, kde tečka reprezentuje krátký tón/slabiku a čárka dlouhý tón/slabiku (H: ····, F ··-·). Jak jste si asi všimli ve svatebním oznámení (nebo tady na webu), slovo HrAchoviNA obsahuje všechna písmena jména HANA a slovo FILIPíny všechna písmena jména FILIP, v obou případech ve správném pořadí. A to nemůže být náhoda!",
           "Pokud bychom chtěli hledat souvislosti ještě dál, Hanka studovala genetiku a hrachovina může připomínat Mendelovy pokusy s hrachem. A Filip studoval matematiku a ve slově Filipíny lze najít i π."
         ]
       }
@@ -294,7 +302,8 @@ export const weddingContent: WeddingContent = {
         id: "car",
         label: "Autem",
         icon: "car",
-        morse: "·−·−·−·−·−·−·−·−",
+        morse: "·−",
+        morseText: "A",
         title: "Doprava autem",
         detail: "Parkování přímo u Sokecu nebo v přilehlých ulicích. Pozor ale na to, že nelze zaparkovat na ulici Nádražní a auto tam nechat do druhého dne. V neděli má být v rámci Šlapanických slavností na ulici Nádraždní průvod a zákaz zastavení.",
         marker: {
@@ -307,7 +316,8 @@ export const weddingContent: WeddingContent = {
         id: "train",
         label: "Vlakem",
         icon: "train",
-        morse: "···−···−···−···−",
+        morse: "···−",
+        morseText: "V",
         title: "Vlakem (Linka S6)",
         detail: "Z hlavního nádraží v Brně (linka S6) na stanici Šlapanice. Sokec se nachází pouhých 5 minut pohodlné chůze od nádraží.",
         marker: {
@@ -320,7 +330,8 @@ export const weddingContent: WeddingContent = {
         id: "bus",
         label: "Trolejbusem",
         icon: "bus",
-        morse: "----------------",
+        morse: "-",
+        morseText: "T",
         title: "Trolejbusem (Linka 31)",
         detail: "Přímé trolejbusové spojení linkou 31 z Hlavního nádraží Brno na zastávku Šlapanice Kalvodova, odkud je to k Sokecu 10 minut chůze.",
         marker: {
@@ -333,7 +344,8 @@ export const weddingContent: WeddingContent = {
         id: "night-bus",
         label: "Domů",
         icon: "bus",
-        morse: "----------------",
+        morse: "·−·",
+        morseText: "R",
         title: "Rozjezdem (linka N96)",
         detail: "Ze Šlapanic se v noci dostanete zpátky do Brna rozjezdem N96, který jezdí ze zastávky Šlapanice, Kalvodova. Od Sokecu je to na Kalvodovu asi 10 minut chůze.",
         marker: {

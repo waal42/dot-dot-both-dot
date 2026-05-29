@@ -4,6 +4,25 @@ import { weddingContent } from "../data/weddingContent";
 
 const { whenWhere } = weddingContent;
 const { venueName, address, coords, googleMapsUrl, description, transportOptions } = whenWhere;
+
+// Generate .ics standard iCalendar file dynamic link for instant invite downloads
+const icsContent = [
+  "BEGIN:VCALENDAR",
+  "VERSION:2.0",
+  "PRODID:-//mywalove//Wedding//CS",
+  "BEGIN:VEVENT",
+  "UID:wedding-hanka-filip-2026@mywalove.cz",
+  "DTSTAMP:20260530T000000Z",
+  "DTSTART:20260815T110000Z", // 13:00 local CEST time is 11:00 UTC
+  "DTEND:20260816T000000Z",   // 02:00 next day CEST is 00:00 UTC
+  "SUMMARY:Svatba Hanky & Filipa",
+  "DESCRIPTION:Budeme moc rádi, když u toho budete s námi! Podrobnosti na https://mywalove.cz/svatba",
+  "LOCATION:Sokec, Šlapanice",
+  "END:VEVENT",
+  "END:VCALENDAR"
+].join("\r\n");
+
+const icsDataUri = `data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`;
 ---
 
 <section id="kdy-a-kde" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
@@ -24,8 +43,52 @@ const { venueName, address, coords, googleMapsUrl, description, transportOptions
   </h2>
 
   <div class="grid items-stretch gap-12 lg:grid-cols-5 animate-fade-in-up delay-100">
-    <!-- Venue Info & Transport Info (Side Column) -->
-    <div class="flex flex-col justify-between space-y-8 lg:col-span-2">
+    <!-- Venue Info, Calendar & Transport Info (Side Column) -->
+    <div class="flex flex-col justify-between space-y-10 lg:col-span-2">
+      
+      <!-- WHEN SECTION (Kdy se potkáme) -->
+      <div class="text-center lg:text-left space-y-4">
+        <p class="text-wedding-medium text-xs font-bold tracking-[0.4em] uppercase">
+          Kdy se potkáme?
+        </p>
+        <div class="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start">
+          <!-- Calendar Card Graphic -->
+          <div class="bg-wedding-dark text-wedding-light p-4 shadow-md rounded-sm w-28 text-center flex flex-col justify-center border border-wedding-medium/20 hover-card-premium shrink-0 select-none">
+            <span class="text-xs uppercase tracking-widest opacity-80 font-bold">Srpen</span>
+            <span class="text-4xl font-extrabold my-1 leading-none">15</span>
+            <span class="text-[10px] uppercase tracking-wider font-semibold opacity-75">Sobota</span>
+          </div>
+          
+          <div class="text-center lg:text-left space-y-2">
+            <p class="text-wedding-dark text-2xl font-bold tracking-tight">Sobota, 15. srpna 2026</p>
+            <p class="text-wedding-medium text-sm font-semibold italic">Zahájení ve 13:00 (rodina) / 14:30 (hosté)</p>
+            
+            <!-- Calendar Integration Links -->
+            <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+              <a 
+                href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Svatba+Hanky+a+Filipa&dates=20260815T110000Z/20260816T000000Z&details=Budeme+moci+r%C3%A1di%2C+kdy%C5%BE+u+toho+budete+s+n%C3%A1mi%21+V%C3%ADce+informac%C3%AD+na+https%3A%2F%2Fmywalove.cz%2Fsvatba&location=Sokec%2C+N%C3%A1dra%C5%BEn%C3%AD+87%2C+664+51+%C5%A0lapanice"
+                target="_blank"
+                class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+              >
+                + Google Kalendář
+              </a>
+              <span class="text-wedding-medium/40 text-xs select-none">•</span>
+              <a 
+                href={icsDataUri}
+                download="svatba-hanka-filip.ics"
+                class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+              >
+                + Pozvánka (.ics)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider line -->
+      <div class="morse-line text-wedding-medium/20 mx-auto h-[2px] w-full max-w-md lg:mx-0"></div>
+
+      <!-- WHERE SECTION (Kde) -->
       <div class="text-center lg:text-left space-y-6">
         <div>
           <p
@@ -41,11 +104,6 @@ const { venueName, address, coords, googleMapsUrl, description, transportOptions
           </p>
         </div>
 
-        <div
-          class="morse-line text-wedding-medium/30 mx-auto h-[2px] w-24 lg:mx-0"
-        >
-        </div>
-
         <p
           class="text-wedding-dark mx-auto text-base leading-relaxed lg:mx-0 opacity-90 font-medium italic text-justify lg:text-left"
         >
@@ -56,20 +114,20 @@ const { venueName, address, coords, googleMapsUrl, description, transportOptions
           <a
             href={googleMapsUrl}
             target="_blank"
-            class="text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light group inline-flex items-center gap-6 border bg-transparent px-8 py-3.5 text-xs font-bold tracking-widest uppercase transition-all duration-300"
+            class="text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light group inline-flex items-center gap-6 border bg-transparent px-8 py-3.5 text-xs font-bold tracking-widest uppercase transition-all duration-300 select-none"
           >
             Navigovat
             <span
               class="morse-decoder text-wedding-medium group-hover:text-wedding-light opacity-30 group-hover:opacity-100"
-              data-decoded="G"
-              >−−·</span
+              data-decoded="N"
+              >−·</span
             >
           </a>
         </div>
       </div>
 
-      <!-- Transportation Selector (Moved here from map) -->
-      <div class="space-y-6 pt-6 border-t border-wedding-medium/20">
+      <!-- Transportation Selector -->
+      <div class="space-y-6 pt-6">
         <p class="text-wedding-medium text-center lg:text-left text-xs font-bold tracking-[0.4em] uppercase">
           Jak se k nám dostanete?
         </p>
@@ -80,7 +138,7 @@ const { venueName, address, coords, googleMapsUrl, description, transportOptions
             transportOptions.map((opt, idx) => (
               <button
                 data-tab={opt.id}
-                class={`transport-tab flex-1 px-3 py-3 text-[10px] sm:text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer text-center rounded-sm ${idx === 0 ? "bg-wedding-dark text-wedding-light" : "text-wedding-dark/60 hover:bg-wedding-medium/10"}`}
+                class={`transport-tab flex-1 px-3 py-3 text-[10px] sm:text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer text-center rounded-sm select-none ${idx === 0 ? "bg-wedding-dark text-wedding-light" : "text-wedding-dark/60 hover:bg-wedding-medium/10"}`}
               >
                 {opt.label}
               </button>
@@ -97,7 +155,9 @@ const { venueName, address, coords, googleMapsUrl, description, transportOptions
                 class={`transport-panel bg-wedding-light/40 border border-wedding-medium/20 p-6 shadow-sm rounded-sm transition-all duration-500 ${idx === 0 ? "translate-y-0 opacity-100" : "pointer-events-none hidden translate-y-4 opacity-0"}`}
               >
                 <p class="text-wedding-medium mb-2 text-[10px] font-bold tracking-[0.3em] uppercase">
-                  {opt.morse}
+                  <span class="morse-decoder" data-decoded={opt.morseText}>
+                    {opt.morse}
+                  </span>
                 </p>
                 <h4 class="text-wedding-dark mb-2 text-lg font-bold leading-tight">
                   {opt.title}
@@ -114,7 +174,7 @@ const { venueName, address, coords, googleMapsUrl, description, transportOptions
 
     <!-- Clean Map Container (No clutter overlays, full visibility!) -->
     <div
-      class="morse-border text-wedding-medium/40 bg-wedding-light relative h-[450px] lg:h-auto overflow-hidden shadow-xl lg:col-span-3 hover-card-premium min-h-[400px] lg:min-h-[500px]"
+      class="morse-border text-wedding-medium/40 bg-wedding-light relative h-[450px] lg:h-auto overflow-hidden shadow-xl lg:col-span-3 hover-card-premium min-h-[450px] lg:min-h-[550px]"
     >
       <!-- Map Element -->
       <div
