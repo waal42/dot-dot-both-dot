@@ -1,33 +1,74 @@
 ---
 import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
-import imgLublan from "../assets/my-v-lublani.jpg";
-import imgSifrovacka from "../assets/my-na-sifrovacce.jpg";
-import imgMyvali from "../assets/my-jsme-myvali.jpg";
-import imgSaline from "../assets/my-v-saline.jpg";
-import imgFabar from "../assets/my-ve-fabaru.jpg";
-import imgVytah from "../assets/my-ve-vytahu.jpg";
-import imgVytah2 from "../assets/my-ve-vytahu-2.jpg";
-import imgPlac from "../assets/my-v-placi.jpg";
+import imgLublan from "../assets/lublan.jpg";
+import imgSifrovacka from "../assets/sifrovacka.jpg";
+import imgMyvali from "../assets/myvali.jpg";
+import imgSaline from "../assets/salina.jpg";
+import imgFabar from "../assets/fabar.jpg";
+import imgVytah from "../assets/vytah.jpg";
+import imgVytah2 from "../assets/vytah2.jpg";
+import imgPlac from "../assets/plac.jpg";
+import imgCap from "../assets/cap.jpg";
+import imgKokorinsko from "../assets/kokorinsko.jpg";
+import imgKokorinsko2 from "../assets/kokorinsko2.jpg";
+import imgMore from "../assets/more.jpg";
+import imgParek from "../assets/parek.jpg";
+import imgSbeerka from "../assets/sbeerka.jpg";
+import imgStehovani from "../assets/stehovani.jpg";
+import imgSvetry from "../assets/svetry.jpg";
+import imgTmou from "../assets/tmou.jpg";
+import imgViden from "../assets/viden.jpg";
+import imgWuppertal from "../assets/wuppertal.jpg";
+
+interface GalleryImage {
+  src: ImageMetadata;
+  alt: string;
+  size: "small" | "large" | "vertical" | "horizontal";
+  type?: "image";
+}
+
+interface GalleryText {
+  src: null;
+  alt: string;
+  type: "text";
+  title: string;
+  detail: string;
+  size: "small" | "large" | "vertical" | "horizontal";
+}
+
+type GalleryItem = GalleryImage | GalleryText;
 
 // Gallery configuration for easy management
-const galleryItems = [
-  { src: imgLublan, alt: "Hanka a Filip v Lublani", size: "large" },
-  { src: imgSifrovacka, alt: "Hanka a Filip na šifrovačce", size: "small" },
-  { src: imgVytah2, alt: "Hanka a Filip ve výtahu", size: "vertical" },
+const galleryItems: GalleryItem[] = [
+  { src: imgLublan, alt: "V Lublani", size: "large" },
+  { src: imgSifrovacka, alt: "Na šifrovačce", size: "small" },
+  { src: imgVytah2, alt: "Ve výtahu", size: "vertical" },
   {
-    src: "",
+    src: null,
     alt: "",
     type: "text",
     title: "Hanka & Filip",
     detail: "nějakej totálně cringe text",
     size: "small",
   },
-  { src: imgSaline, alt: "Hanka a Filip v Šalině", size: "horizontal" },
-  { src: imgPlac, alt: "Hanka a Filip v Pláči", size: "horizontal" },
-  { src: imgMyvali, alt: "My jsme mývalové", size: "small" },
-  { src: imgFabar, alt: "Ve Fabaru", size: "horizontal" },
-  { src: imgVytah, alt: "Ve Výtahu", size: "small" },
+  { src: imgSaline, alt: "V šalině", size: "horizontal" },
+  { src: imgPlac, alt: "Společný pláč", size: "horizontal" },
+  { src: imgMyvali, alt: "My jsme mývalové", size: "vertical" },
+  { src: imgFabar, alt: "V F.A. baru", size: "horizontal" },
+  { src: imgVytah, alt: "Ve výtahu", size: "small" },
+  { src: imgStehovani, alt: "Malování po stěhování", size: "large" },
+  { src: imgSvetry, alt: "Ve vánočních svetrch", size: "vertical" },
+  { src: imgTmou, alt: "Na Tmou", size: "vertical" },
+  { src: imgViden, alt: "Ve Vídni", size: "horizontal" },
+  { src: imgParek, alt: "Na Párku", size: "vertical" },
+  { src: imgWuppertal, alt: "Ve Wuppertalu", size: "horizontal" },
+  { src: imgMore, alt: "U moře", size: "small" },
+  { src: imgCap, alt: "U Čápa", size: "horizontal" },
+  { src: imgSbeerka, alt: "Ve Sbeerce", size: "horizontal" },
+  { src: imgKokorinsko, alt: "Pod Kokořínem", size: "horizontal" },
+  { src: imgKokorinsko2, alt: "Pořád pod Kokořínem", size: "horizontal" },
 ];
 
 const getSizeClasses = (size: string) => {
@@ -60,7 +101,8 @@ const getSizeClasses = (size: string) => {
   </h2>
 
   <div
-    class="grid auto-rows-[200px] grid-cols-2 gap-4 md:auto-rows-[300px] md:grid-cols-4"
+    id="gallery"
+    class="grid auto-rows-[150px] grid-cols-2 gap-3 md:auto-rows-[300px] md:grid-cols-4 md:gap-4"
   >
     {
       galleryItems.map((item) => (
@@ -68,21 +110,29 @@ const getSizeClasses = (size: string) => {
           class={`${getSizeClasses(item.size)} group bg-wedding-dark/5 overflow-hidden`}
         >
           {item.type === "text" ? (
-            <div class="border-wedding-medium/20 bg-wedding-light flex h-full flex-col items-center justify-center border p-8 text-center">
-              <p class="text-wedding-dark mb-2 text-2xl font-bold">
+            <div class="border-wedding-medium/20 bg-wedding-light flex h-full flex-col items-center justify-center border p-4 text-center md:p-8">
+              <p class="text-wedding-dark mb-2 text-xl font-bold md:text-2xl">
                 {item.title}
               </p>
-              <div class="morse-line text-wedding-medium/40 my-6 h-[2px] w-40" />
-              <p class="text-wedding-medium text-xs font-bold tracking-[0.3em] uppercase">
+              <div class="morse-line text-wedding-medium/40 my-4 h-[2px] w-24 md:my-6 md:w-40" />
+              <p class="text-wedding-medium text-[10px] font-bold tracking-[0.3em] uppercase md:text-xs">
                 {item.detail}
               </p>
             </div>
           ) : (
-            <Image
-              src={item.src}
-              alt={item.alt}
-              class="h-full w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 hover:grayscale-0"
-            />
+            <a
+              href={item.src.src}
+              data-pswp-width={item.src.width}
+              data-pswp-height={item.src.height}
+              target="_blank"
+              class="block h-full w-full cursor-zoom-in"
+            >
+              <Image
+                src={item.src}
+                alt={item.alt}
+                class="h-full w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0 md:grayscale"
+              />
+            </a>
           )}
         </div>
       ))
@@ -99,3 +149,17 @@ const getSizeClasses = (size: string) => {
     </p>
   </div>
 </section>
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import "photoswipe/style.css";
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: "#gallery",
+    children: "a",
+    pswpModule: () => import("photoswipe"),
+    // Add some padding for mobile
+    padding: { top: 20, bottom: 20, left: 10, right: 10 },
+  });
+  lightbox.init();
+</script>
