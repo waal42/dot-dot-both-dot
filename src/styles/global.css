@@ -103,3 +103,105 @@
     mask-repeat: no-repeat;
   }
 }
+
+/* Custom Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-wedding-light);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-wedding-medium);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-wedding-dark);
+}
+
+/* Interactive Morse Decoder Utility */
+.morse-decoder {
+  position: relative;
+  cursor: help;
+  transition: color 0.3s ease;
+}
+
+.morse-decoder::after {
+  content: attr(data-decoded);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: var(--color-wedding-dark);
+  color: var(--color-wedding-light);
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 100;
+}
+
+/* Small arrow for tooltip */
+.morse-decoder::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--color-wedding-dark) transparent transparent transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+}
+
+.morse-decoder:hover::after,
+.morse-decoder:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.morse-decoder:hover {
+  color: var(--color-wedding-dark);
+}
+
+/* Premium Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+
+/* Premium Card Hover Effect */
+.hover-card-premium {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+}

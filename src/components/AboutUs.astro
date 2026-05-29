@@ -1,75 +1,9 @@
 ---
+// src/components/AboutUs.astro
 import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
+import { weddingContent } from "../data/weddingContent";
 
-import imgLublan from "../assets/lublan.jpg";
-import imgSifrovacka from "../assets/sifrovacka.jpg";
-import imgMyvali from "../assets/myvali.jpg";
-import imgSaline from "../assets/salina.jpg";
-import imgFabar from "../assets/fabar.jpg";
-import imgVytah from "../assets/vytah.jpg";
-import imgVytah2 from "../assets/vytah2.jpg";
-import imgPlac from "../assets/plac.jpg";
-import imgCap from "../assets/cap.jpg";
-import imgKokorinsko from "../assets/kokorinsko.jpg";
-import imgKokorinsko2 from "../assets/kokorinsko2.jpg";
-import imgMore from "../assets/more.jpg";
-import imgParek from "../assets/parek.jpg";
-import imgSbeerka from "../assets/sbeerka.jpg";
-import imgStehovani from "../assets/stehovani.jpg";
-import imgSvetry from "../assets/svetry.jpg";
-import imgTmou from "../assets/tmou.jpg";
-import imgViden from "../assets/viden.jpg";
-import imgWuppertal from "../assets/wuppertal.jpg";
-
-interface GalleryImage {
-  src: ImageMetadata;
-  alt: string;
-  size: "small" | "large" | "vertical" | "horizontal";
-  type?: "image";
-}
-
-interface GalleryText {
-  src: null;
-  alt: string;
-  type: "text";
-  title: string;
-  detail: string;
-  size: "small" | "large" | "vertical" | "horizontal";
-}
-
-type GalleryItem = GalleryImage | GalleryText;
-
-// Gallery configuration for easy management
-const galleryItems: GalleryItem[] = [
-  { src: imgLublan, alt: "V Lublani", size: "large" },
-  { src: imgSifrovacka, alt: "Na šifrovačce", size: "small" },
-  { src: imgVytah2, alt: "Ve výtahu", size: "vertical" },
-  {
-    src: null,
-    alt: "",
-    type: "text",
-    title: "Hanka & Filip",
-    detail: "nějakej totálně cringe text",
-    size: "small",
-  },
-  { src: imgSaline, alt: "V šalině", size: "horizontal" },
-  { src: imgPlac, alt: "Společný pláč", size: "horizontal" },
-  { src: imgMyvali, alt: "My jsme mývalové", size: "vertical" },
-  { src: imgFabar, alt: "V F.A. baru", size: "horizontal" },
-  { src: imgVytah, alt: "Ve výtahu", size: "small" },
-  { src: imgStehovani, alt: "Malování po stěhování", size: "large" },
-  { src: imgSvetry, alt: "Ve vánočních svetrch", size: "vertical" },
-  { src: imgTmou, alt: "Na Tmou", size: "vertical" },
-  { src: imgViden, alt: "Ve Vídni", size: "horizontal" },
-  { src: imgParek, alt: "Na Párku", size: "vertical" },
-  { src: imgWuppertal, alt: "Ve Wuppertalu", size: "horizontal" },
-  { src: imgMore, alt: "U moře", size: "small" },
-  { src: imgCap, alt: "U Čápa", size: "horizontal" },
-  { src: imgSbeerka, alt: "Ve Sbeerce", size: "horizontal" },
-  { src: imgKokorinsko, alt: "Pod Kokořínem", size: "horizontal" },
-  { src: imgKokorinsko2, alt: "Pořád pod Kokořínem", size: "horizontal" },
-];
+const { aboutUs } = weddingContent;
 
 const getSizeClasses = (size: string) => {
   switch (size) {
@@ -86,32 +20,65 @@ const getSizeClasses = (size: string) => {
 ---
 
 <section id="o-nas" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
-  <h2
-    class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
-  >
-    <span
-      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
-      >−−·</span
+  <div class="text-center">
+    <h2
+      class="text-wedding-dark mb-4 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
     >
-    O nás
-    <span
-      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
-      >·−·−</span
-    >
-  </h2>
+      <span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+        data-decoded="O"
+        >−−−</span
+      >
+      {aboutUs.title}
+      <span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+        data-decoded="S"
+        >···</span
+      >
+    </h2>
+    <p class="text-wedding-medium mx-auto max-w-xl text-center text-lg italic opacity-85 mb-16 animate-fade-in-up">
+      {aboutUs.motto}
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 items-stretch">
+    {
+      aboutUs.sections.map((section, idx) => (
+        <div 
+          class="morse-border text-wedding-dark bg-wedding-light shadow-sm hover-card-premium animate-fade-in-up flex flex-col justify-between"
+          style={`animation-delay: ${idx * 150}ms`}
+        >
+          <div class="px-6 py-12 text-center md:px-10 lg:px-12 flex flex-col justify-center h-full">
+            <div class="space-y-6">
+              <p class="text-wedding-dark text-2xl font-bold md:text-3xl leading-tight">
+                {section.title}
+              </p>
+              {section.content.map((pText) => (
+                <p 
+                  class="text-wedding-dark mx-auto text-base leading-relaxed font-medium italic opacity-90 text-justify md:text-center" 
+                  set:html={pText} 
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
 
   <div
     id="gallery"
-    class="grid auto-rows-[150px] grid-cols-2 gap-3 md:auto-rows-[300px] md:grid-cols-4 md:gap-4"
+    class="grid auto-rows-[150px] grid-cols-2 gap-3 md:auto-rows-[300px] md:grid-cols-4 md:gap-4 grid-flow-row-dense animate-fade-in-up"
+    style="animation-delay: 300ms;"
   >
     {
-      galleryItems.map((item) => (
+      aboutUs.gallery.map((item) => (
         <div
-          class={`${getSizeClasses(item.size)} group bg-wedding-dark/5 overflow-hidden`}
+          class={`${getSizeClasses(item.size)} group bg-wedding-dark/5 overflow-hidden border border-transparent hover:border-wedding-dark/10 transition-all duration-500 shadow-sm`}
         >
           {item.type === "text" ? (
             <div class="border-wedding-medium/20 bg-wedding-light flex h-full flex-col items-center justify-center border p-4 text-center md:p-8">
-              <p class="text-wedding-dark mb-2 text-xl font-bold md:text-2xl">
+              <p class="text-wedding-dark mb-2 text-xl font-bold md:text-2xl leading-tight">
                 {item.title}
               </p>
               <div class="morse-line text-wedding-medium/40 my-4 h-[2px] w-24 md:my-6 md:w-40" />
@@ -130,6 +97,7 @@ const getSizeClasses = (size: string) => {
               <Image
                 src={item.src}
                 alt={item.alt}
+                width={800}
                 class="h-full w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0 md:grayscale"
               />
             </a>
@@ -137,16 +105,6 @@ const getSizeClasses = (size: string) => {
         </div>
       ))
     }
-  </div>
-
-  <div class="mx-auto mt-20 max-w-2xl text-center">
-    <p
-      class="text-wedding-dark text-xl leading-relaxed font-medium italic md:text-2xl"
-    >
-      "Jsme dva, co se našli u kódu, šifer a dobrého kafe. Naše cesta nás
-      zavedla z brněnských uliček až k tomuto dni, o který se s vámi chceme
-      podělit." -Gemini
-    </p>
   </div>
 </section>
 
@@ -158,7 +116,6 @@ const getSizeClasses = (size: string) => {
     gallery: "#gallery",
     children: "a",
     pswpModule: () => import("photoswipe"),
-    // Add some padding for mobile
     padding: { top: 20, bottom: 20, left: 10, right: 10 },
   });
   lightbox.init();

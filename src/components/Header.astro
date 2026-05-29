@@ -14,10 +14,18 @@ import Navigation from "./Navigation.astro";
         class="group flex items-center gap-4 text-xl font-bold whitespace-nowrap md:text-2xl"
       >
         <span>Hanka</span>
-        <span
-          class="text-wedding-medium text-sm tracking-widest opacity-30 transition-opacity group-hover:opacity-60 md:text-base"
-          >···· &nbsp; ··−·</span
-        >
+        <span class="flex items-center gap-1.5 md:gap-2">
+          <span
+            class="morse-decoder text-wedding-medium text-sm tracking-widest opacity-30 transition-all hover:opacity-100 md:text-base cursor-help"
+            data-decoded="H"
+            >····</span
+          >
+          <span
+            class="morse-decoder text-wedding-medium text-sm tracking-widest opacity-30 transition-all hover:opacity-100 md:text-base cursor-help"
+            data-decoded="F"
+            >··−·</span
+          >
+        </span>
         <span>Filip</span>
       </a>
     </div>

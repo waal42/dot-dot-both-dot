@@ -1,40 +1,44 @@
 ---
-const dressCode = {
-  title: "Dress Code",
-  main: "Žádný.",
-  detail: "Přijďte v tom, v čem se cítíte dobře.",
-  subDetail:
-    "Svatba se odehrává v interiéru i exteriéru, tak na to prosím myslete při výběru obuvi.",
-};
+// src/components/DressCode.astro
+import { weddingContent } from "../data/weddingContent";
+
+const { dressCode } = weddingContent;
 ---
 
 <section id="dress-code" class="mx-auto max-w-4xl scroll-mt-24 px-6 py-24">
-  <h2
-    class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
-  >
-    <span
-      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
-      >−··</span
+  <div class="text-center">
+    <h2
+      class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
     >
-    {dressCode.title}
-    <span
-      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
-      >−·−·</span
-    >
-  </h2>
+      <span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+        data-decoded="D"
+        >−··</span
+      >
+      {dressCode.title}
+      <span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+        data-decoded="E"
+        >·</span
+      >
+    </h2>
+  </div>
+
   <div
-    class="morse-border text-wedding-medium/30 bg-wedding-light p-16 text-center shadow-sm md:p-24"
+    class="morse-border text-wedding-medium/30 bg-wedding-light p-16 text-center shadow-sm md:p-24 animate-fade-in-up delay-100 hover-card-premium"
   >
-    <p class="text-wedding-dark mb-6 text-5xl font-bold tracking-tight">
+    <p class="text-wedding-dark mb-6 text-5xl font-bold tracking-tight leading-none">
       {dressCode.main}
     </p>
-    <p class="text-wedding-dark mb-8 text-2xl font-medium italic">
+    <p class="text-wedding-dark mb-8 text-2xl font-medium italic opacity-90 leading-relaxed max-w-xl mx-auto">
       {dressCode.detail}
     </p>
+    
     <div class="morse-line text-wedding-medium/30 mx-auto my-12 h-[2px] w-64">
     </div>
+    
     <p
-      class="text-wedding-dark mx-auto max-w-sm text-sm leading-relaxed font-bold tracking-[0.2em] uppercase"
+      class="text-wedding-dark mx-auto max-w-sm text-sm leading-relaxed font-bold tracking-[0.2em] uppercase opacity-80"
     >
       {dressCode.subDetail}
     </p>

@@ -7,15 +7,24 @@
     >
       <div class="flex items-center gap-4">
         <span class="opacity-60">H</span>
-        <span class="text-3xl opacity-20 md:text-4xl">⋅⋅⋅⋅</span>
+        <span 
+          class="morse-decoder text-3xl opacity-30 hover:opacity-100 transition-all cursor-help md:text-4xl" 
+          data-decoded="H"
+          >····</span
+        >
       </div>
       <span class="mx-4 hidden text-4xl font-light opacity-20 md:block">/</span>
       <div class="flex items-center gap-4">
         <span class="opacity-60">F</span>
-        <span class="text-3xl opacity-20 md:text-4xl">⋅⋅-⋅</span>
+        <span 
+          class="morse-decoder text-3xl opacity-30 hover:opacity-100 transition-all cursor-help md:text-4xl" 
+          data-decoded="F"
+          >··−·</span
+        >
       </div>
     </div>
-    <p class="mb-2 text-3xl font-bold">Těšíme se na vás!</p>
+    
+    <p class="mb-2 text-3xl font-bold text-wedding-dark">Těšíme se na vás!</p>
     <p class="text-wedding-dark text-lg font-bold tracking-[0.2em] uppercase">
       Hanka & Filip
     </p>
@@ -24,10 +33,117 @@
     >
       Šlapanice, 15. srpna 2026
     </p>
+    
+    <!-- 🦝 MÝVALÍ MINI-ŠIFRA GAME -->
+    <div class="mt-16 max-w-md mx-auto p-6 bg-wedding-light/50 border border-wedding-medium/20 shadow-sm rounded-sm hover-card-premium">
+      <h4 class="text-wedding-dark font-bold text-sm tracking-widest uppercase mb-3 flex items-center justify-center gap-2">
+        🦝 Mývalí mini-šifra
+      </h4>
+      <p class="text-wedding-dark text-xs italic font-medium opacity-80 mb-5 leading-relaxed">
+        Dokážeš rozluštit tajný kód pro vstup k mývalům?
+      </p>
+      
+      <!-- Morse Code to decode -->
+      <div class="mb-5 py-3.5 bg-wedding-dark/5 border border-wedding-medium/10 rounded-sm">
+        <p class="text-wedding-dark text-lg font-bold tracking-[0.25em] select-all">
+          −− &nbsp; −·−− &nbsp; ···− &nbsp; ·− &nbsp; ·−·· &nbsp; −−− &nbsp; ···− &nbsp; ·
+        </p>
+      </div>
+
+      <!-- Interactive Inputs -->
+      <div id="game-controls" class="flex gap-2">
+        <input 
+          type="text" 
+          id="game-input" 
+          placeholder="Tvoje odpověď..." 
+          class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark px-3 py-2 text-sm bg-transparent border rounded-sm outline-none flex-1 font-bold tracking-widest uppercase placeholder:text-wedding-medium/40"
+        />
+        <button 
+          id="game-btn" 
+          class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium px-5 py-2 text-xs font-bold tracking-widest uppercase rounded-sm cursor-pointer transition-colors active:scale-95"
+        >
+          Ověřit
+        </button>
+      </div>
+      
+      <!-- Output Message (Initially Hidden) -->
+      <div id="game-success" class="hidden mt-6 text-center animate-fade-in-up">
+        <div class="morse-line text-wedding-medium/20 mx-auto h-[2px] w-24 mb-4"></div>
+        <p class="text-wedding-dark text-sm font-bold mb-1">🎉 Kód je správný! Vítej v mývalím doupěti.</p>
+        <p class="text-wedding-medium text-[10px] font-medium italic mb-4">
+          Tady je tvůj tajný mývalí maskot:
+        </p>
+        <!-- Cute Text Art Raccoons -->
+        <pre class="text-wedding-dark text-[10px] leading-tight font-mono inline-block text-left p-3.5 bg-wedding-dark/5 border border-wedding-medium/15 rounded-sm select-all">
+       ( -\_- )     ( -\_- )
+       /     \\=====/     \\
+      |  (o)  | ❤  |  (o)  |
+       \\     /=====\\     /
+        `---'         `---'
+        </pre>
+      </div>
+      
+      <p id="game-error" class="hidden mt-3 text-xs text-red-600 font-bold tracking-widest uppercase animate-pulse">
+        Kód nesouhlasí, zkus to znovu!
+      </p>
+    </div>
+    
     <div class="border-wedding-medium/10 mt-24 border-t pt-10">
-      <p class="text-xs font-bold tracking-[0.5em] uppercase opacity-60">
-        ⋅⋅∸⋅ Vytvořeno s morseovkou ⋅⋅∸⋅
+      <p class="text-xs font-bold tracking-[0.3em] uppercase opacity-60 flex items-center justify-center gap-2">
+        <span class="morse-decoder cursor-help" data-decoded="F">··−·</span>
+        <span>Vytvořeno s morseovkou</span>
+        <span class="morse-decoder cursor-help" data-decoded="F">··−·</span>
       </p>
     </div>
   </div>
 </footer>
+
+<script>
+  const gameInput = document.getElementById("game-input") as HTMLInputElement;
+  const gameBtn = document.getElementById("game-btn");
+  const gameSuccess = document.getElementById("game-success");
+  const gameError = document.getElementById("game-error");
+  const gameControls = document.getElementById("game-controls");
+
+  gameBtn?.addEventListener("click", () => {
+    if (!gameInput || !gameSuccess || !gameError || !gameControls) return;
+    
+    // Normalize input (ignore case, spaces, diacritics)
+    const answer = gameInput.value
+      .trim()
+      .toUpperCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // remove diacritics
+      .replace(/\s+/g, ""); // remove spaces
+
+    if (answer === "MYVALOVE") {
+      gameError.classList.add("hidden");
+      gameControls.classList.add("hidden");
+      gameSuccess.classList.remove("hidden");
+      
+      // Save puzzle state in localStorage so it stays solved on reload!
+      localStorage.setItem("myvalove_puzzle_solved", "true");
+    } else {
+      gameError.classList.remove("hidden");
+      // Hide error after 3 seconds
+      setTimeout(() => {
+        gameError.classList.add("hidden");
+      }, 3000);
+    }
+  });
+
+  // Listen for Enter key
+  gameInput?.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      gameBtn?.click();
+    }
+  });
+
+  // Check if solved on mount
+  if (localStorage.getItem("myvalove_puzzle_solved") === "true") {
+    if (gameControls && gameSuccess) {
+      gameControls.classList.add("hidden");
+      gameSuccess.classList.remove("hidden");
+    }
+  }
+</script>

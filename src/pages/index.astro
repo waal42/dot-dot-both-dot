@@ -9,11 +9,16 @@ import RsvpForm from "../components/RsvpForm.astro";
 import DressCode from "../components/DressCode.astro";
 import AboutUs from "../components/AboutUs.astro";
 
+// Import Centralized Data
+import { weddingContent } from "../data/weddingContent";
+
 // Import Assets
 import morseMotif from "../assets/morse-motif.svg";
+
+const { metaTitle, hero } = weddingContent;
 ---
 
-<Layout title="Naše Svatba | Hanka & Filip">
+<Layout title={metaTitle}>
   <Header />
 
   <main class="pb-20">
@@ -21,26 +26,26 @@ import morseMotif from "../assets/morse-motif.svg";
       class="flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-6 py-20 text-center"
     >
       <h1
-        class="text-wedding-dark mb-8 text-6xl font-bold tracking-tight md:text-8xl"
+        class="text-wedding-dark mb-8 text-6xl font-bold tracking-tight md:text-8xl animate-fade-in-up"
       >
-        Bereme se!
+        {hero.title}
       </h1>
       <p
-        class="text-wedding-medium mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl"
+        class="text-wedding-medium mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
       >
-        Budeme rádi, když u toho budete s námi.
+        {hero.subtitle}
       </p>
 
       <a
         href="#rsvp"
-        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300"
+        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm"
       >
         <img
           src={morseMotif.src}
           alt=""
           class="ml-2 h-10 w-auto tracking-widest opacity-60"
         />
-        Potvrdit účast
+        {hero.buttonText}
         <img
           src={morseMotif.src}
           alt=""

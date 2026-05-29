@@ -1,48 +1,30 @@
 ---
 // src/components/Schedule.astro
-const schedule = [
-  {
-    time: "13:00",
-    title: "Rodinný oběd",
-    description: "Nejprve nakrmíme rodinu.",
-  },
-  {
-    time: "14:30",
-    title: "Příprava na obřad",
-    description: "Příchod a přivítání hostů.",
-  },
-  { time: "15:00", title: "Obřad" },
-  { time: "15:30", title: "Oslava", description: "Až do konce!" },
-  /* { time: "16:40", title: "Dort", description: "Čas na mlsání." },
-  {
-    time: "17:00",
-    title: "Večerní raut",
-    description: "Jídlo, pití a dobrá nálada.",
-  },
-  {
-    time: "19:00",
-    title: "První tanec",
-    description: "A zahájení večerní party.",
-  }, */
-];
+import { weddingContent } from "../data/weddingContent";
+
+const { schedule } = weddingContent;
 ---
 
 <section id="harmonogram" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
-  <h2
-    class="text-wedding-dark mb-24 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
-  >
-    <span
-      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
-      >····</span
+  <div class="text-center">
+    <h2
+      class="text-wedding-dark mb-24 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
     >
-    Harmonogram
-    <span
-      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
-      >−−−−</span
-    >
-  </h2>
+      <span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+        data-decoded="H"
+        >····</span
+      >
+      {schedule.title}
+      <span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+        data-decoded="M"
+        >−−</span
+      >
+    </h2>
+  </div>
 
-  <div class="relative mx-auto max-w-2xl">
+  <div class="relative mx-auto max-w-2xl animate-fade-in-up delay-100">
     <!-- Vertical Line -->
     <div
       class="morse-line-vertical text-wedding-medium/30 absolute top-0 bottom-0 left-4 w-[2px] md:left-1/2 md:-translate-x-1/2"
@@ -51,12 +33,12 @@ const schedule = [
 
     <div class="space-y-16">
       {
-        schedule.map((item, index) => (
+        schedule.items.map((item, index) => (
           <div
             class={`relative flex flex-col items-start md:flex-row ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}
           >
             {/* Timeline Marker (Alternating Dot and Dash) */}
-            <div class="bg-wedding-light border-wedding-medium/50 absolute top-0 left-4 z-10 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border md:left-1/2">
+            <div class="bg-wedding-light border-wedding-medium/50 absolute top-0 left-4 z-10 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border md:left-1/2 transition-colors duration-300 hover:border-wedding-dark group">
               {index % 2 === 0 ? (
                 <div class="bg-wedding-dark h-1.5 w-1.5 rounded-full" />
               ) : (
@@ -74,7 +56,7 @@ const schedule = [
               <h3 class="text-wedding-dark mb-1 text-2xl font-bold">
                 {item.title}
               </h3>
-              <p class="text-wedding-dark text-base font-medium italic opacity-90">
+              <p class="text-wedding-dark text-base font-medium italic opacity-85 leading-relaxed">
                 {item.description}
               </p>
             </div>
@@ -85,10 +67,4 @@ const schedule = [
       }
     </div>
   </div>
-
-  <!-- <div class="mt-24 text-center">
-    <p class="text-wedding-medium text-xs tracking-widest uppercase opacity-80">
-      ⋅⋅∸⋅
-    </p>
-  </div> -->
 </section>

@@ -1,162 +1,126 @@
 ---
-const venue = {
-  name: "Sokec, Šlapanice",
-  address: "Nádražní 87, 664 51 Šlapanice",
-  coords: [49.1605206, 16.7286136],
-  googleMapsUrl: "https://maps.app.goo.gl/AJ5MkMekiaeEhSGf6",
-};
+// src/components/WhenWhere.astro
+import { weddingContent } from "../data/weddingContent";
 
-const transportOptions = [
-  {
-    id: "car",
-    label: "Autem",
-    icon: "car",
-    morse: "·−·−·−·−·−·−·−·−",
-    title: "Doprava autem",
-    detail: "Parkování přímo u Sokecu nebo v přilehlých ulicích.",
-    marker: {
-      coords: [49.1594822, 16.7289861],
-      title: "Parkoviště u Sokecu",
-      icon: "parking",
-    },
-  },
-  {
-    id: "train",
-    label: "Vlakem",
-    icon: "train",
-    morse: "···−···−···−···−",
-    title: "Vlakem (S6)",
-    detail: "Z Brna (S6) na stanici Šlapanice, poté 5 min chůze.",
-    marker: {
-      coords: [49.1567917, 16.7294883],
-      title: "Vlaková stanice Šlapanice",
-      icon: "train",
-    },
-  },
-  {
-    id: "bus",
-    label: "Trolejbusem",
-    icon: "bus",
-    morse: "----------------",
-    title: "Trolejbusem (31)",
-    detail: "Linka 31 z Hlavního nádraží na zastávku 'Šlapanice Kalvodova'.",
-    marker: {
-      coords: [49.1664506, 16.7262975],
-      title: "Zastávka Šlapanice Kalvodova",
-      icon: "bus",
-    },
-  },
-];
+const { whenWhere } = weddingContent;
+const { venueName, address, coords, googleMapsUrl, description, transportOptions } = whenWhere;
 ---
 
 <section id="kdy-a-kde" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
   <h2
-    class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
+    class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
   >
     <span
-      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
+      class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+      data-decoded="K"
       >−·−</span
     >
-    Kdy a kde
+    {whenWhere.title}
     <span
-      class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
-      >−−·−</span
+      class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+      data-decoded="E"
+      >·</span
     >
   </h2>
 
-  <div class="grid items-stretch gap-12 lg:grid-cols-5">
-    <!-- Venue Info (Side Column) -->
-    <div class="flex flex-col justify-center space-y-12 lg:col-span-2">
-      <div class="text-center lg:text-left">
-        <p
-          class="text-wedding-medium mb-4 text-xs font-bold tracking-[0.4em] uppercase"
-        >
-          Místo konání
-        </p>
-        <h3 class="mb-4 text-5xl font-bold tracking-tight md:text-6xl">
-          {venue.name}
-        </h3>
-        <p class="text-wedding-dark mb-8 text-2xl font-medium italic">
-          {venue.address}
-        </p>
+  <div class="grid items-stretch gap-12 lg:grid-cols-5 animate-fade-in-up delay-100">
+    <!-- Venue Info & Transport Info (Side Column) -->
+    <div class="flex flex-col justify-between space-y-8 lg:col-span-2">
+      <div class="text-center lg:text-left space-y-6">
+        <div>
+          <p
+            class="text-wedding-medium mb-3 text-xs font-bold tracking-[0.4em] uppercase"
+          >
+            Místo konání
+          </p>
+          <h3 class="mb-3 text-4xl font-bold tracking-tight md:text-5xl text-wedding-dark leading-tight">
+            {venueName}
+          </h3>
+          <p class="text-wedding-medium text-lg font-medium italic">
+            {address}
+          </p>
+        </div>
 
         <div
-          class="morse-line text-wedding-medium/30 mx-auto mb-8 h-[2px] w-24 lg:mx-0"
+          class="morse-line text-wedding-medium/30 mx-auto h-[2px] w-24 lg:mx-0"
         >
         </div>
 
         <p
-          class="text-wedding-dark mx-auto max-w-sm text-base leading-relaxed lg:mx-0"
+          class="text-wedding-dark mx-auto text-base leading-relaxed lg:mx-0 opacity-90 font-medium italic text-justify lg:text-left"
         >
-          Sokec je taková fajn restaurace pod Sokolovnou, před kterou je dobrej
-          plácek na párty a sestra už tam svatbu měla a bylo to fajn.
+          {description}
         </p>
-      </div>
-
-      <div class="hidden lg:block">
-        <a
-          href={venue.googleMapsUrl}
-          target="_blank"
-          class="text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light group inline-flex items-center gap-6 border bg-transparent px-10 py-4 text-sm font-bold tracking-widest uppercase transition-all duration-300"
-        >
-          Navigovat
-          <span
-            class="text-wedding-medium group-hover:text-wedding-light opacity-30"
-            >·−−</span
+        
+        <div class="pt-2 flex justify-center lg:justify-start">
+          <a
+            href={googleMapsUrl}
+            target="_blank"
+            class="text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light group inline-flex items-center gap-6 border bg-transparent px-8 py-3.5 text-xs font-bold tracking-widest uppercase transition-all duration-300"
           >
-        </a>
-      </div>
-    </div>
-
-    <!-- Integrated Map Container -->
-    <div
-      class="morse-border text-wedding-medium/40 bg-wedding-light relative h-[500px] overflow-hidden shadow-xl lg:col-span-3"
-    >
-      <!-- Map Element -->
-      <div
-        id="map"
-        class="z-0 h-full w-full grayscale transition-all duration-700 hover:grayscale-0"
-      >
+            Navigovat
+            <span
+              class="morse-decoder text-wedding-medium group-hover:text-wedding-light opacity-30 group-hover:opacity-100"
+              data-decoded="G"
+              >−−·</span
+            >
+          </a>
+        </div>
       </div>
 
-      <!-- Floating Tabs (Top) -->
-      <div class="absolute top-6 left-1/2 z-10 w-auto -translate-x-1/2 px-4">
-        <div
-          class="bg-wedding-light/90 border-wedding-medium/20 flex gap-1 border p-1 shadow-lg backdrop-blur-sm"
-        >
+      <!-- Transportation Selector (Moved here from map) -->
+      <div class="space-y-6 pt-6 border-t border-wedding-medium/20">
+        <p class="text-wedding-medium text-center lg:text-left text-xs font-bold tracking-[0.4em] uppercase">
+          Jak se k nám dostanete?
+        </p>
+        
+        <!-- Tabs Grid -->
+        <div class="bg-wedding-light border-wedding-medium/20 flex gap-1 border p-1 shadow-sm rounded-sm">
           {
             transportOptions.map((opt, idx) => (
               <button
                 data-tab={opt.id}
-                class={`transport-tab px-6 py-3 text-xs font-bold tracking-widest uppercase transition-all duration-300 ${idx === 0 ? "bg-wedding-dark text-wedding-light" : "text-wedding-dark/60 hover:bg-wedding-medium/10"}`}
+                class={`transport-tab flex-1 px-3 py-3 text-[10px] sm:text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer text-center rounded-sm ${idx === 0 ? "bg-wedding-dark text-wedding-light" : "text-wedding-dark/60 hover:bg-wedding-medium/10"}`}
               >
                 {opt.label}
               </button>
             ))
           }
         </div>
-      </div>
 
-      <!-- Floating Info Panel (Bottom) -->
-      <div class="absolute right-6 bottom-6 left-6 z-10 md:right-auto md:w-96">
-        {
-          transportOptions.map((opt, idx) => (
-            <div
-              id={`panel-${opt.id}`}
-              class={`transport-panel bg-wedding-light/95 border-wedding-medium/30 border p-8 shadow-2xl backdrop-blur-sm transition-all duration-500 ${idx === 0 ? "translate-y-0 opacity-100" : "pointer-events-none hidden translate-y-4 opacity-0"}`}
-            >
-              <p class="text-wedding-medium mb-3 text-xs font-bold tracking-[0.3em] uppercase">
-                {opt.morse}
-              </p>
-              <h4 class="text-wedding-dark mb-2 text-xl font-bold">
-                {opt.title}
-              </h4>
-              <p class="text-wedding-dark text-sm leading-relaxed font-medium italic">
-                {opt.detail}
-              </p>
-            </div>
-          ))
-        }
+        <!-- Detail Panels (Stacked dynamically) -->
+        <div class="relative min-h-[140px]">
+          {
+            transportOptions.map((opt, idx) => (
+              <div
+                id={`panel-${opt.id}`}
+                class={`transport-panel bg-wedding-light/40 border border-wedding-medium/20 p-6 shadow-sm rounded-sm transition-all duration-500 ${idx === 0 ? "translate-y-0 opacity-100" : "pointer-events-none hidden translate-y-4 opacity-0"}`}
+              >
+                <p class="text-wedding-medium mb-2 text-[10px] font-bold tracking-[0.3em] uppercase">
+                  {opt.morse}
+                </p>
+                <h4 class="text-wedding-dark mb-2 text-lg font-bold leading-tight">
+                  {opt.title}
+                </h4>
+                <p class="text-wedding-dark text-sm leading-relaxed font-medium italic opacity-95">
+                  {opt.detail}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Clean Map Container (No clutter overlays, full visibility!) -->
+    <div
+      class="morse-border text-wedding-medium/40 bg-wedding-light relative h-[450px] lg:h-auto overflow-hidden shadow-xl lg:col-span-3 hover-card-premium min-h-[400px] lg:min-h-[500px]"
+    >
+      <!-- Map Element -->
+      <div
+        id="map"
+        class="z-0 h-full w-full grayscale transition-all duration-700 hover:grayscale-0"
+      >
       </div>
     </div>
   </div>
@@ -173,7 +137,7 @@ const transportOptions = [
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   crossorigin=""></script>
 
-<script is:inline define:vars={{ venue, transportOptions }}>
+<script is:inline define:vars={{ venue: { name: venueName, address, coords, googleMapsUrl }, transportOptions }}>
   document.addEventListener("DOMContentLoaded", () => {
     const map = L.map("map", {
       center: venue.coords,
@@ -210,7 +174,7 @@ const transportOptions = [
     const markers = {};
     L.marker(venue.coords, { icon: createCustomIcon("ring", true) })
       .addTo(map)
-      .bindPopup("<b>Sokec</b>");
+      .bindPopup(`<b>${venue.name}</b>`);
 
     transportOptions.forEach((opt) => {
       markers[opt.id] = L.marker(opt.marker.coords, {

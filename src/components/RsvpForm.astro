@@ -1,166 +1,40 @@
 ---
-// Fully schema-driven form configuration
-const formSchema = [
-  {
-    section: "personal",
-    grid: true,
-    fields: [
-      {
-        id: "name",
-        name: "name",
-        label: "Jméno a příjmení",
-        type: "text",
-        required: true,
-        placeholder: "Jan Novák",
-        condition: null,
-        options: [],
-      },
-      {
-        id: "email",
-        name: "email",
-        label: "E-mail",
-        type: "email",
-        required: true,
-        placeholder: "jan@seznam.cz",
-        condition: null,
-        options: [],
-      },
-    ],
-  },
-  {
-    section: "attendance",
-    fields: [
-      {
-        id: "attendance",
-        name: "attendance",
-        label: "Dorazíte?",
-        type: "radio",
-        condition: null,
-        required: true,
-        placeholder: null,
-        options: [
-          { value: "ano", label: "Ano, rád/a", checked: true },
-          { value: "ne", label: "Bohužel ne", checked: false },
-        ],
-      },
-    ],
-  },
-  {
-    section: "children",
-    divider: true,
-    grid: true,
-    fields: [
-      {
-        id: "coming-with-children",
-        name: "coming_with_children",
-        label: "Přijdete s dětmi?",
-        type: "checkbox",
-        text: "Ano",
-        condition: null,
-        required: false,
-        placeholder: null,
-        options: [],
-      },
-      {
-        id: "how-many-children",
-        name: "how_many_children",
-        label: "Počet dětí",
-        type: "text",
-        condition: "coming-with-children",
-        required: false,
-        placeholder: "např. 2",
-        options: [],
-      },
-    ],
-  },
-  {
-    section: "lunch",
-    divider: true,
-    fields: [
-      {
-        id: "is-lunch-guest",
-        name: "is_lunch_guest",
-        label: "Jste pozváni na rodinný oběd?",
-        type: "checkbox",
-        text: "Ano",
-        condition: null,
-        required: false,
-        placeholder: null,
-        options: [],
-      },
-      {
-        id: "coming-to-lunch",
-        name: "coming_to_lunch",
-        label: "Dorazíte na oběd?",
-        type: "radio",
-        condition: "is_lunch_guest",
-        conditionValue: null,
-        required: false,
-        placeholder: null,
-        options: [
-          { value: "yes", label: "Ano", checked: false },
-          { value: "no", label: "Ne", checked: false },
-        ],
-      },
-    ],
-  },
-  {
-    section: "additional",
-    divider: true,
-    fields: [
-      {
-        id: "diet",
-        name: "diet",
-        label: "Alergie / Dietní omezení",
-        type: "text",
-        placeholder: "např. bezlepková dieta, vegan...",
-        condition: null,
-        required: false,
-        options: [],
-      },
-      {
-        id: "song",
-        name: "song",
-        label: "Píseň, která mě zaručeně zvedne ze židle",
-        type: "text",
-        placeholder: "Název písně a interpret",
-        condition: null,
-        required: false,
-        options: [],
-      },
-    ],
-  },
-];
+// src/components/RsvpForm.astro
+import { weddingContent } from "../data/weddingContent";
+
+const { rsvpForm } = weddingContent;
 ---
 
 <section id="rsvp" class="mx-auto max-w-3xl scroll-mt-24 px-6 py-24">
   <div class="mb-16 text-center">
     <h2
-      class="text-wedding-dark mb-6 flex items-center justify-center gap-4 text-4xl font-bold md:text-5xl"
+      class="text-wedding-dark mb-6 flex items-center justify-center gap-4 text-4xl font-bold md:text-5xl animate-fade-in-up"
     >
       <span
-        class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+        data-decoded="U"
         >··−</span
       >
-      Účast
+      {rsvpForm.title}
       <span
-        class="text-wedding-medium text-2xl tracking-tighter opacity-20 md:text-3xl"
-        >−·−·</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
+        data-decoded="T"
+        >−</span
       >
     </h2>
     <p
-      class="text-wedding-dark text-base font-medium tracking-widest uppercase italic md:text-lg"
+      class="text-wedding-dark text-base font-medium tracking-widest uppercase italic md:text-lg opacity-80 animate-fade-in-up delay-100"
     >
-      Prosíme o potvrzení účasti do 30. června 2026.
+      {rsvpForm.description}
     </p>
   </div>
 
   <div
-    class="morse-border text-wedding-medium/30 bg-wedding-light p-8 shadow-sm md:p-12"
+    class="morse-border text-wedding-medium/30 bg-wedding-light p-8 shadow-sm md:p-12 animate-fade-in-up delay-200"
   >
     <form id="rsvp-form" class="space-y-12">
       {
-        formSchema.map((section) => (
+        rsvpForm.schema.map((section) => (
           <div class={`space-y-6 ${section.divider ? "relative pt-12" : ""}`}>
             {section.divider && (
               <div class="morse-line text-wedding-medium/20 absolute top-0 left-0 h-[2px] w-full" />
@@ -183,7 +57,7 @@ const formSchema = [
                   {field.type !== "checkbox" && (
                     <label
                       for={field.id}
-                      class="text-wedding-dark block text-sm font-bold tracking-widest uppercase"
+                      class="text-wedding-dark block text-xs font-bold tracking-widest uppercase opacity-80"
                     >
                       {field.label}
                     </label>
@@ -197,7 +71,7 @@ const formSchema = [
                       name={field.name}
                       required={field.required}
                       placeholder={field.placeholder}
-                      class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/60 w-full border-b bg-transparent py-4 text-lg transition-colors outline-none"
+                      class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 w-full border-b bg-transparent py-4 text-lg font-medium text-wedding-dark transition-colors outline-none focus:ring-0"
                     />
                   )}
 
@@ -241,8 +115,8 @@ const formSchema = [
 
                   {/* Checkbox Input */}
                   {field.type === "checkbox" && (
-                    <div class="space-y-6">
-                      <p class="text-wedding-dark text-sm font-bold tracking-widest uppercase">
+                    <div class="space-y-4">
+                      <p class="text-wedding-dark text-xs font-bold tracking-widest uppercase opacity-85">
                         {field.label}
                       </p>
                       <label class="group flex cursor-pointer items-center gap-4">
@@ -279,15 +153,17 @@ const formSchema = [
       <button
         type="submit"
         id="submit-btn"
-        class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium group flex w-full items-center justify-center gap-6 px-8 py-5 font-bold tracking-[0.3em] uppercase transition-colors"
+        class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium group flex w-full items-center justify-center gap-6 px-8 py-5 font-bold tracking-[0.3em] uppercase transition-colors cursor-pointer rounded-sm"
       >
         <span
-          class="text-wedding-medium group-hover:text-wedding-light opacity-30 transition-all group-hover:opacity-60"
+          class="morse-decoder text-wedding-medium group-hover:text-wedding-light opacity-30 transition-all group-hover:opacity-60"
+          data-decoded="S"
           >···</span
         >
-        Odeslat potvrzení
+        {rsvpForm.submitButtonText}
         <span
-          class="text-wedding-medium group-hover:text-wedding-light opacity-30 transition-all group-hover:opacity-60"
+          class="morse-decoder text-wedding-medium group-hover:text-wedding-light opacity-30 transition-all group-hover:opacity-60"
+          data-decoded="O"
           >−−−</span
         >
       </button>
@@ -301,8 +177,8 @@ const formSchema = [
   </div>
 </section>
 
-<script>
-  const form = document.getElementById("rsvp-form") as HTMLFormElement;
+<script define:vars={{ rsvpForm }}>
+  const form = document.getElementById("rsvp-form");
   const statusMsg = document.getElementById("form-status");
   const submitBtn = document.getElementById("submit-btn");
 
@@ -315,14 +191,10 @@ const formSchema = [
       if (!conditionKey) return;
 
       // Try finding by ID first
-      let field = document.getElementById(
-        conditionKey,
-      ) as HTMLInputElement | null;
+      let field = document.getElementById(conditionKey);
 
       // If not found or if it's not a checkbox/radio, try finding by Name (for radio groups)
-      const inputsByName = form.querySelectorAll(
-        `input[name="${conditionKey}"]`,
-      ) as NodeListOf<HTMLInputElement>;
+      const inputsByName = form.querySelectorAll(`input[name="${conditionKey}"]`);
 
       let isVisible = false;
 
@@ -364,29 +236,38 @@ const formSchema = [
 
     submitBtn.setAttribute("disabled", "true");
     const originalBtnText = submitBtn.innerHTML;
-    submitBtn.innerHTML = "Odesílám...";
+    submitBtn.innerHTML = rsvpForm.sendingText;
 
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
     data.timestamp = new Date().toISOString();
 
     try {
-      // URL is stored in private memory for later
-      const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL_HERE";
-      console.log("RSVP Data:", data);
+      console.log("RSVP Data Submitted:", data);
 
-      // Success Simulation
-      statusMsg.textContent = "Děkujeme! Vaše potvrzení bylo uloženo.";
-      statusMsg.classList.remove("hidden", "text-red-500");
-      statusMsg.classList.add("text-green-600");
-
-      form.reset();
-      updateVisibility();
+      // Elegant Success Card State loaded from Config
+      const formCard = form.parentElement;
+      if (formCard) {
+        formCard.innerHTML = `
+          <div class="text-center py-16 px-6 animate-fade-in-up">
+            <div class="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-wedding-dark text-wedding-light shadow-md animate-bounce">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <h3 class="text-wedding-dark text-3xl font-bold mb-4">${rsvpForm.successMessage.title}</h3>
+            <p class="text-wedding-medium text-lg font-medium italic mb-8 max-w-md mx-auto leading-relaxed">
+              ${rsvpForm.successMessage.subtitle}
+            </p>
+            <div class="morse-line text-wedding-medium/30 mx-auto h-[2px] w-32 mb-8"></div>
+            <p class="text-wedding-dark text-xs font-bold tracking-[0.4em] uppercase opacity-60">
+              ${rsvpForm.successMessage.morseCode}
+            </p>
+          </div>
+        `;
+      }
     } catch (error) {
-      statusMsg.textContent = "Chyba při odesílání. Zkuste to prosím znovu.";
+      statusMsg.textContent = rsvpForm.errorMessage;
       statusMsg.classList.remove("hidden", "text-green-600");
       statusMsg.classList.add("text-red-500");
-    } finally {
       submitBtn.removeAttribute("disabled");
       submitBtn.innerHTML = originalBtnText;
     }
