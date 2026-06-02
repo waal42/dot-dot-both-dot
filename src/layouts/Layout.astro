@@ -1,6 +1,7 @@
 ---
 // src/layouts/Layout.astro
 import "../styles/global.css";
+import "photoswipe/style.css";
 import Footer from "../components/Footer.astro";
 import { getEntry } from "astro:content";
 
@@ -22,7 +23,11 @@ const { metaDescription } = wedding.data;
     <meta charset="UTF-8" />
     <meta name="description" content={metaDescription} />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/svatba/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/svatba/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/svatba/favicon-16x16.png" />
+    <link rel="manifest" href="/svatba/site.webmanifest" />
+    <link rel="shortcut icon" href="/svatba/favicon.ico" />
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,6 +40,25 @@ const { metaDescription } = wedding.data;
     id="top"
     class="bg-wedding-light text-wedding-dark font-sans antialiased"
   >
+    <!-- Floating Audio Toggle -->
+    <button
+      id="sound-toggle"
+      class="fixed bottom-6 right-6 z-40 bg-wedding-light border border-wedding-medium/30 text-wedding-medium hover:text-wedding-dark hover:border-wedding-dark flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-md cursor-pointer select-none"
+      aria-label="Toggle Morse Audio"
+      title="Zapnout zvukovou telegrafii (Morseovy efekty)"
+    >
+      <svg id="sound-icon-muted" class="h-5 w-5 block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+      <svg id="sound-icon-unmuted" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </svg>
+    </button>
+
     <main>
       <slot />
     </main>
@@ -43,11 +67,39 @@ const { metaDescription } = wedding.data;
     <script>
       import { playMorse, stopMorse } from "../scripts/morseAudio";
 
+      const soundToggle = document.getElementById("sound-toggle");
+      const iconMuted = document.getElementById("sound-icon-muted");
+      const iconUnmuted = document.getElementById("sound-icon-unmuted");
+
       let soundEnabled = localStorage.getItem("morse-sound-enabled") === "true";
 
-      // Sync active state from Header toggle dispatch
-      window.addEventListener("morse-sound-toggled", (e: any) => {
-        soundEnabled = e.detail.enabled;
+      const updateSoundIcons = (enabled: boolean) => {
+        if (enabled) {
+          iconMuted?.classList.remove("block");
+          iconMuted?.classList.add("hidden");
+          iconUnmuted?.classList.remove("hidden");
+          iconUnmuted?.classList.add("block");
+          if (soundToggle) {
+            soundToggle.title = "Vypnout zvukové telegrafní efekty";
+          }
+        } else {
+          iconMuted?.classList.remove("hidden");
+          iconMuted?.classList.add("block");
+          iconUnmuted?.classList.remove("block");
+          iconUnmuted?.classList.add("hidden");
+          if (soundToggle) {
+            soundToggle.title = "Zapnout zvukovou telegrafii (Morseovy efekty)";
+          }
+        }
+      };
+
+      // Initial sync
+      updateSoundIcons(soundEnabled);
+
+      soundToggle?.addEventListener("click", () => {
+        soundEnabled = !soundEnabled;
+        localStorage.setItem("morse-sound-enabled", String(soundEnabled));
+        updateSoundIcons(soundEnabled);
         if (!soundEnabled) {
           stopMorse();
         }

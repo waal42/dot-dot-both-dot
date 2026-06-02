@@ -75,7 +75,7 @@ const alphabet = [
       </button>
 
       {/* Header */}
-      <div class="mb-6 pr-8 text-left">
+      <div class="mb-6 pr-12 text-left">
         <h3 class="text-2xl font-bold text-wedding-dark mb-2">
           {morseMessage.title}
         </h3>
@@ -145,31 +145,31 @@ const alphabet = [
           </p>
 
           {/* 1. Direct Morse characters inputs */}
-          <div class="flex items-center justify-center gap-2">
+          <div class="flex items-center justify-center gap-2 w-full max-w-sm mx-auto">
             <button
               id="key-dot"
-              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 px-6 text-xl font-bold uppercase rounded-sm cursor-pointer transition-all active:scale-90"
-              title="Vložit tečku"
+              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 flex-1 text-2xl font-extrabold rounded-sm cursor-pointer transition-all active:scale-90 flex items-center justify-center"
+              title="Vložit tečku (·)"
             >
-              · (tečka)
+              ·
             </button>
             <button
               id="key-dash"
-              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 px-6 text-xl font-bold uppercase rounded-sm cursor-pointer transition-all active:scale-90"
-              title="Vložit čárku"
+              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 flex-1 text-2xl font-extrabold rounded-sm cursor-pointer transition-all active:scale-90 flex items-center justify-center"
+              title="Vložit čárku (−)"
             >
-              − (čárka)
+              −
             </button>
             <button
               id="key-slash"
-              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 px-6 text-sm font-bold uppercase rounded-sm cursor-pointer transition-all active:scale-90"
-              title="Mezera mezi slovy"
+              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 flex-1 text-xl font-bold rounded-sm cursor-pointer transition-all active:scale-90 flex items-center justify-center"
+              title="Mezera mezi slovy (/)"
             >
-              / (mezera)
+              /
             </button>
             <button
               id="key-backspace"
-              class="border border-wedding-medium/40 hover:border-wedding-dark text-wedding-medium hover:text-wedding-dark h-12 px-4 flex items-center justify-center rounded-sm cursor-pointer transition-all active:scale-90"
+              class="border border-wedding-medium/40 hover:border-wedding-dark text-wedding-medium hover:text-wedding-dark h-12 px-5 flex items-center justify-center rounded-sm cursor-pointer transition-all active:scale-90"
               title="Smazat poslední znak"
             >
               <svg
@@ -179,7 +179,7 @@ const alphabet = [
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
+                stroke-width="2.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               >
@@ -230,11 +230,11 @@ const alphabet = [
       </div>
 
       {/* Footer operations (Submit / Playback / Cancel) */}
-      <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-wedding-medium/10">
+      <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-wedding-medium/10">
         {/* Play Message */}
         <button
           id="morse-play"
-          class="border-wedding-medium/40 text-wedding-medium hover:border-wedding-dark hover:text-wedding-dark flex flex-1 items-center justify-center gap-3 px-6 py-3.5 text-xs font-bold tracking-widest uppercase transition-colors cursor-pointer rounded-sm active:scale-95"
+          class="border border-wedding-dark text-wedding-dark hover:bg-wedding-dark hover:text-wedding-light flex flex-1 items-center justify-center gap-3 px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer rounded-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -255,7 +255,7 @@ const alphabet = [
         {/* Submit Message */}
         <button
           id="morse-submit"
-          class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium flex flex-2 items-center justify-center gap-3 px-8 py-3.5 text-xs font-bold tracking-[0.2em] uppercase transition-colors cursor-pointer rounded-sm active:scale-95 shadow-sm"
+          class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light flex flex-2 items-center justify-center gap-3 px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer rounded-sm"
         >
           <img
             src={morseMotif.src}

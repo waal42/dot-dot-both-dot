@@ -8,6 +8,7 @@
     "hero": {
       "type": "object",
       "properties": {
+        "logo": {"type": "object"},
         "title": { "type": "string" },
         "date": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -22,21 +23,6 @@
       "properties": {
         "title": { "type": "string" },
         "motto": { "type": "string" },
-        "sections": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "string" },
-              "title": { "type": "string" },
-              "content": {
-                "type": "array",
-                "items": { "type": "string" }
-              }
-            },
-            "required": ["id", "title", "content"]
-          }
-        },
         "gallery": {
           "type": "array",
           "items": {
@@ -67,7 +53,7 @@
           }
         }
       },
-      "required": ["title", "motto", "sections", "gallery"]
+      "required": ["title", "motto", "gallery"]
     },
     "whenWhere": {
       "type": "object",
@@ -83,6 +69,34 @@
         },
         "googleMapsUrl": { "type": "string" },
         "description": { "type": "string" },
+        "calendar": {
+          "type": "object",
+          "properties": {
+            "summary": { "type": "string" },
+            "description": { "type": "string" },
+            "location": { "type": "string" },
+            "prodId": { "type": "string" },
+            "family": {
+              "type": "object",
+              "properties": {
+                "uid": { "type": "string" },
+                "start": { "type": "string" },
+                "end": { "type": "string" }
+              },
+              "required": ["uid", "start", "end"]
+            },
+            "guest": {
+              "type": "object",
+              "properties": {
+                "uid": { "type": "string" },
+                "start": { "type": "string" },
+                "end": { "type": "string" }
+              },
+              "required": ["uid", "start", "end"]
+            }
+          },
+          "required": ["summary", "description", "location", "prodId", "family", "guest"]
+        },
         "transportOptions": {
           "type": "array",
           "items": {
@@ -114,7 +128,7 @@
           }
         }
       },
-      "required": ["title", "venueName", "address", "coords", "googleMapsUrl", "description", "transportOptions"]
+      "required": ["title", "venueName", "address", "coords", "googleMapsUrl", "description", "calendar", "transportOptions"]
     },
     "schedule": {
       "type": "object",
@@ -212,15 +226,34 @@
       },
       "required": ["title", "description", "submitButtonText", "sendingText", "successMessage", "errorMessage", "schema"]
     },
-    "dressCode": {
+    "faq": {
       "type": "object",
       "properties": {
         "title": { "type": "string" },
-        "main": { "type": "string" },
-        "detail": { "type": "string" },
-        "subDetail": { "type": "string" }
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": { "type": "string" },
+              "answer": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "button": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "action": { "type": "string", "enum": ["song-suggestion"] }
+                },
+                "required": ["text", "action"]
+              }
+            },
+            "required": ["question", "answer"]
+          }
+        }
       },
-      "required": ["title", "main", "detail", "subDetail"]
+      "required": ["title", "items"]
     },
     "morseMessage": {
       "type": "object",
@@ -255,7 +288,7 @@
     "schedule",
     "gifts",
     "rsvpForm",
-    "dressCode",
+    "faq",
     "morseMessage"
   ]
 }

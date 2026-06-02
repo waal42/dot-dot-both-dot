@@ -30,14 +30,14 @@ const getSizeClasses = (size: string) => {
     >
       <span
         class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="O"
-        >−−−</span
+        data-decoded="M"
+        >−−</span
       >
       {aboutUs.title}
       <span
         class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="S"
-        >···</span
+        data-decoded="A"
+        >·−</span
       >
     </h2>
     <p class="text-wedding-medium mx-auto max-w-xl text-center text-lg italic opacity-85 mb-16 animate-fade-in-up">
@@ -45,30 +45,7 @@ const getSizeClasses = (size: string) => {
     </p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 items-stretch">
-    {
-      aboutUs.sections.map((section, idx) => (
-        <div 
-          class="morse-border text-wedding-dark bg-wedding-light shadow-sm hover-card-premium animate-fade-in-up flex flex-col justify-between"
-          style={`animation-delay: ${idx * 150}ms`}
-        >
-          <div class="px-6 py-12 text-center md:px-10 lg:px-12 flex flex-col justify-center h-full">
-            <div class="space-y-6">
-              <p class="text-wedding-dark text-2xl font-bold md:text-3xl leading-tight">
-                {section.title}
-              </p>
-              {section.content.map((pText) => (
-                <p 
-                  class="text-wedding-dark mx-auto text-base leading-relaxed font-medium italic opacity-90 text-justify md:text-center" 
-                  set:html={pText} 
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      ))
-    }
-  </div>
+
 
   <div
     id="gallery"
@@ -81,7 +58,7 @@ const getSizeClasses = (size: string) => {
           class={`${getSizeClasses(item.size)} group bg-wedding-dark/5 overflow-hidden border border-transparent hover:border-wedding-dark/10 transition-all duration-500 shadow-sm`}
         >
           {item.type === "text" ? (
-            <div class="border-wedding-medium/20 bg-wedding-light flex h-full flex-col items-center justify-center border p-4 text-center md:p-8">
+            <div class="border-wedding-medium/30 bg-wedding-light flex h-full flex-col items-center justify-center border p-4 text-center md:p-8">
               <p class="text-wedding-dark mb-2 text-xl font-bold md:text-2xl leading-tight">
                 {item.title}
               </p>
@@ -95,8 +72,8 @@ const getSizeClasses = (size: string) => {
               href={item.src.src}
               data-pswp-width={item.src.width}
               data-pswp-height={item.src.height}
-              target="_blank"
-              class="block h-full w-full cursor-zoom-in"
+              data-cropped="true"
+              class="block h-full w-full cursor-zoom-in relative"
             >
               <Image
                 src={item.src}
@@ -104,6 +81,11 @@ const getSizeClasses = (size: string) => {
                 width={800}
                 class="h-full w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0 md:grayscale"
               />
+              <div class="absolute inset-0 flex items-center justify-center bg-wedding-dark/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none">
+                <span class="text-wedding-light px-4 text-center text-lg font-bold drop-shadow-md md:text-xl">
+                  {item.alt}
+                </span>
+              </div>
             </a>
           )}
         </div>
@@ -114,13 +96,55 @@ const getSizeClasses = (size: string) => {
 
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
-  import "photoswipe/style.css";
 
   const lightbox = new PhotoSwipeLightbox({
     gallery: "#gallery",
     children: "a",
     pswpModule: () => import("photoswipe"),
-    padding: { top: 20, bottom: 20, left: 10, right: 10 },
+    padding: { top: 20, bottom: 60, left: 10, right: 10 },
+    bgClickAction: 'close',
+    tapAction: 'close',
   });
+
+  lightbox.on('uiRegister', function() {
+    lightbox.pswp!.ui!.registerElement({
+      name: 'custom-caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'wrapper',
+      html: 'Caption text',
+      onInit: (el, pswp) => {
+        lightbox.pswp!.on('change', () => {
+          const currSlideElement = lightbox.pswp!.currSlide?.data.element;
+          let captionHTML = '';
+          if (currSlideElement) {
+            const img = currSlideElement.querySelector('img');
+            if (img) {
+              captionHTML = img.getAttribute('alt') || '';
+            }
+          }
+          el.innerHTML = captionHTML;
+        });
+      }
+    });
+  });
+
   lightbox.init();
 </script>
+
+<style is:global>
+  .pswp__custom-caption {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    z-index: 1000;
+    pointer-events: none;
+    max-width: 90%;
+  }
+</style>

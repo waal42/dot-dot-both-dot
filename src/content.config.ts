@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 const wedding = defineCollection({
@@ -8,6 +9,10 @@ const wedding = defineCollection({
       metaTitle: z.string(),
       metaDescription: z.string(),
       hero: z.object({
+        logo: z.object({
+          src: image(),
+          alt: z.string(),
+        }),
         title: z.string(),
         date: z.string(),
         subtitle: z.string(),
@@ -18,13 +23,6 @@ const wedding = defineCollection({
       aboutUs: z.object({
         title: z.string(),
         motto: z.string(),
-        sections: z.array(
-          z.object({
-            id: z.string(),
-            title: z.string(),
-            content: z.array(z.string()),
-          })
-        ),
         gallery: z.array(
           z.union([
             z.object({
@@ -51,6 +49,22 @@ const wedding = defineCollection({
         coords: z.tuple([z.number(), z.number()]),
         googleMapsUrl: z.string(),
         description: z.string(),
+        calendar: z.object({
+          summary: z.string(),
+          description: z.string(),
+          location: z.string(),
+          prodId: z.string(),
+          family: z.object({
+            uid: z.string(),
+            start: z.string(),
+            end: z.string(),
+          }),
+          guest: z.object({
+            uid: z.string(),
+            start: z.string(),
+            end: z.string(),
+          }),
+        }),
         transportOptions: z.array(
           z.object({
             id: z.string(),
@@ -130,11 +144,20 @@ const wedding = defineCollection({
           })
         ),
       }),
-      dressCode: z.object({
+      faq: z.object({
         title: z.string(),
-        main: z.string(),
-        detail: z.string(),
-        subDetail: z.string(),
+        items: z.array(
+          z.object({
+            question: z.string(),
+            answer: z.array(z.string()),
+            button: z
+              .object({
+                text: z.string(),
+                action: z.enum(["song-suggestion"]),
+              })
+              .optional(),
+          })
+        ),
       }),
       morseMessage: z.object({
         buttonText: z.string(),

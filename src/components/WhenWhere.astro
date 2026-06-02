@@ -7,26 +7,44 @@ if (!wedding) {
   throw new Error("Wedding content 'info' not found");
 }
 const { whenWhere } = wedding.data;
-const { venueName, address, coords, googleMapsUrl, description, transportOptions } = whenWhere;
+const { venueName, address, coords, googleMapsUrl, description, transportOptions, calendar } = whenWhere;
 
-// Generate .ics standard iCalendar file dynamic link for instant invite downloads
-const icsContent = [
-  "BEGIN:VCALENDAR",
-  "VERSION:2.0",
-  "PRODID:-//mywalove//Wedding//CS",
-  "BEGIN:VEVENT",
-  "UID:wedding-hanka-filip-2026@mywalove.cz",
-  "DTSTAMP:20260530T000000Z",
-  "DTSTART:20260815T110000Z", // 13:00 local CEST time is 11:00 UTC
-  "DTEND:20260816T000000Z",   // 02:00 next day CEST is 00:00 UTC
-  "SUMMARY:Svatba Hanky & Filipa",
-  "DESCRIPTION:Budeme moc rádi, když u toho budete s námi! Podrobnosti na https://mywalove.cz/svatba",
-  "LOCATION:Sokec, Šlapanice",
-  "END:VEVENT",
-  "END:VCALENDAR"
-].join("\r\n");
+// Generate .ics standard iCalendar files & Google Calendar links dynamically
+const generateIcsDataUri = (eventConfig: { uid: string; start: string; end: string }) => {
+  const icsLines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    `PRODID:${calendar.prodId}`,
+    "BEGIN:VEVENT",
+    `UID:${eventConfig.uid}`,
+    "DTSTAMP:20260530T000000Z",
+    `DTSTART:${eventConfig.start}`,
+    `DTEND:${eventConfig.end}`,
+    `SUMMARY:${calendar.summary}`,
+    `DESCRIPTION:${calendar.description}`,
+    `LOCATION:${calendar.location}`,
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ];
+  return `data:text/calendar;charset=utf8,${encodeURIComponent(icsLines.join("\r\n"))}`;
+};
 
-const icsDataUri = `data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`;
+const generateGoogleUrl = (eventConfig: { start: string; end: string }) => {
+  const baseUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+  const params = new URLSearchParams({
+    text: calendar.summary,
+    dates: `${eventConfig.start}/${eventConfig.end}`,
+    details: calendar.description,
+    location: calendar.location,
+  });
+  return `${baseUrl}&${params.toString()}`;
+};
+
+const familyIcsDataUri = generateIcsDataUri(calendar.family);
+const familyGoogleUrl = generateGoogleUrl(calendar.family);
+
+const guestIcsDataUri = generateIcsDataUri(calendar.guest);
+const guestGoogleUrl = generateGoogleUrl(calendar.guest);
 ---
 
 <section id="kdy-a-kde" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
@@ -63,27 +81,51 @@ const icsDataUri = `data:text/calendar;charset=utf8,${encodeURIComponent(icsCont
             <span class="text-[10px] uppercase tracking-wider font-semibold opacity-75">Sobota</span>
           </div>
           
-          <div class="text-center lg:text-left space-y-2">
+          <div class="text-center lg:text-left space-y-4">
             <p class="text-wedding-dark text-2xl font-bold tracking-tight">Sobota, 15. srpna 2026</p>
-            <p class="text-wedding-medium text-sm font-semibold italic">Zahájení ve 13:00 (rodina) / 14:30 (hosté)</p>
             
-            <!-- Calendar Integration Links -->
-            <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-              <a 
-                href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Svatba+Hanky+a+Filipa&dates=20260815T110000Z/20260816T000000Z&details=Budeme+moci+r%C3%A1di%2C+kdy%C5%BE+u+toho+budete+s+n%C3%A1mi%21+V%C3%ADce+informac%C3%AD+na+https%3A%2F%2Fmywalove.cz%2Fsvatba&location=Sokec%2C+N%C3%A1dra%C5%BEn%C3%AD+87%2C+664+51+%C5%A0lapanice"
-                target="_blank"
-                class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
-              >
-                + Google Kalendář
-              </a>
-              <span class="text-wedding-medium/40 text-xs select-none">•</span>
-              <a 
-                href={icsDataUri}
-                download="svatba-hanka-filip.ics"
-                class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
-              >
-                + Pozvánka (.ics)
-              </a>
+            <div class="space-y-4 pt-1 text-center lg:text-left">
+              <div class="space-y-1">
+                <p class="text-wedding-dark text-xs font-bold uppercase tracking-wider opacity-85">Pro rodinu (oběd od 13:00)</p>
+                <div class="flex items-center justify-center lg:justify-start gap-3">
+                  <a 
+                    href={familyGoogleUrl} 
+                    target="_blank" 
+                    class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+                  >
+                    + Google Kalendář
+                  </a>
+                  <span class="text-wedding-medium/40 text-xs select-none">•</span>
+                  <a 
+                    href={familyIcsDataUri} 
+                    download="svatba-rodina.ics" 
+                    class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+                  >
+                    + Pozvánka (.ics)
+                  </a>
+                </div>
+              </div>
+              
+              <div class="space-y-1 pt-1">
+                <p class="text-wedding-dark text-xs font-bold uppercase tracking-wider opacity-85">Pro ostatní hosty (od 14:30)</p>
+                <div class="flex items-center justify-center lg:justify-start gap-3">
+                  <a 
+                    href={guestGoogleUrl} 
+                    target="_blank" 
+                    class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+                  >
+                    + Google Kalendář
+                  </a>
+                  <span class="text-wedding-medium/40 text-xs select-none">•</span>
+                  <a 
+                    href={guestIcsDataUri} 
+                    download="svatba-hoste.ics" 
+                    class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+                  >
+                    + Pozvánka (.ics)
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -118,14 +160,9 @@ const icsDataUri = `data:text/calendar;charset=utf8,${encodeURIComponent(icsCont
           <a
             href={googleMapsUrl}
             target="_blank"
-            class="text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light group inline-flex items-center gap-6 border bg-transparent px-8 py-3.5 text-xs font-bold tracking-widest uppercase transition-all duration-300 select-none"
+            class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex justify-center items-center gap-3 bg-transparent px-8 py-3.5 text-xs font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm select-none cursor-pointer"
           >
             Navigovat
-            <span
-              class="morse-decoder text-wedding-medium group-hover:text-wedding-light opacity-30 group-hover:opacity-100"
-              data-decoded="N"
-              >−·</span
-            >
           </a>
         </div>
       </div>
@@ -178,7 +215,7 @@ const icsDataUri = `data:text/calendar;charset=utf8,${encodeURIComponent(icsCont
 
     <!-- Clean Map Container (No clutter overlays, full visibility!) -->
     <div
-      class="morse-border text-wedding-medium/40 bg-wedding-light relative h-[450px] lg:h-auto overflow-hidden shadow-xl lg:col-span-3 hover-card-premium min-h-[450px] lg:min-h-[550px]"
+      class="morse-border text-wedding-medium/30 bg-wedding-light relative h-[450px] lg:h-auto overflow-hidden shadow-sm lg:col-span-3 min-h-[450px] lg:min-h-[550px]"
     >
       <!-- Map Element -->
       <div
@@ -263,17 +300,19 @@ const icsDataUri = `data:text/calendar;charset=utf8,${encodeURIComponent(icsCont
         tab.classList.remove("text-wedding-dark/60");
 
         panels.forEach((p) => {
-          p.classList.add("hidden", "opacity-0", "translate-y-4");
+          p.classList.add("hidden", "opacity-0", "translate-y-4", "pointer-events-none");
           p.classList.remove("opacity-100", "translate-y-0");
         });
 
         const activePanel = document.getElementById(`panel-${target}`);
-        activePanel.classList.remove("hidden");
-        // Trigger reflow for animation
-        setTimeout(() => {
-          activePanel.classList.add("opacity-100", "translate-y-0");
-          activePanel.classList.remove("opacity-0", "translate-y-4");
-        }, 10);
+        if (activePanel) {
+          activePanel.classList.remove("hidden", "pointer-events-none");
+          // Trigger reflow for animation
+          setTimeout(() => {
+            activePanel.classList.add("opacity-100", "translate-y-0");
+            activePanel.classList.remove("opacity-0", "translate-y-4");
+          }, 10);
+        }
 
         Object.values(markers).forEach((m) => map.removeLayer(m));
         if (markers[target]) {

@@ -1,6 +1,6 @@
 ---
 import { getEntry } from "astro:content";
-import morseMotif from "../assets/morse-motif.svg";
+
 
 const wedding = await getEntry("wedding", "info");
 if (!wedding) {
@@ -10,7 +10,7 @@ const { morseMessage } = wedding.data;
 ---
 
 <footer
-  class="bg-wedding-light text-wedding-dark border-wedding-medium/20 mt-32 border-t py-24 text-center"
+  class="bg-wedding-light text-wedding-dark border-wedding-medium/20 mt-16 border-t py-24 text-center"
 >
   <div class="mx-auto max-w-6xl px-6">
     <div
@@ -48,19 +48,9 @@ const { morseMessage } = wedding.data;
     <div class="mt-10">
       <button
         id="open-morse-modal"
-        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex items-center gap-3 bg-transparent px-10 py-4.5 text-base font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer rounded-sm"
+        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm"
       >
-        <img
-          src={morseMotif.src}
-          alt=""
-          class="ml-2 h-7 w-auto tracking-widest opacity-60"
-        />
         {morseMessage.buttonText}
-        <img
-          src={morseMotif.src}
-          alt=""
-          class="ml-2 h-7 w-auto tracking-widest opacity-60"
-        />
       </button>
     </div>
     
@@ -90,7 +80,7 @@ const { morseMessage } = wedding.data;
         />
         <button 
           id="game-btn" 
-          class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium px-5 py-2 text-xs font-bold tracking-widest uppercase rounded-sm cursor-pointer transition-colors active:scale-95"
+          class="border border-wedding-dark text-wedding-dark hover:bg-wedding-dark hover:text-wedding-light px-5 py-2 text-xs font-bold tracking-widest uppercase rounded-sm cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm"
         >
           Ověřit
         </button>
@@ -115,14 +105,6 @@ const { morseMessage } = wedding.data;
       
       <p id="game-error" class="hidden mt-3 text-xs text-red-600 font-bold tracking-widest uppercase animate-pulse">
         Kód nesouhlasí, zkus to znovu!
-      </p>
-    </div>
-    
-    <div class="border-wedding-medium/10 mt-24 border-t pt-10">
-      <p class="text-xs font-bold tracking-[0.3em] uppercase opacity-60 flex items-center justify-center gap-2">
-        <span class="morse-decoder cursor-help" data-decoded="F">··−·</span>
-        <span>Vytvořeno s morseovkou</span>
-        <span class="morse-decoder cursor-help" data-decoded="F">··−·</span>
       </p>
     </div>
   </div>

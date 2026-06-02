@@ -75,7 +75,7 @@ const { rsvpForm } = wedding.data;
                       name={field.name}
                       required={field.required}
                       placeholder={field.placeholder}
-                      class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 w-full border-b bg-transparent py-4 text-lg font-medium text-wedding-dark transition-colors outline-none focus:ring-0"
+                      class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 placeholder:text-sm w-full border-b bg-transparent py-4 text-lg font-medium text-wedding-dark transition-colors outline-none focus:ring-0"
                     />
                   )}
 
@@ -154,23 +154,15 @@ const { rsvpForm } = wedding.data;
         ))
       }
 
-      <button
-        type="submit"
-        id="submit-btn"
-        class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium group flex w-full items-center justify-center gap-6 px-8 py-5 font-bold tracking-[0.3em] uppercase transition-colors cursor-pointer rounded-sm"
-      >
-        <span
-          class="morse-decoder text-wedding-medium group-hover:text-wedding-light opacity-30 transition-all group-hover:opacity-60"
-          data-decoded="S"
-          >···</span
+      <div class="flex justify-center pt-8">
+        <button
+          type="submit"
+          id="submit-btn"
+          class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex justify-center items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
         >
-        {rsvpForm.submitButtonText}
-        <span
-          class="morse-decoder text-wedding-medium group-hover:text-wedding-light opacity-30 transition-all group-hover:opacity-60"
-          data-decoded="O"
-          >−−−</span
-        >
-      </button>
+          {rsvpForm.submitButtonText}
+        </button>
+      </div>
 
       <p
         id="form-status"

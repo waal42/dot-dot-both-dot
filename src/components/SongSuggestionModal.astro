@@ -1,0 +1,221 @@
+---
+// src/components/SongSuggestionModal.astro
+import { getEntry } from "astro:content";
+
+const wedding = await getEntry("wedding", "info");
+if (!wedding) {
+  throw new Error("Wedding content 'info' not found");
+}
+const { rsvpForm } = wedding.data;
+---
+
+{/* Modal Container */}
+<div
+  id="song-modal"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-wedding-dark/60 backdrop-blur-sm transition-all duration-500 opacity-0 pointer-events-none"
+>
+  {/* Card Wrapper */}
+  <div
+    id="song-modal-card"
+    class="bg-wedding-light border border-wedding-medium/20 text-wedding-dark w-full max-w-md flex flex-col p-6 md:p-8 shadow-2xl relative translate-y-8 transition-transform duration-500 overflow-hidden rounded-sm"
+  >
+    {/* Close button */}
+    <button
+      id="close-song-modal"
+      class="absolute top-4 right-4 text-wedding-medium hover:text-wedding-dark cursor-pointer p-2 transition-colors active:scale-90"
+      aria-label="Zavřít"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="h-6 w-6"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    {/* Header */}
+    <div class="mb-6 pr-8 text-left">
+      <h3 class="text-2xl font-bold text-wedding-dark mb-2">
+        Navrhněte písničku
+      </h3>
+      <p class="text-wedding-medium text-xs font-semibold italic">
+        Pošlete nám tip na vaši oblíbenou pecku, kterou byste rádi slyšeli na svatbě. Rádi ji zařadíme do playlistu!
+      </p>
+    </div>
+
+    {/* Body */}
+    <form id="song-form" class="space-y-6 text-left">
+      {/* Song Name and Artist */}
+      <div class="space-y-2">
+        <label
+          for="song-name-artist"
+          class="text-wedding-dark block text-xs font-bold tracking-widest uppercase opacity-85"
+        >
+          Název písničky a interpret
+        </label>
+        <input
+          type="text"
+          id="song-name-artist"
+          name="song"
+          required
+          placeholder="např. Queen - Don't Stop Me Now"
+          class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 placeholder:text-sm w-full border-b bg-transparent py-2.5 text-base font-semibold text-wedding-dark transition-colors outline-none focus:ring-0"
+        />
+      </div>
+
+      {/* YouTube Link */}
+      <div class="space-y-2">
+        <label
+          for="song-youtube-link"
+          class="text-wedding-dark block text-xs font-bold tracking-widest uppercase opacity-85"
+        >
+          Odkaz na YouTube (volitelně)
+        </label>
+        <input
+          type="text"
+          id="song-youtube-link"
+          name="link"
+          placeholder="https://www.youtube.com/... nebo prázdné"
+          class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 placeholder:text-sm w-full border-b bg-transparent py-2.5 text-base font-semibold text-wedding-dark transition-colors outline-none focus:ring-0"
+        />
+      </div>
+
+      {/* Status message */}
+      <p
+        id="song-status"
+        class="hidden text-center text-xs font-bold tracking-widest uppercase"
+      >
+      </p>
+
+      {/* Submit button */}
+      <div class="pt-6 flex gap-3 border-t border-wedding-medium/10">
+        <button
+          type="submit"
+          id="song-submit"
+          class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light flex w-full justify-center items-center gap-3 bg-transparent px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer rounded-sm"
+        >
+          Odeslat návrh
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script define:vars={{ rsvpUrl: rsvpForm.rsvpUrl }}>
+  window.songRsvpUrl = rsvpUrl;
+
+  const modal = document.getElementById("song-modal");
+  const modalCard = document.getElementById("song-modal-card");
+  const closeBtn = document.getElementById("close-song-modal");
+
+  const openModal = () => {
+    if (!modal || !modalCard) return;
+    modal.classList.remove("pointer-events-none", "opacity-0");
+    modal.classList.add("opacity-100");
+    modalCard.classList.remove("translate-y-8");
+    modalCard.classList.add("translate-y-0");
+    document.body.style.overflow = "hidden"; // disable background scroll
+  };
+
+  const closeModal = () => {
+    if (!modal || !modalCard) return;
+    modal.classList.add("pointer-events-none", "opacity-0");
+    modal.classList.remove("opacity-100");
+    modalCard.classList.add("translate-y-8");
+    modalCard.classList.remove("translate-y-0");
+    document.body.style.overflow = ""; // enable scroll
+  };
+
+  // Open modal when clicking the trigger button (using event delegation)
+  document.addEventListener("click", (e) => {
+    if (e.target instanceof Element && e.target.closest("#open-song-modal")) {
+      openModal();
+    }
+  });
+
+  closeBtn?.addEventListener("click", closeModal);
+
+  // Close modal when clicking on backdrop
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+</script>
+
+<script>
+  const form = document.getElementById("song-form") as HTMLFormElement | null;
+  const songInput = document.getElementById("song-name-artist") as HTMLInputElement | null;
+  const linkInput = document.getElementById("song-youtube-link") as HTMLInputElement | null;
+  const submitBtn = document.getElementById("song-submit") as HTMLButtonElement | null;
+  const statusMsg = document.getElementById("song-status") as HTMLParagraphElement | null;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!songInput || !submitBtn || !statusMsg) return;
+
+    const song = songInput.value.trim();
+    const link = linkInput ? linkInput.value.trim() : "";
+
+    if (!song) {
+      songInput.classList.add("border-red-500");
+      songInput.focus();
+      return;
+    } else {
+      songInput.classList.remove("border-red-500");
+    }
+
+    submitBtn.setAttribute("disabled", "true");
+    const originalText = submitBtn.innerHTML;
+    submitBtn.textContent = "Odesílám...";
+
+    const postData = new FormData();
+    postData.append("form_type", "song");
+    postData.append("song", song);
+    postData.append("link", link);
+
+    try {
+      // @ts-ignore
+      const targetUrl = (window as any).songRsvpUrl || "";
+      if (targetUrl) {
+        await fetch(targetUrl, {
+          method: "POST",
+          mode: "no-cors",
+          body: postData,
+        });
+      }
+
+      statusMsg.textContent = "Návrh byl úspěšně odeslán do playlistu!";
+      statusMsg.className = "text-center text-xs font-bold uppercase text-green-600 animate-bounce";
+      statusMsg.classList.remove("hidden");
+
+      // Reset values
+      songInput.value = "";
+      if (linkInput) linkInput.value = "";
+
+      setTimeout(() => {
+        statusMsg.classList.add("hidden");
+        // Close modal automatically
+        const closeTrigger = document.getElementById("close-song-modal");
+        closeTrigger?.click();
+      }, 2500);
+
+    } catch (err) {
+      statusMsg.textContent = "Chyba při odesílání návrhu.";
+      statusMsg.className = "text-center text-xs font-bold uppercase text-red-500 animate-pulse";
+      statusMsg.classList.remove("hidden");
+    } finally {
+      submitBtn.removeAttribute("disabled");
+      submitBtn.innerHTML = originalText;
+    }
+  });
+</script>

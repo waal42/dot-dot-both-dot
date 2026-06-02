@@ -6,15 +6,17 @@ import WhenWhere from "../components/WhenWhere.astro";
 import Schedule from "../components/Schedule.astro";
 import Gifts from "../components/Gifts.astro";
 import RsvpForm from "../components/RsvpForm.astro";
-import DressCode from "../components/DressCode.astro";
+import Faq from "../components/Faq.astro";
 import AboutUs from "../components/AboutUs.astro";
 import MorseMessageModal from "../components/MorseMessageModal.astro";
+import SongSuggestionModal from "../components/SongSuggestionModal.astro";
+
+import { Image } from "astro:assets";
 
 // Import Content Collection
 import { getEntry } from "astro:content";
 
-// Import Assets
-import morseMotif from "../assets/morse-motif.svg";
+
 
 const wedding = await getEntry("wedding", "info");
 if (!wedding) {
@@ -30,6 +32,7 @@ const { metaTitle, hero } = wedding.data;
     <header
       class="flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-6 py-20 text-center"
     >
+      <Image src={hero.logo.src} alt={hero.logo.alt} class="mb-20" />
       <h1
         class="text-wedding-dark mb-8 text-6xl font-bold tracking-tight md:text-8xl animate-fade-in-up"
       >
@@ -39,11 +42,6 @@ const { metaTitle, hero } = wedding.data;
         class="text-wedding-dark mb-8 text-4xl font-bold tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
       >
         {hero.date}
-      </p>
-      <p
-        class="text-wedding-medium mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
-      >
-        {hero.subtitle}
       </p>
       <p
         class="text-wedding-dark mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
@@ -56,17 +54,7 @@ const { metaTitle, hero } = wedding.data;
         href="#rsvp"
         class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm"
       >
-        <img
-          src={morseMotif.src}
-          alt=""
-          class="ml-2 h-10 w-auto tracking-widest opacity-60"
-        />
         {hero.buttonText}
-        <img
-          src={morseMotif.src}
-          alt=""
-          class="ml-2 h-10 w-auto tracking-widest opacity-60"
-        />
       </a>
     </header>
 
@@ -80,8 +68,9 @@ const { metaTitle, hero } = wedding.data;
 
     <RsvpForm />
 
-    <DressCode />
+    <Faq />
 
     <MorseMessageModal />
+    <SongSuggestionModal />
   </main>
 </Layout>
