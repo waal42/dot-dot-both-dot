@@ -1,6 +1,6 @@
 ---
 // src/components/AboutUs.astro
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import { getEntry } from "astro:content";
 
 const wedding = await getEntry("wedding", "info");
@@ -8,6 +8,16 @@ if (!wedding) {
   throw new Error("Wedding content 'info' not found");
 }
 const { aboutUs } = wedding.data;
+
+const galleryWithOptimizedImages = await Promise.all(
+  aboutUs.gallery.map(async (item) => {
+    if (item.type !== "text") {
+      const optimizedImage = await getImage({ src: item.src, format: "webp" });
+      return { ...item, optimizedSrc: optimizedImage.src };
+    }
+    return item;
+  })
+);
 
 const getSizeClasses = (size: string) => {
   switch (size) {
@@ -53,7 +63,7 @@ const getSizeClasses = (size: string) => {
     style="animation-delay: 300ms;"
   >
     {
-      aboutUs.gallery.map((item) => (
+      galleryWithOptimizedImages.map((item) => (
         <div
           class={`${getSizeClasses(item.size)} group bg-wedding-dark/5 overflow-hidden border border-transparent hover:border-wedding-dark/10 transition-all duration-500 shadow-sm`}
         >
@@ -69,7 +79,7 @@ const getSizeClasses = (size: string) => {
             </div>
           ) : (
             <a
-              href={item.src.src}
+              href={item.optimizedSrc}
               data-pswp-width={item.src.width}
               data-pswp-height={item.src.height}
               data-cropped="true"
