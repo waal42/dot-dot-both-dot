@@ -8,6 +8,7 @@ import Gifts from "../components/Gifts.astro";
 import RsvpForm from "../components/RsvpForm.astro";
 import DressCode from "../components/DressCode.astro";
 import AboutUs from "../components/AboutUs.astro";
+import MorseMessageModal from "../components/MorseMessageModal.astro";
 
 // Import Content Collection
 import { getEntry } from "astro:content";
@@ -80,5 +81,7 @@ const { metaTitle, hero } = wedding.data;
     <RsvpForm />
 
     <DressCode />
+
+    <MorseMessageModal />
   </main>
 </Layout>

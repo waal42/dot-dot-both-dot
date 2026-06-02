@@ -1,3 +1,14 @@
+---
+import { getEntry } from "astro:content";
+import morseMotif from "../assets/morse-motif.svg";
+
+const wedding = await getEntry("wedding", "info");
+if (!wedding) {
+  throw new Error("Wedding content 'info' not found");
+}
+const { morseMessage } = wedding.data;
+---
+
 <footer
   class="bg-wedding-light text-wedding-dark border-wedding-medium/20 mt-32 border-t py-24 text-center"
 >
@@ -33,6 +44,25 @@
     >
       Šlapanice, 15. srpna 2026
     </p>
+
+    <div class="mt-10">
+      <button
+        id="open-morse-modal"
+        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex items-center gap-3 bg-transparent px-10 py-4.5 text-base font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer rounded-sm"
+      >
+        <img
+          src={morseMotif.src}
+          alt=""
+          class="ml-2 h-7 w-auto tracking-widest opacity-60"
+        />
+        {morseMessage.buttonText}
+        <img
+          src={morseMotif.src}
+          alt=""
+          class="ml-2 h-7 w-auto tracking-widest opacity-60"
+        />
+      </button>
+    </div>
     
     <!-- 🦝 MÝVALÍ MINI-ŠIFRA GAME -->
     <div class="mt-16 max-w-md mx-auto p-6 bg-wedding-light/50 border border-wedding-medium/20 shadow-sm rounded-sm hover-card-premium">

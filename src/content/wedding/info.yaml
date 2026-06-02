@@ -273,3 +273,13 @@ dressCode:
   main: "žádný"
   detail: "Přijďte v tom, v čem se cítíte dobře!"
   subDetail: ""
+
+morseMessage:
+  buttonText: "Napište nám zprávu"
+  title: "Vzkaz v morseovce"
+  description: "Vyťukejte nám zprávu v morseovce nebo napište normální text – my ho přeložíme! Můžete si ho i přehrát."
+  placeholderName: "Tvoje jméno / podpis"
+  submitButtonText: "Poslat zprávu"
+  sendingText: "Odesílám..."
+  successMessage: "Vzkaz byl úspěšně odeslán do naší mývalí schránky! Děkujeme."
+  errorMessage: "Chyba při odesílání. Zkuste to prosím znovu."

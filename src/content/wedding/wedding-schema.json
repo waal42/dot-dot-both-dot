@@ -221,6 +221,29 @@
         "subDetail": { "type": "string" }
       },
       "required": ["title", "main", "detail", "subDetail"]
+    },
+    "morseMessage": {
+      "type": "object",
+      "properties": {
+        "buttonText": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "placeholderName": { "type": "string" },
+        "submitButtonText": { "type": "string" },
+        "sendingText": { "type": "string" },
+        "successMessage": { "type": "string" },
+        "errorMessage": { "type": "string" }
+      },
+      "required": [
+        "buttonText",
+        "title",
+        "description",
+        "placeholderName",
+        "submitButtonText",
+        "sendingText",
+        "successMessage",
+        "errorMessage"
+      ]
     }
   },
   "required": [
@@ -232,6 +255,7 @@
     "schedule",
     "gifts",
     "rsvpForm",
-    "dressCode"
+    "dressCode",
+    "morseMessage"
   ]
 }

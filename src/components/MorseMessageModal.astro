@@ -1,0 +1,562 @@
+---
+// src/components/MorseMessageModal.astro
+import { getEntry } from "astro:content";
+import morseMotif from "../assets/morse-motif.svg";
+
+const wedding = await getEntry("wedding", "info");
+if (!wedding) {
+  throw new Error("Wedding content 'info' not found");
+}
+const { morseMessage, rsvpForm } = wedding.data;
+
+// Morse alphabet elements for virtual keyboard rendering
+const alphabet = [
+  { char: "A", code: "·−" },
+  { char: "B", code: "−···" },
+  { char: "C", code: "−·−·" },
+  { char: "D", code: "−··" },
+  { char: "E", code: "·" },
+  { char: "F", code: "··−·" },
+  { char: "G", code: "−−·" },
+  { char: "H", code: "····" },
+  { char: "CH", code: "−−−−" },
+  { char: "I", code: "··" },
+  { char: "J", code: "·−−−" },
+  { char: "K", code: "−·−" },
+  { char: "L", code: "·−··" },
+  { char: "M", code: "−−" },
+  { char: "N", code: "−·" },
+  { char: "O", code: "−−−" },
+  { char: "P", code: "·−−·" },
+  { char: "Q", code: "−−·−" },
+  { char: "R", code: "·−·" },
+  { char: "S", code: "···" },
+  { char: "T", code: "−" },
+  { char: "U", code: "··−" },
+  { char: "V", code: "···−" },
+  { char: "W", code: "·−−" },
+  { char: "X", code: "−··−" },
+  { char: "Y", code: "−·−−" },
+  { char: "Z", code: "−−··" },
+];
+---
+
+  {/* Modal Container */}
+  <div
+    id="morse-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-wedding-dark/60 backdrop-blur-sm transition-all duration-500 opacity-0 pointer-events-none"
+  >
+    {/* Card Wrapper */}
+    <div
+      id="morse-modal-card"
+      class="bg-wedding-light border border-wedding-medium/20 text-wedding-dark w-full max-w-2xl max-h-[90vh] flex flex-col p-6 md:p-8 shadow-2xl relative translate-y-8 transition-transform duration-500 overflow-hidden rounded-sm"
+    >
+      {/* Close button */}
+      <button
+        id="close-morse-modal"
+        class="absolute top-4 right-4 text-wedding-medium hover:text-wedding-dark cursor-pointer p-2 transition-colors active:scale-90"
+        aria-label="Zavřít"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-6 w-6"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      {/* Header */}
+      <div class="mb-6 pr-8 text-left">
+        <h3 class="text-2xl font-bold text-wedding-dark mb-2">
+          {morseMessage.title}
+        </h3>
+        <p class="text-wedding-medium text-xs font-semibold italic">
+          {morseMessage.description}
+        </p>
+      </div>
+
+      {/* Body: Scrollable fields wrapper */}
+      <div class="flex-1 overflow-y-auto space-y-6 pr-2 mb-6 scrollbar-thin">
+        {/* Name input */}
+        <div class="text-left space-y-2">
+          <label
+            for="morse-guest-name"
+            class="text-wedding-dark block text-xs font-bold tracking-widest uppercase opacity-85"
+          >
+            Jméno / Podpis
+          </label>
+          <input
+            type="text"
+            id="morse-guest-name"
+            required
+            placeholder={morseMessage.placeholderName}
+            class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 w-full border-b bg-transparent py-2.5 text-base font-semibold text-wedding-dark transition-colors outline-none focus:ring-0"
+          />
+        </div>
+
+        {/* Translation fields columns */}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+          {/* Normal Text Box */}
+          <div class="space-y-2 flex flex-col">
+            <label
+              for="text-input"
+              class="text-wedding-dark block text-xs font-bold tracking-widest uppercase opacity-85"
+            >
+              Klasické písmo
+            </label>
+            <textarea
+              id="text-input"
+              placeholder="Zde napište vzkaz..."
+              rows="4"
+              class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark w-full border p-3 bg-transparent text-sm font-semibold rounded-sm outline-none resize-none flex-1 transition-colors min-h-[100px]"
+            ></textarea>
+          </div>
+
+          {/* Morse Code Box */}
+          <div class="space-y-2 flex flex-col">
+            <label
+              for="morse-input"
+              class="text-wedding-dark block text-xs font-bold tracking-widest uppercase opacity-85"
+            >
+              Morseovka (· a −)
+            </label>
+            <textarea
+              id="morse-input"
+              placeholder="Zde ťukejte morseovku..."
+              rows="4"
+              class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark w-full border p-3 bg-transparent text-sm font-bold tracking-widest rounded-sm outline-none resize-none flex-1 transition-colors min-h-[100px]"
+            ></textarea>
+          </div>
+        </div>
+
+        {/* Virtual Keyboard telegraph tools */}
+        <div class="space-y-4 bg-wedding-dark/5 p-4 border border-wedding-medium/10 rounded-sm">
+          <p class="text-wedding-dark text-center text-xs font-bold tracking-widest uppercase opacity-80">
+            Telegrafní nástroje
+          </p>
+
+          {/* 1. Direct Morse characters inputs */}
+          <div class="flex items-center justify-center gap-2">
+            <button
+              id="key-dot"
+              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 px-6 text-xl font-bold uppercase rounded-sm cursor-pointer transition-all active:scale-90"
+              title="Vložit tečku"
+            >
+              · (tečka)
+            </button>
+            <button
+              id="key-dash"
+              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 px-6 text-xl font-bold uppercase rounded-sm cursor-pointer transition-all active:scale-90"
+              title="Vložit čárku"
+            >
+              − (čárka)
+            </button>
+            <button
+              id="key-slash"
+              class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium h-12 px-6 text-sm font-bold uppercase rounded-sm cursor-pointer transition-all active:scale-90"
+              title="Mezera mezi slovy"
+            >
+              / (mezera)
+            </button>
+            <button
+              id="key-backspace"
+              class="border border-wedding-medium/40 hover:border-wedding-dark text-wedding-medium hover:text-wedding-dark h-12 px-4 flex items-center justify-center rounded-sm cursor-pointer transition-all active:scale-90"
+              title="Smazat poslední znak"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                <line x1="18" y1="9" x2="12" y2="15"></line>
+                <line x1="12" y1="9" x2="18" y2="15"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div class="morse-line text-wedding-medium/20 mx-auto h-[2px] w-24"></div>
+
+          {/* 2. Alphabet keyboard helper trigger */}
+          <div class="space-y-3">
+            <button
+              id="toggle-keyboard-helper"
+              class="text-wedding-medium hover:text-wedding-dark text-[10px] font-bold tracking-widest uppercase transition-colors cursor-pointer select-none underline decoration-dotted underline-offset-4"
+            >
+              Zobrazit nápovědu abecedy
+            </button>
+
+            {/* Alphabet Grid */}
+            <div
+              id="keyboard-helper"
+              class="hidden grid-cols-4 sm:grid-cols-6 gap-1.5 pt-2 max-h-[140px] overflow-y-auto"
+            >
+              {
+                alphabet.map((item) => (
+                  <button
+                    data-morse-code={item.code}
+                    class="alphabet-key border border-wedding-medium/20 bg-wedding-light hover:bg-wedding-dark hover:text-wedding-light py-2 text-center transition-colors cursor-pointer rounded-sm select-none"
+                  >
+                    <div class="text-[10px] font-extrabold leading-none">{item.char}</div>
+                    <div class="text-[8px] font-bold opacity-60 leading-none mt-1">{item.code}</div>
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+
+        {/* Global form feedback display messages */}
+        <p
+          id="morse-status"
+          class="hidden text-center text-xs font-bold tracking-widest uppercase"
+        >
+        </p>
+      </div>
+
+      {/* Footer operations (Submit / Playback / Cancel) */}
+      <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-wedding-medium/10">
+        {/* Play Message */}
+        <button
+          id="morse-play"
+          class="border-wedding-medium/40 text-wedding-medium hover:border-wedding-dark hover:text-wedding-dark flex flex-1 items-center justify-center gap-3 px-6 py-3.5 text-xs font-bold tracking-widest uppercase transition-colors cursor-pointer rounded-sm active:scale-95"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Přehrát
+        </button>
+
+        {/* Submit Message */}
+        <button
+          id="morse-submit"
+          class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium flex flex-2 items-center justify-center gap-3 px-8 py-3.5 text-xs font-bold tracking-[0.2em] uppercase transition-colors cursor-pointer rounded-sm active:scale-95 shadow-sm"
+        >
+          <img
+            src={morseMotif.src}
+            alt=""
+            class="h-6 w-auto tracking-widest opacity-60"
+          />
+          {morseMessage.submitButtonText}
+        </button>
+      </div>
+    </div>
+  </div>
+
+<script define:vars={{ rsvpUrl: rsvpForm.rsvpUrl, morseMessage }}>
+  // Expose variables globally so they can be accessed by the processed script block
+  window.rsvpUrl = rsvpUrl;
+  window.morseMessage = morseMessage;
+
+  // Interactive Modal UI handling
+  const closeBtn = document.getElementById("close-morse-modal");
+  const modal = document.getElementById("morse-modal");
+  const modalCard = document.getElementById("morse-modal-card");
+
+  const openModal = () => {
+    if (!modal || !modalCard) return;
+    modal.classList.remove("pointer-events-none", "opacity-0");
+    modal.classList.add("opacity-100");
+    modalCard.classList.remove("translate-y-8");
+    modalCard.classList.add("translate-y-0");
+    document.body.style.overflow = "hidden"; // disable background scroll
+  };
+
+  const closeModal = () => {
+    if (!modal || !modalCard) return;
+    modal.classList.add("pointer-events-none", "opacity-0");
+    modal.classList.remove("opacity-100");
+    modalCard.classList.add("translate-y-8");
+    modalCard.classList.remove("translate-y-0");
+    document.body.style.overflow = ""; // enable scroll
+  };
+
+  // Use event delegation for open button since Footer.astro is loaded after index.astro content slot
+  document.addEventListener("click", (e) => {
+    if (e.target instanceof Element && e.target.closest("#open-morse-modal")) {
+      openModal();
+    }
+  });
+
+  closeBtn?.addEventListener("click", closeModal);
+
+  // Close modal when clicking outside card backdrop
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Alphabet Help grid collapsing toggles
+  const toggleKeyboardBtn = document.getElementById("toggle-keyboard-helper");
+  const keyboardHelper = document.getElementById("keyboard-helper");
+
+  toggleKeyboardBtn?.addEventListener("click", () => {
+    if (!keyboardHelper || !toggleKeyboardBtn) return;
+    const isHidden = keyboardHelper.classList.contains("hidden");
+    if (isHidden) {
+      keyboardHelper.classList.remove("hidden");
+      keyboardHelper.classList.add("grid");
+      toggleKeyboardBtn.textContent = "Skrýt nápovědu abecedy";
+    } else {
+      keyboardHelper.classList.add("hidden");
+      keyboardHelper.classList.remove("grid");
+      toggleKeyboardBtn.textContent = "Zobrazit nápovědu abecedy";
+    }
+  });
+</script>
+
+<script>
+  import { textToMorse, morseToText } from "../scripts/morseTranslator";
+  import { playMorse, stopMorse, playSingleTone } from "../scripts/morseAudio";
+
+  const textInput = document.getElementById("text-input") as HTMLTextAreaElement | null;
+  const morseInput = document.getElementById("morse-input") as HTMLTextAreaElement | null;
+  const nameInput = document.getElementById("morse-guest-name") as HTMLInputElement | null;
+
+  const keyDot = document.getElementById("key-dot");
+  const keyDash = document.getElementById("key-dash");
+  const keySlash = document.getElementById("key-slash");
+  const keyBackspace = document.getElementById("key-backspace");
+  const alphabetKeys = document.querySelectorAll(".alphabet-key");
+
+  const playBtn = document.getElementById("morse-play");
+  const submitBtn = document.getElementById("morse-submit");
+  const statusMsg = document.getElementById("morse-status");
+
+  // Sync translation: Normal Text -> Morse Code
+  textInput?.addEventListener("input", (e) => {
+    if (!morseInput) return;
+    const text = (e.target as HTMLTextAreaElement).value;
+    morseInput.value = textToMorse(text);
+  });
+
+  // Sync translation: Morse Code -> Normal Text
+  morseInput?.addEventListener("input", (e) => {
+    if (!textInput) return;
+    const morse = (e.target as HTMLTextAreaElement).value;
+    textInput.value = morseToText(morse);
+  });
+
+  // Helper to insert values at cursor position in Morse textarea
+  const insertMorseChar = (char: string) => {
+    if (!morseInput || !textInput) return;
+    
+    const start = morseInput.selectionStart;
+    const end = morseInput.selectionEnd;
+    const val = morseInput.value;
+
+    morseInput.value = val.substring(0, start) + char + val.substring(end);
+    
+    // Position cursor right after insertion
+    const newPos = start + char.length;
+    morseInput.setSelectionRange(newPos, newPos);
+    morseInput.focus();
+
+    // Trigger update for translator sync
+    textInput.value = morseToText(morseInput.value);
+  };
+
+  // Keyboard button click events
+  keyDot?.addEventListener("click", () => {
+    insertMorseChar("·");
+    playSingleTone(false);
+  });
+
+  keyDash?.addEventListener("click", () => {
+    insertMorseChar("−");
+    playSingleTone(true);
+  });
+
+  keySlash?.addEventListener("click", () => {
+    if (!morseInput || !textInput) return;
+    
+    const start = morseInput.selectionStart;
+    const end = morseInput.selectionEnd;
+    const val = morseInput.value;
+
+    const leftText = val.substring(0, start);
+    
+    if (leftText.endsWith(" / ") || leftText.endsWith("/ ")) {
+      const lastSlashIdx = leftText.lastIndexOf("/");
+      const replacement = "// ";
+      const newVal = val.substring(0, lastSlashIdx) + replacement + val.substring(end);
+      
+      morseInput.value = newVal;
+      
+      const newPos = lastSlashIdx + replacement.length;
+      morseInput.setSelectionRange(newPos, newPos);
+      morseInput.focus();
+      
+      textInput.value = morseToText(newVal);
+    } else if (leftText.endsWith(" // ") || leftText.endsWith("// ")) {
+      morseInput.focus();
+      return;
+    } else {
+      if (leftText.trim() === "") {
+        morseInput.focus();
+        return;
+      }
+      insertMorseChar(" / ");
+    }
+  });
+
+  keyBackspace?.addEventListener("click", () => {
+    if (!morseInput || !textInput) return;
+    const val = morseInput.value;
+    const start = morseInput.selectionStart;
+    const end = morseInput.selectionEnd;
+
+    // Delete single character at cursor
+    if (start > 0) {
+      morseInput.value = val.substring(0, start - 1) + val.substring(end);
+      morseInput.setSelectionRange(start - 1, start - 1);
+    }
+    morseInput.focus();
+    textInput.value = morseToText(morseInput.value);
+  });
+
+  // Alphabet keys input events (inserts full code block + standard slash separator)
+  alphabetKeys.forEach((key) => {
+    key.addEventListener("click", () => {
+      const code = key.getAttribute("data-morse-code");
+      if (code) {
+        insertMorseChar(code + " / ");
+      }
+    });
+  });
+
+  // Stop audio playback if modal is closed
+  document.getElementById("close-morse-modal")?.addEventListener("click", () => {
+    stopMorse();
+  });
+  document.getElementById("morse-modal")?.addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) {
+      stopMorse();
+    }
+  });
+
+
+  // Play Morse audio synthesizer
+  playBtn?.addEventListener("click", () => {
+    if (!morseInput) return;
+    const morse = morseInput.value;
+    
+    // Check toggle state (mute checks) before playing
+    const soundEnabled = localStorage.getItem("morse-sound-enabled") === "true";
+    
+    if (!soundEnabled) {
+      // Alert/remind user sound is muted
+      if (statusMsg) {
+        statusMsg.textContent = "🔔 Zvuk je v záhlaví ztlumený. Pro přehrání ho zapněte.";
+        statusMsg.className = "text-center text-xs font-bold uppercase text-wedding-medium";
+        statusMsg.classList.remove("hidden");
+        setTimeout(() => statusMsg.classList.add("hidden"), 3000);
+      }
+      return;
+    }
+
+    if (morse.trim()) {
+      playMorse(morse);
+    }
+  });
+
+  // Submit Guestbook message
+  submitBtn?.addEventListener("click", async () => {
+    if (!nameInput || !textInput || !morseInput || !submitBtn || !statusMsg) return;
+
+    const name = nameInput.value.trim();
+    const morseMsg = morseInput.value.trim();
+    const textMsg = textInput.value.trim();
+
+    if (!name) {
+      nameInput.classList.add("border-red-500");
+      nameInput.focus();
+      return;
+    } else {
+      nameInput.classList.remove("border-red-500");
+    }
+
+    if (!morseMsg) {
+      textInput.classList.add("border-red-500");
+      morseInput.classList.add("border-red-500");
+      return;
+    } else {
+      textInput.classList.remove("border-red-500");
+      morseInput.classList.remove("border-red-500");
+    }
+
+    submitBtn.setAttribute("disabled", "true");
+    const originalText = submitBtn.innerHTML;
+    // @ts-ignore
+    submitBtn.textContent = (window as any).morseMessage?.sendingText || "Odesílám...";
+
+    const postData = new FormData();
+    postData.append("form_type", "message");
+    postData.append("name", name);
+    postData.append("morse_message", morseMsg);
+    postData.append("decoded_message", textMsg);
+
+    try {
+      // Post to Google Apps Script
+      // @ts-ignore
+      const targetUrl = (window as any).rsvpUrl || "";
+      if (targetUrl) {
+        await fetch(targetUrl, {
+          method: "POST",
+          mode: "no-cors",
+          body: postData,
+        });
+      }
+
+      statusMsg.textContent = (window as any).morseMessage?.successMessage || "Vzkaz byl odeslán!";
+      statusMsg.className = "text-center text-xs font-bold uppercase text-green-600 animate-bounce";
+      statusMsg.classList.remove("hidden");
+
+      // Reset values
+      nameInput.value = "";
+      textInput.value = "";
+      morseInput.value = "";
+
+      setTimeout(() => {
+        statusMsg.classList.add("hidden");
+        // Close modal automatically
+        const closeTrigger = document.getElementById("close-morse-modal");
+        closeTrigger?.click();
+      }, 2500);
+
+    } catch (err) {
+      statusMsg.textContent = (window as any).morseMessage?.errorMessage || "Chyba při odesílání.";
+      statusMsg.className = "text-center text-xs font-bold uppercase text-red-500 animate-pulse";
+      statusMsg.classList.remove("hidden");
+    } finally {
+      submitBtn.removeAttribute("disabled");
+      submitBtn.innerHTML = originalText;
+    }
+  });
+</script>

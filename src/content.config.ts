@@ -136,6 +136,16 @@ const wedding = defineCollection({
         detail: z.string(),
         subDetail: z.string(),
       }),
+      morseMessage: z.object({
+        buttonText: z.string(),
+        title: z.string(),
+        description: z.string(),
+        placeholderName: z.string(),
+        submitButtonText: z.string(),
+        sendingText: z.string(),
+        successMessage: z.string(),
+        errorMessage: z.string(),
+      }),
     }),
 });
 

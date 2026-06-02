@@ -33,8 +33,14 @@ export const playMorse = (morseStr: string) => {
   let time = ctx.currentTime;
 
   // Process dots, dashes, and spacing
-  for (let i = 0; i < morseStr.length; i++) {
-    const char = morseStr[i];
+  // Normalize double-slashes to a pipe (|) and single-slashes to a slash (/), then ignore spaces.
+  const cleanStr = morseStr
+    .replace(/\s*\/\/\s*/g, "|") // Word separator
+    .replace(/\s*\/\s*/g, "/")   // Letter separator
+    .replace(/\s+/g, "");        // Remove remaining spaces
+
+  for (let i = 0; i < cleanStr.length; i++) {
+    const char = cleanStr[i];
     if (char === "·" || char === ".") {
       // Dit (1 unit sound + 1 unit silent)
       gain.gain.setValueAtTime(0.12, time);
@@ -47,11 +53,11 @@ export const playMorse = (morseStr: string) => {
       time += unit * 3;
       gain.gain.setValueAtTime(0, time);
       time += unit;
-    } else if (char === " ") {
-      // Character space (3 units total, 1 is already handled by elements, add 2)
-      time += unit * 2;
     } else if (char === "/") {
-      // Word space (7 units total, 1 is already handled, add 6)
+      // Letter space (3 units total. Since the last dit/dah already added 1 unit of silence, add 2)
+      time += unit * 2;
+    } else if (char === "|") {
+      // Word space (7 units total. Since the last dit/dah already added 1 unit of silence, add 6)
       time += unit * 6;
     }
   }
@@ -77,3 +83,46 @@ export const stopMorse = () => {
     activeAudio = null;
   }
 };
+
+/**
+ * Play a single dot (dit) or dash (dah) immediately.
+ * Only if sound is enabled in localStorage.
+ */
+export const playSingleTone = (isDash: boolean) => {
+  const soundEnabled = localStorage.getItem("morse-sound-enabled") === "true";
+  if (!soundEnabled) return;
+
+  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+  if (!AudioContextClass) return;
+
+  try {
+    const ctx = new AudioContextClass();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(600, ctx.currentTime);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    const unit = 0.08;
+    const duration = isDash ? unit * 3 : unit;
+
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    osc.start();
+    
+    // Stop after duration
+    gain.gain.setValueAtTime(0, ctx.currentTime + duration);
+    osc.stop(ctx.currentTime + duration + 0.05);
+    
+    setTimeout(() => {
+      try {
+        ctx.close();
+      } catch (e) {}
+    }, (duration + 0.1) * 1000);
+  } catch (err) {
+    // Ignore audio errors
+  }
+};
+
