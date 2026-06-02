@@ -1,7 +1,6 @@
 ---
 // src/components/MorseMessageModal.astro
 import { getEntry } from "astro:content";
-import morseMotif from "../assets/morse-motif.svg";
 
 const wedding = await getEntry("wedding", "info");
 if (!wedding) {
@@ -257,11 +256,6 @@ const alphabet = [
           id="morse-submit"
           class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light flex flex-2 items-center justify-center gap-3 px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer rounded-sm"
         >
-          <img
-            src={morseMotif.src}
-            alt=""
-            class="h-6 w-auto tracking-widest opacity-60"
-          />
           {morseMessage.submitButtonText}
         </button>
       </div>

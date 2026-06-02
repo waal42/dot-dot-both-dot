@@ -280,7 +280,9 @@ const { rsvpForm } = wedding.data;
             </p>
             <div class="morse-line text-wedding-medium/30 mx-auto h-[2px] w-32 mb-8"></div>
             <p class="text-wedding-dark text-xs font-bold tracking-[0.4em] uppercase opacity-60">
+              <span class="morse-decoder hover:opacity-100 cursor-help transition-all" data-decoded="${rsvpForm.successMessage.morseCodeText}">
               ${rsvpForm.successMessage.morseCode}
+              </span>
             </p>
           </div>
         `;

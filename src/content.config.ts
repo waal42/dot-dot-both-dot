@@ -112,6 +112,7 @@ const wedding = defineCollection({
           title: z.string(),
           subtitle: z.string(),
           morseCode: z.string(),
+          morseCodeText: z.string(),
         }),
         errorMessage: z.string(),
         schema: z.array(
