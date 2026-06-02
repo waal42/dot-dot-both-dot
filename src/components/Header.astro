@@ -30,26 +30,85 @@ import Navigation from "./Navigation.astro";
       </a>
     </div>
 
-    <!-- Mobile Menu Button -->
-    <button
-      id="menu-toggle"
-      class="z-50 flex flex-col gap-1.5 p-2 md:hidden"
-      aria-label="Toggle Menu"
-    >
-      <span
-        class="bg-wedding-dark h-1 w-7 origin-center transition-all duration-300"
-      ></span>
-      <span class="bg-wedding-dark h-1 w-7 transition-all duration-300"></span>
-      <span
-        class="bg-wedding-dark h-1 w-7 origin-center transition-all duration-300"
-      ></span>
-    </button>
+    <div class="flex items-center gap-2">
+      <!-- Sound Effect Toggle -->
+      <button
+        id="sound-toggle"
+        class="border-wedding-medium/30 hover:border-wedding-dark text-wedding-medium hover:text-wedding-dark flex h-10 w-10 items-center justify-center border transition-all active:scale-95 cursor-pointer rounded-full shrink-0 select-none shadow-sm hover:bg-wedding-dark/5"
+        aria-label="Toggle Morse Audio"
+        title="Zapnout zvukovou telegrafii (Morseovy efekty)"
+      >
+        <svg id="sound-icon-muted" class="h-4 w-4 block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+        <svg id="sound-icon-unmuted" class="h-4 w-4 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="menu-toggle"
+        class="z-50 flex flex-col gap-1.5 p-2 md:hidden cursor-pointer"
+        aria-label="Toggle Menu"
+      >
+        <span
+          class="bg-wedding-dark h-1 w-7 origin-center transition-all duration-300"
+        ></span>
+        <span class="bg-wedding-dark h-1 w-7 transition-all duration-300"></span>
+        <span
+          class="bg-wedding-dark h-1 w-7 origin-center transition-all duration-300"
+        ></span>
+      </button>
+    </div>
 
     <Navigation />
   </div>
 </header>
 
 <script>
+  // Handle Morse Sound Toggle
+  const soundToggle = document.getElementById("sound-toggle");
+  const iconMuted = document.getElementById("sound-icon-muted");
+  const iconUnmuted = document.getElementById("sound-icon-unmuted");
+
+  const updateSoundIcons = (enabled: boolean) => {
+    if (enabled) {
+      iconMuted?.classList.remove("block");
+      iconMuted?.classList.add("hidden");
+      iconUnmuted?.classList.remove("hidden");
+      iconUnmuted?.classList.add("block");
+      if (soundToggle) {
+        soundToggle.title = "Vypnout zvukové telegrafní efekty";
+      }
+    } else {
+      iconMuted?.classList.remove("hidden");
+      iconMuted?.classList.add("block");
+      iconUnmuted?.classList.remove("block");
+      iconUnmuted?.classList.add("hidden");
+      if (soundToggle) {
+        soundToggle.title = "Zapnout zvukovou telegrafii (Morseovy efekty)";
+      }
+    }
+  };
+
+  // Read initial sound preference (default: false / muted)
+  let soundEnabled = localStorage.getItem("morse-sound-enabled") === "true";
+  updateSoundIcons(soundEnabled);
+
+  soundToggle?.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem("morse-sound-enabled", String(soundEnabled));
+    updateSoundIcons(soundEnabled);
+    
+    // Dispatch custom event to notify layout hover listeners
+    window.dispatchEvent(new CustomEvent("morse-sound-toggled", { detail: { enabled: soundEnabled } }));
+  });
+
   const menuToggle = document.getElementById("menu-toggle");
   const navMenu = document.getElementById("nav-menu");
   const menuSpans = menuToggle?.querySelectorAll("span");
