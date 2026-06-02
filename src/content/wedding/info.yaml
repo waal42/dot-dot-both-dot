@@ -1,0 +1,273 @@
+metaTitle: "Naše Svatba | Hanka & Filip"
+metaDescription: "Hanka a Filip se berou! 15. srpna 2026 ve Šlapanicích. Těšíme se na vás."
+
+hero:
+  title: "Bereme se!"
+  date: "15. srpna 2026"
+  subtitle: "Budeme moc rádi, když u toho budete s námi."
+  morseCode: "·− / −· / ---"
+  morseCodeText: "ANO"
+  buttonText: "Potvrdit účast"
+
+aboutUs:
+  title: "O nás"
+  motto: "Příběh dvou teček, které v šifrách života našly svou společnou čárku."
+  sections:
+    - id: "mywalove"
+      title: "Proč mywalove.cz?"
+      content:
+        - "Filip má kvůli svému příjmení (Valášek) přezdívku Wal. Po svatbě budou oba Valáškovi, tedy tak trochu Walovi. 😊 Název MyWalove pak můžete číst různě: jako My Walové, Mývalové nebo třeba MyWa.Love. Necháme to na vás."
+    - id: "hrachovina"
+      title: "Proč Hrachovina a Filipíny?"
+      content:
+        - "Hanka a Filip rádi chodí na šifrovačky. Hrachovina a Filipíny jsou pomocná slova pro zápis morseovky, kde tečka reprezentuje krátký tón/slabiku a čárka dlouhý tón/slabiku (H: ····, F ··-·). Jak jste si asi všimli ve svatebním oznámení (nebo tady na webu), slovo HrAchoviNA obsahuje všechna písmena jména HANA a slovo FILIPíny všechna písmena jména FILIP, v obou případech ve správném pořadí. A to nemůže být náhoda!"
+        - "Pokud bychom chtěli hledat souvislosti ještě dál, Hanka studovala genetiku a hrachovina může připomínat Mendelovy pokusy s hrachem. A Filip studoval matematiku a ve slově Filipíny lze najít i π."
+  gallery:
+    - src: "../../assets/lublan.jpg"
+      alt: "V Lublani"
+      size: "large"
+    - src: "../../assets/sifrovacka.jpg"
+      alt: "Na šifrovačce"
+      size: "small"
+    - src: "../../assets/vytah2.jpg"
+      alt: "Ve výtahu"
+      size: "vertical"
+    - src: "../../assets/salina.jpg"
+      alt: "V šalině"
+      size: "horizontal"
+    - src: "../../assets/plac.jpg"
+      alt: "Společný pláč"
+      size: "horizontal"
+    - src: "../../assets/myvali.jpg"
+      alt: "My jsme mývalové"
+      size: "vertical"
+    - src: "../../assets/fabar.jpg"
+      alt: "V F.A. baru"
+      size: "horizontal"
+    - src: "../../assets/vytah.jpg"
+      alt: "Ve výtahu"
+      size: "small"
+    - src: "../../assets/stehovani.jpg"
+      alt: "Malování po stěhování"
+      size: "large"
+    - src: "../../assets/svetry.jpg"
+      alt: "Ve vánočních svetrech"
+      size: "vertical"
+    - src: "../../assets/tmou.jpg"
+      alt: "Na šifrovačce Tmou"
+      size: "vertical"
+    - src: "../../assets/viden.jpg"
+      alt: "Ve Vídni"
+      size: "horizontal"
+    - src: "../../assets/parek.jpg"
+      alt: "Na Párku"
+      size: "vertical"
+    - src: "../../assets/wuppertal.jpg"
+      alt: "Ve Wuppertalu"
+      size: "horizontal"
+    - src: "../../assets/more.jpg"
+      alt: "U moře"
+      size: "small"
+    - src: "../../assets/cap.jpg"
+      alt: "U Čápa"
+      size: "horizontal"
+    - src: "../../assets/sbeerka.jpg"
+      alt: "Ve Sbeerce"
+      size: "horizontal"
+    - src: "../../assets/kokorinsko.jpg"
+      alt: "Pod Kokořínem"
+      size: "horizontal"
+    - src: "../../assets/kokorinsko2.jpg"
+      alt: "Pořád pod Kokořínem"
+      size: "horizontal"
+
+whenWhere:
+  title: "Kdy a kde"
+  venueName: "Sokec, Šlapanice"
+  address: "Nádražní 87, 664 51 Šlapanice"
+  coords: [49.1605206, 16.7286136]
+  googleMapsUrl: "https://maps.app.goo.gl/AJ5MkMekiaeEhSGf6"
+  description: "Sokec je taková fajn restaurace pod Sokolovnou, před kterou je dobrej plácek na párty a Filipova sestra už tam svatbu měla a bylo to fajn."
+  transportOptions:
+    - id: "car"
+      label: "Autem"
+      icon: "car"
+      morse: "·−"
+      morseText: "A"
+      title: "Doprava autem"
+      detail: "Parkování přímo u Sokecu nebo v přilehlých ulicích. Pozor ale na to, že nelze zaparkovat na ulici Nádražní a auto tam nechat do druhého dne. V neděli má být v rámci Šlapanických slavností na ulici Nádraždní průvod a zákaz zastavení."
+      marker:
+        coords: [49.1594822, 16.7289861]
+        title: "Parkoviště u Sokecu"
+        icon: "parking"
+    - id: "train"
+      label: "Vlakem"
+      icon: "train"
+      morse: "···−"
+      morseText: "V"
+      title: "Vlakem (Linka S6)"
+      detail: "Z hlavního nádraží v Brně (linka S6) na stanici Šlapanice. Sokec se nachází pouhých 5 minut pohodlné chůze od nádraží."
+      marker:
+        coords: [49.1567917, 16.7294883]
+        title: "Vlakové nádraží Šlapanice"
+        icon: "train"
+    - id: "bus"
+      label: "Trolejbusem"
+      icon: "bus"
+      morse: "-"
+      morseText: "T"
+      title: "Trolejbusem (Linka 31)"
+      detail: "Přímé trolejbusové spojení linkou 31 z Hlavního nádraží Brno na zastávku Šlapanice Kalvodova, odkud je to k Sokecu 10 minut chůze."
+      marker:
+        coords: [49.1664506, 16.7262975]
+        title: "Zastávka Šlapanice Kalvodova"
+        icon: "bus"
+    - id: "night-bus"
+      label: "Domů"
+      icon: "bus"
+      morse: "·−·"
+      morseText: "R"
+      title: "Rozjezdem (linka N96)"
+      detail: "Ze Šlapanic se v noci dostanete zpátky do Brna rozjezdem N96, který jezdí ze zastávky Šlapanice, Kalvodova. Od Sokecu je to na Kalvodovu asi 10 minut chůze."
+      marker:
+        coords: [49.1664506, 16.7262975]
+        title: "Zastávka Šlapanice Kalvodova"
+        icon: "bus"
+
+schedule:
+  title: "Harmonogram"
+  items:
+    - time: "13:00"
+      title: "Rodinný oběd"
+      description: ""
+    - time: "14:30"
+      title: "Příprava na obřad"
+      description: "příchod a přivítaní hostů"
+    - time: "15:00"
+      title: "Obřad"
+      description: ""
+    - time: "15:30"
+      title: "Oslava"
+      description: "Až do konce!"
+
+gifts:
+  title: "Svatební dary"
+  heading: "Největším darem pro nás bude vaše přítomnost."
+  description: "Pokud byste nás přesto chtěli obdarovat, budeme rádi za příspěvek do rodinné kasičky. Pro ty, kteří nechtějí řešit hotovost, přikládáme QR kód. Neberte to ale jako vstupné na svatbu. 😊 Jen předpokládáme, že si někteří z vás budou lámat hlavu nad tím, co nám pořídit, a tak vám chceme rozhodování co nejvíce usnadnit."
+  accountLabel: "Číslo bankovního účtu"
+  accountNumber: "670100-2223828816 / 6210"
+  accountNote: "Při platbě prosím uveďte do poznámky vaše jména, ať víme, komu poděkovat."
+  qrLabel: "Rychlá QR platba"
+  qrMessage: "DAR SVATEBNI"
+
+rsvpForm:
+  title: "Účast"
+  description: "Prosíme o potvrzení účasti do 30. června 2026. Každý dospělý host vyplňuje formulář zvlášť, děti vyplňuje jen jeden z rodičů."
+  submitButtonText: "Odeslat potvrzení"
+  sendingText: "Odesílám..."
+  successMessage:
+    title: "Děkujeme!"
+    subtitle: "Vaše odpověď byla bezpečně uložena. Těšíme se na vás 15. srpna ve Šlapanicích!"
+    morseCode: "··− &nbsp; −·−·  &nbsp; ·−  &nbsp; ···  &nbsp; −"
+  errorMessage: "Chyba při odesílání. Zkuste to prosím znovu."
+  schema:
+    - section: "personal"
+      grid: true
+      fields:
+        - id: "name"
+          name: "name"
+          label: "Jméno a příjmení"
+          type: "text"
+          required: true
+          placeholder: "Jan Novák"
+          condition: null
+          options: []
+        - id: "email"
+          name: "email"
+          label: "E-mail"
+          type: "email"
+          required: true
+          placeholder: "jan@seznam.cz"
+          condition: null
+          options: []
+    - section: "attendance"
+      fields:
+        - id: "attendance"
+          name: "attendance"
+          label: "Dorazíte?"
+          type: "radio"
+          condition: null
+          required: true
+          placeholder: null
+          options:
+            - value: "ano"
+              label: "Ano, rád/a"
+              checked: true
+            - value: "ne"
+              label: "Bohužel ne"
+              checked: false
+    - section: "children"
+      divider: true
+      grid: true
+      fields:
+        - id: "coming-with-children"
+          name: "coming_with_children"
+          label: "Přijdete s dětmi?"
+          type: "checkbox"
+          text: "Ano, beru s sebou ratolesti"
+          condition: null
+          required: false
+          placeholder: null
+          options: []
+        - id: "how-many-children"
+          name: "how_many_children"
+          label: "Kolik jich bude? Kolik jim je let? Co je baví?"
+          type: "text"
+          condition: "coming-with-children"
+          required: false
+          placeholder: "např. 2 děti (4 a 7 let), rády kreslí..."
+          options: []
+    - section: "lunch"
+      divider: true
+      fields:
+        - id: "is-lunch-guest"
+          name: "is_lunch_guest"
+          label: "Jste pozváni na rodinný oběd?"
+          type: "checkbox"
+          text: "Ano, patřím do rodinného kruhu"
+          condition: null
+          required: false
+          placeholder: null
+          options: []
+        - id: "coming-to-lunch"
+          name: "coming_to_lunch"
+          label: "Dorazíte na oběd?"
+          type: "radio"
+          condition: "is_lunch_guest"
+          conditionValue: null
+          required: false
+          placeholder: null
+          options:
+            - value: "yes"
+              label: "Ano, s radostí"
+              checked: false
+            - value: "no"
+              label: "Bohužel se sejdu až u obřadu"
+              checked: false
+    - section: "additional"
+      divider: true
+      fields:
+        - id: "diet"
+          name: "diet"
+          label: "Alergie / Dietní omezení (napište také, co mají nejraději děti, pokud mají specifické chutě)"
+          type: "text"
+          placeholder: "např. bezlepková dieta, vegetarián, bez ořechů..."
+          condition: null
+          required: false
+          options: []
+
+dressCode:
+  title: "Dress Code"
+  main: "žádný"
+  detail: "Přijďte v tom, v čem se cítíte dobře!"
+  subDetail: ""

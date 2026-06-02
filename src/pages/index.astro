@@ -9,13 +9,17 @@ import RsvpForm from "../components/RsvpForm.astro";
 import DressCode from "../components/DressCode.astro";
 import AboutUs from "../components/AboutUs.astro";
 
-// Import Centralized Data
-import { weddingContent } from "../data/weddingContent";
+// Import Content Collection
+import { getEntry } from "astro:content";
 
 // Import Assets
 import morseMotif from "../assets/morse-motif.svg";
 
-const { metaTitle, hero } = weddingContent;
+const wedding = await getEntry("wedding", "info");
+if (!wedding) {
+  throw new Error("Wedding content 'info' not found");
+}
+const { metaTitle, hero } = wedding.data;
 ---
 
 <Layout title={metaTitle}>

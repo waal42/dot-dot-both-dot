@@ -2,9 +2,13 @@
 // src/components/Gifts.astro
 import QRCode from "qrcode";
 import { composeIBAN } from "ibantools";
-import { weddingContent } from "../data/weddingContent";
+import { getEntry } from "astro:content";
 
-const { gifts } = weddingContent;
+const wedding = await getEntry("wedding", "info");
+if (!wedding) {
+  throw new Error("Wedding content 'info' not found");
+}
+const { gifts } = wedding.data;
 
 // IBAN Generation Logic
 const [accFull, bankCodeRaw] = gifts.accountNumber.split(" / ");

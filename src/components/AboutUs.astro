@@ -1,9 +1,13 @@
 ---
 // src/components/AboutUs.astro
 import { Image } from "astro:assets";
-import { weddingContent } from "../data/weddingContent";
+import { getEntry } from "astro:content";
 
-const { aboutUs } = weddingContent;
+const wedding = await getEntry("wedding", "info");
+if (!wedding) {
+  throw new Error("Wedding content 'info' not found");
+}
+const { aboutUs } = wedding.data;
 
 const getSizeClasses = (size: string) => {
   switch (size) {

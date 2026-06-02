@@ -1,8 +1,12 @@
 ---
 // src/components/WhenWhere.astro
-import { weddingContent } from "../data/weddingContent";
+import { getEntry } from "astro:content";
 
-const { whenWhere } = weddingContent;
+const wedding = await getEntry("wedding", "info");
+if (!wedding) {
+  throw new Error("Wedding content 'info' not found");
+}
+const { whenWhere } = wedding.data;
 const { venueName, address, coords, googleMapsUrl, description, transportOptions } = whenWhere;
 
 // Generate .ics standard iCalendar file dynamic link for instant invite downloads
