@@ -21,7 +21,7 @@ const account = accPart.trim().padStart(10, "0");
 const bban = bankCode + prefix + account;
 const iban = composeIBAN({ countryCode: "CZ", bban });
 
-// Generate QR Code for dynamic payment
+// Generate static fallback QR Code for guests without JavaScript
 const spayd = `SPD*1.0*ACC:${iban}*MSG:${gifts.qrMessage}`;
 const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
   margin: 2,
@@ -53,7 +53,13 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
     </h2>
   </div>
 
-  <div class="morse-border text-wedding-medium/30 bg-wedding-light shadow-sm animate-fade-in-up delay-100 hover-card-premium">
+  <div
+    id="gifts-container"
+    data-account-number={gifts.accountNumber}
+    data-iban={iban}
+    data-qr-message={gifts.qrMessage}
+    class="morse-border text-wedding-medium/30 bg-wedding-light shadow-sm animate-fade-in-up delay-100 hover-card-premium"
+  >
     <div class="px-8 py-16 text-center md:px-16 lg:px-24">
       {/* 1. Introductory Text */}
       <div class="mb-16 space-y-6">
@@ -102,16 +108,39 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
         </p>
       </div>
 
-      {/* 3. QR Code Section */}
+      <div class="morse-line text-wedding-medium/20 mx-auto mb-16 h-[2px] w-32">
+      </div>
+
+      {/* 3. Interactive Payment Calculator */}
+      <div class="mb-16 space-y-6">
+        <p class="text-wedding-medium text-xs font-bold tracking-[0.4em] uppercase opacity-70">
+          Zvolte výši příspěvku
+        </p>
+
+        {/* Currency Input Field */}
+        <div class="relative max-w-xs mx-auto mb-6">
+          <input
+            type="number"
+            id="gift-amount"
+            placeholder="Libovolná částka"
+            class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark w-full border-b bg-transparent py-3 text-center text-2xl font-bold outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition-colors"
+          />
+          <div class="absolute right-2 bottom-3 text-wedding-medium/60 text-lg font-bold">Kč</div>
+        </div>
+      </div>
+
+      {/* 4. QR Code Section */}
       <div class="flex flex-col items-center">
         <div
           class="morse-border text-wedding-medium/20 bg-wedding-light relative mb-6 p-4 shadow-xl hover:scale-[1.02] transition-transform duration-500"
         >
-          <div class="relative">
+          <div class="relative flex h-56 w-56 items-center justify-center md:h-64 md:w-64">
+            {/* Dynamic interactive QR Code Image (Pre-rendered default on load) */}
             <img
+              id="qr-image"
               src={qrCodeDataUrl}
               alt="QR platba"
-              class="h-56 w-56 md:h-64 md:w-64"
+              class="h-full w-full"
             />
           </div>
         </div>
@@ -125,10 +154,19 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
   </div>
 </section>
 
-<script define:vars={{ rawAccount: gifts.accountNumber }}>
+<script>
+  // @ts-ignore
+  import QRCode from "qrcode/lib/browser.js";
+
+  const container = document.getElementById("gifts-container");
+  const rawAccount = container?.getAttribute("data-account-number") || "";
+  const iban = container?.getAttribute("data-iban") || "";
+  const qrMessage = container?.getAttribute("data-qr-message") || "";
+
   const copyBtn = document.getElementById("copy-btn");
   const copyText = document.getElementById("copy-text");
 
+  // Handle Copy Button
   copyBtn?.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(rawAccount);
@@ -144,4 +182,46 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
       console.error("Failed to copy bank details: ", err);
     }
   });
+
+  // Handle Dynamic QR Payment Calculation
+  const qrImage = document.getElementById("qr-image") as HTMLImageElement | null;
+  const giftInput = document.getElementById("gift-amount") as HTMLInputElement | null;
+
+  const generateQRCode = async (amount: number | null) => {
+    if (!qrImage) return;
+
+    const parts = ["SPD*1.0", `ACC:${iban}`];
+    if (amount && amount > 0) {
+      parts.push(`AM:${amount.toFixed(2)}`);
+      parts.push("CC:CZK");
+    }
+    if (qrMessage) {
+      parts.push(`MSG:${qrMessage}`);
+    }
+    const spaydString = parts.join("*");
+
+    try {
+      const dataUrl = await QRCode.toDataURL(spaydString, {
+        margin: 2,
+        width: 600,
+        errorCorrectionLevel: "M",
+        color: {
+          dark: "#2d3a2d", // wedding-dark
+          light: "#f1f3eb", // wedding-light
+        },
+      });
+      qrImage.src = dataUrl;
+    } catch (err) {
+      console.error("Failed to generate QR Code on client side: ", err);
+    }
+  };
+
+  // Listen for text/number input changes
+  giftInput?.addEventListener("input", (e) => {
+    const val = parseFloat((e.target as HTMLInputElement).value);
+    generateQRCode(isNaN(val) ? null : val);
+  });
+
+  // Initial draw
+  generateQRCode(null);
 </script>

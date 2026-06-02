@@ -1,0 +1,237 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WeddingContentSchema",
+  "type": "object",
+  "properties": {
+    "metaTitle": { "type": "string" },
+    "metaDescription": { "type": "string" },
+    "hero": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "morseCode": { "type": "string" },
+        "morseCodeText": { "type": "string" },
+        "buttonText": { "type": "string" }
+      },
+      "required": ["title", "date", "subtitle", "morseCode", "morseCodeText", "buttonText"]
+    },
+    "aboutUs": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "motto": { "type": "string" },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "title": { "type": "string" },
+              "content": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "required": ["id", "title", "content"]
+          }
+        },
+        "gallery": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "src": { "type": "string" },
+                  "alt": { "type": "string" },
+                  "size": { "type": "string", "enum": ["small", "large", "vertical", "horizontal"] },
+                  "type": { "type": "string", "enum": ["image"] }
+                },
+                "required": ["src", "alt", "size"]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "src": { "type": "null" },
+                  "alt": { "type": "string" },
+                  "type": { "type": "string", "enum": ["text"] },
+                  "title": { "type": "string" },
+                  "detail": { "type": "string" },
+                  "size": { "type": "string", "enum": ["small", "large", "vertical", "horizontal"] }
+                },
+                "required": ["src", "alt", "type", "title", "detail", "size"]
+              }
+            ]
+          }
+        }
+      },
+      "required": ["title", "motto", "sections", "gallery"]
+    },
+    "whenWhere": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "venueName": { "type": "string" },
+        "address": { "type": "string" },
+        "coords": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "googleMapsUrl": { "type": "string" },
+        "description": { "type": "string" },
+        "transportOptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "icon": { "type": "string", "enum": ["car", "train", "bus"] },
+              "morse": { "type": "string" },
+              "morseText": { "type": "string" },
+              "title": { "type": "string" },
+              "detail": { "type": "string" },
+              "marker": {
+                "type": "object",
+                "properties": {
+                  "coords": {
+                    "type": "array",
+                    "items": { "type": "number" },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "title": { "type": "string" },
+                  "icon": { "type": "string", "enum": ["parking", "train", "bus"] }
+                },
+                "required": ["coords", "title", "icon"]
+              }
+            },
+            "required": ["id", "label", "icon", "morse", "morseText", "title", "detail", "marker"]
+          }
+        }
+      },
+      "required": ["title", "venueName", "address", "coords", "googleMapsUrl", "description", "transportOptions"]
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "time": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            },
+            "required": ["time", "title", "description"]
+          }
+        }
+      },
+      "required": ["title", "items"]
+    },
+    "gifts": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "heading": { "type": "string" },
+        "description": { "type": "string" },
+        "accountLabel": { "type": "string" },
+        "accountNumber": { "type": "string" },
+        "accountNote": { "type": "string" },
+        "qrLabel": { "type": "string" },
+        "qrMessage": { "type": "string" }
+      },
+      "required": ["title", "heading", "description", "accountLabel", "accountNumber", "accountNote", "qrLabel", "qrMessage"]
+    },
+    "rsvpForm": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "rsvpUrl": { "type": "string" },
+        "submitButtonText": { "type": "string" },
+        "sendingText": { "type": "string" },
+        "successMessage": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" },
+            "morseCode": { "type": "string" }
+          },
+          "required": ["title", "subtitle", "morseCode"]
+        },
+        "errorMessage": { "type": "string" },
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "section": { "type": "string" },
+              "grid": { "type": "boolean" },
+              "divider": { "type": "boolean" },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "label": { "type": "string" },
+                    "type": { "type": "string", "enum": ["text", "email", "radio", "select", "checkbox"] },
+                    "required": { "type": "boolean" },
+                    "placeholder": { "type": ["string", "null"] },
+                    "text": { "type": "string" },
+                    "condition": { "type": ["string", "null"] },
+                    "conditionValue": { "type": ["string", "null"] },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "value": { "type": "string" },
+                          "label": { "type": "string" },
+                          "checked": { "type": "boolean" }
+                        },
+                        "required": ["value", "label", "checked"]
+                      }
+                    }
+                  },
+                  "required": ["id", "name", "label", "type", "required", "placeholder", "condition"]
+                }
+              }
+            },
+            "required": ["section", "fields"]
+          }
+        }
+      },
+      "required": ["title", "description", "submitButtonText", "sendingText", "successMessage", "errorMessage", "schema"]
+    },
+    "dressCode": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "main": { "type": "string" },
+        "detail": { "type": "string" },
+        "subDetail": { "type": "string" }
+      },
+      "required": ["title", "main", "detail", "subDetail"]
+    }
+  },
+  "required": [
+    "metaTitle",
+    "metaDescription",
+    "hero",
+    "aboutUs",
+    "whenWhere",
+    "schedule",
+    "gifts",
+    "rsvpForm",
+    "dressCode"
+  ]
+}

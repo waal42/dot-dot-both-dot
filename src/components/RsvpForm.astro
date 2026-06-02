@@ -243,11 +243,36 @@ const { rsvpForm } = wedding.data;
     submitBtn.innerHTML = rsvpForm.sendingText;
 
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    data.timestamp = new Date().toISOString();
 
     try {
-      console.log("RSVP Data Submitted:", data);
+      if (rsvpForm.rsvpUrl) {
+        const postData = new FormData();
+        postData.append("name", String(formData.get("name") || ""));
+        postData.append("email", String(formData.get("email") || ""));
+        postData.append("attendance", String(formData.get("attendance") || ""));
+        
+        const comingWithChildren = formData.get("coming_with_children") === "on" ? "ano" : "ne";
+        postData.append("coming_with_children", comingWithChildren);
+        
+        postData.append("how_many_children", String(formData.get("how_many_children") || ""));
+        
+        const isLunchGuest = formData.get("is_lunch_guest") === "on" ? "ano" : "ne";
+        postData.append("is_lunch_guest", isLunchGuest);
+        
+        const comingToLunchRaw = formData.get("coming_to_lunch");
+        let comingToLunch = "";
+        if (comingToLunchRaw === "yes") comingToLunch = "ano";
+        if (comingToLunchRaw === "no") comingToLunch = "ne";
+        postData.append("coming_to_lunch", comingToLunch);
+        
+        postData.append("diet", String(formData.get("diet") || ""));
+
+        await fetch(rsvpForm.rsvpUrl, {
+          method: "POST",
+          mode: "no-cors",
+          body: postData,
+        });
+      }
 
       // Elegant Success Card State loaded from Config
       const formCard = form.parentElement;

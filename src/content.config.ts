@@ -91,6 +91,7 @@ const wedding = defineCollection({
       rsvpForm: z.object({
         title: z.string(),
         description: z.string(),
+        rsvpUrl: z.string().optional(),
         submitButtonText: z.string(),
         sendingText: z.string(),
         successMessage: z.object({
