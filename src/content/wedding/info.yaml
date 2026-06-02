@@ -278,7 +278,7 @@ faq:
         - "Žádný! Přijďte v tom, v čem se cítíte dobře!"
     - question: "Kdo bude DJ?"
       answer:
-        - "Všichni! Hanka i Filip mají hodně rádi hudbu (a Hanka už byla DJ na vícero svatbách), takže budou mít přichystané playlisty s osvědčenými párty peckami. Pokud máte přání zahrát svůj oblíbený hit, můžete s tím přijít přímo na párty – k dispozici bude notebook, na kterém bude možné přidávat písničky do fronty. A jestli vás nějaké vály napadají už teď, sem s nimi! Můžete nám je posílat průběžně a my je rádi zařadíme."
+        - "Všichni! Oba máme hodně rádi hudbu, takže budeme mít přichystané playlisty s osvědčenými párty peckami. Pokud máte přání zahrát svůj oblíbený hit, můžete s tím přijít přímo na párty – k dispozici bude notebook, na kterém bude možné přidávat písničky do fronty. A jestli vás nějaké vály napadají už teď, sem s nimi! Můžete nám je posílat průběžně a my je rádi zařadíme."
       button:
         text: "Navrhnout písničku"
         action: "song-suggestion"
