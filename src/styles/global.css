@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@custom-variant dark (&:where(.dark, .dark *));
 :root {
   --theme-dark: #2d3a2d; /* Forest Pine - Deep green */
   --theme-light: #f1f3eb; /* Sage Mist - Soft greenish cream */
