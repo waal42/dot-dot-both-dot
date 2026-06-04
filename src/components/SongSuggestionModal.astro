@@ -12,6 +12,9 @@ const { rsvpForm } = wedding.data;
 {/* Modal Container */}
 <div
   id="song-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="song-modal-title"
   class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-wedding-dark/60 backdrop-blur-sm transition-all duration-500 opacity-0 pointer-events-none"
 >
   {/* Card Wrapper */}
@@ -44,7 +47,7 @@ const { rsvpForm } = wedding.data;
 
     {/* Header */}
     <div class="mb-6 pr-8 text-left">
-      <h3 class="text-2xl font-bold text-wedding-dark mb-2">
+      <h3 id="song-modal-title" class="text-2xl font-bold text-wedding-dark mb-2">
         Navrhněte písničku
       </h3>
       <p class="text-wedding-medium text-xs font-semibold italic">
@@ -117,13 +120,27 @@ const { rsvpForm } = wedding.data;
   const modalCard = document.getElementById("song-modal-card");
   const closeBtn = document.getElementById("close-song-modal");
 
-  const openModal = () => {
+  let triggerElement = null;
+
+  const openModal = (trigger) => {
     if (!modal || !modalCard) return;
+    triggerElement = trigger;
     modal.classList.remove("pointer-events-none", "opacity-0");
     modal.classList.add("opacity-100");
     modalCard.classList.remove("translate-y-8");
     modalCard.classList.add("translate-y-0");
     document.body.style.overflow = "hidden"; // disable background scroll
+
+    if (triggerElement) {
+      triggerElement.setAttribute("aria-expanded", "true");
+    }
+
+    // Accessibility focus management:
+    // Focus first input (song-name-artist input)
+    const firstInput = document.getElementById("song-name-artist");
+    if (firstInput) {
+      setTimeout(() => firstInput.focus(), 100);
+    }
   };
 
   const closeModal = () => {
@@ -133,12 +150,18 @@ const { rsvpForm } = wedding.data;
     modalCard.classList.add("translate-y-8");
     modalCard.classList.remove("translate-y-0");
     document.body.style.overflow = ""; // enable scroll
+
+    if (triggerElement) {
+      triggerElement.setAttribute("aria-expanded", "false");
+      triggerElement.focus();
+    }
   };
 
   // Open modal when clicking the trigger button (using event delegation)
   document.addEventListener("click", (e) => {
-    if (e.target instanceof Element && e.target.closest("#open-song-modal")) {
-      openModal();
+    const trigger = e.target instanceof Element && e.target.closest("#open-song-modal");
+    if (trigger) {
+      openModal(trigger);
     }
   });
 
@@ -148,6 +171,40 @@ const { rsvpForm } = wedding.data;
   modal?.addEventListener("click", (e) => {
     if (e.target === modal) {
       closeModal();
+    }
+  });
+
+  // Escape key event listener
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal && !modal.classList.contains("opacity-0")) {
+      closeModal();
+    }
+  });
+
+  // Focus trapping
+  modal?.addEventListener("keydown", (e) => {
+    if (e.key !== "Tab") return;
+
+    // Find all focusable elements inside the modal
+    const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusableElements = modalCard ? Array.from(modalCard.querySelectorAll(focusableSelector)) : [];
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) {
+      // Shift + Tab -> loop to last
+      if (document.activeElement === firstElement) {
+        lastElement.focus();
+        e.preventDefault();
+      }
+    } else {
+      // Tab -> loop to first
+      if (document.activeElement === lastElement) {
+        firstElement.focus();
+        e.preventDefault();
+      }
     }
   });
 </script>
@@ -162,6 +219,15 @@ const { rsvpForm } = wedding.data;
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!songInput || !submitBtn || !statusMsg) return;
+
+    const escapeHtml = (unsafe: string) => {
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    };
 
     const song = songInput.value.trim();
     const link = linkInput ? linkInput.value.trim() : "";
@@ -180,8 +246,8 @@ const { rsvpForm } = wedding.data;
 
     const postData = new FormData();
     postData.append("form_type", "song");
-    postData.append("song", song);
-    postData.append("link", link);
+    postData.append("song", escapeHtml(song));
+    postData.append("link", escapeHtml(link));
 
     try {
       // @ts-ignore

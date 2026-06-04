@@ -113,9 +113,9 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
 
       {/* 3. Interactive Payment Calculator */}
       <div class="mb-16 space-y-6">
-        <p class="text-wedding-medium text-xs font-bold tracking-[0.4em] uppercase opacity-70">
+        <label for="gift-amount" class="block text-wedding-medium text-xs font-bold tracking-[0.4em] uppercase opacity-70 cursor-pointer">
           Zvolte výši příspěvku
-        </p>
+        </label>
 
         {/* Currency Input Field */}
         <div class="relative max-w-xs mx-auto mb-6">
@@ -140,6 +140,7 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
               id="qr-image"
               src={qrCodeDataUrl}
               alt="QR platba"
+              loading="lazy"
               class="h-full w-full"
             />
           </div>
@@ -155,8 +156,7 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
 </section>
 
 <script>
-  // @ts-ignore
-  import QRCode from "qrcode/lib/browser.js";
+  import QRCode from "qrcode";
 
   const container = document.getElementById("gifts-container");
   const rawAccount = container?.getAttribute("data-account-number") || "";

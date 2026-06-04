@@ -71,8 +71,15 @@ import Navigation from "./Navigation.astro";
   });
 
   menuToggle?.addEventListener("click", () => {
+    const isHidden = navMenu?.classList.contains("hidden");
     navMenu?.classList.toggle("hidden");
     navMenu?.classList.toggle("flex");
+
+    if (isHidden) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
 
     // Animate hamburger to X
     if (menuSpans) {
@@ -90,6 +97,7 @@ import Navigation from "./Navigation.astro";
     link.addEventListener("click", () => {
       navMenu?.classList.add("hidden");
       navMenu?.classList.remove("flex");
+      document.body.classList.remove("overflow-hidden");
 
       if (menuSpans) {
         menuSpans[0].classList.remove("rotate-45", "translate-y-2.5");

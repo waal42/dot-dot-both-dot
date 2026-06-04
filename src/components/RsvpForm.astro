@@ -107,10 +107,10 @@ const { rsvpForm } = wedding.data;
                     <select
                       id={field.id}
                       name={field.name}
-                      class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark w-full border bg-transparent p-4 text-lg font-semibold outline-none"
+                      class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark bg-wedding-light w-full border p-4 text-lg font-semibold outline-none"
                     >
                       {field.options?.map((opt) => (
-                        <option value={opt.value} class="text-wedding-dark">
+                        <option value={opt.value} class="text-wedding-dark bg-wedding-light">
                           {opt.label}
                         </option>
                       ))}
@@ -236,17 +236,40 @@ const { rsvpForm } = wedding.data;
 
     const formData = new FormData(form);
 
+    const escapeHtml = (unsafe) => {
+      return String(unsafe || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    };
+
+    const email = String(formData.get("email") || "").trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email && !emailRegex.test(email)) {
+      const emailInput = document.getElementById("email");
+      emailInput?.classList.add("border-red-500");
+      emailInput?.focus();
+      submitBtn.removeAttribute("disabled");
+      submitBtn.innerHTML = originalBtnText;
+      return;
+    } else {
+      const emailInput = document.getElementById("email");
+      emailInput?.classList.remove("border-red-500");
+    }
+
     try {
       if (rsvpForm.rsvpUrl) {
         const postData = new FormData();
-        postData.append("name", String(formData.get("name") || ""));
-        postData.append("email", String(formData.get("email") || ""));
+        postData.append("name", escapeHtml(String(formData.get("name") || "").trim()));
+        postData.append("email", escapeHtml(email));
         postData.append("attendance", String(formData.get("attendance") || ""));
         
         const comingWithChildren = formData.get("coming_with_children") === "on" ? "ano" : "ne";
         postData.append("coming_with_children", comingWithChildren);
         
-        postData.append("how_many_children", String(formData.get("how_many_children") || ""));
+        postData.append("how_many_children", escapeHtml(String(formData.get("how_many_children") || "").trim()));
         
         const isLunchGuest = formData.get("is_lunch_guest") === "on" ? "ano" : "ne";
         postData.append("is_lunch_guest", isLunchGuest);
@@ -257,7 +280,7 @@ const { rsvpForm } = wedding.data;
         if (comingToLunchRaw === "no") comingToLunch = "ne";
         postData.append("coming_to_lunch", comingToLunch);
         
-        postData.append("diet", String(formData.get("diet") || ""));
+        postData.append("diet", escapeHtml(String(formData.get("diet") || "").trim()));
 
         await fetch(rsvpForm.rsvpUrl, {
           method: "POST",

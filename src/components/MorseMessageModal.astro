@@ -43,6 +43,9 @@ const alphabet = [
   {/* Modal Container */}
   <div
     id="morse-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="morse-modal-title"
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-wedding-dark/60 backdrop-blur-sm transition-all duration-500 opacity-0 pointer-events-none"
   >
     {/* Card Wrapper */}
@@ -75,7 +78,7 @@ const alphabet = [
 
       {/* Header */}
       <div class="mb-6 pr-12 text-left">
-        <h3 class="text-2xl font-bold text-wedding-dark mb-2">
+        <h3 id="morse-modal-title" class="text-2xl font-bold text-wedding-dark mb-2">
           {morseMessage.title}
         </h3>
         <p class="text-wedding-medium text-xs font-semibold italic">
@@ -272,13 +275,27 @@ const alphabet = [
   const modal = document.getElementById("morse-modal");
   const modalCard = document.getElementById("morse-modal-card");
 
-  const openModal = () => {
+  let triggerElement = null;
+
+  const openModal = (trigger) => {
     if (!modal || !modalCard) return;
+    triggerElement = trigger;
     modal.classList.remove("pointer-events-none", "opacity-0");
     modal.classList.add("opacity-100");
     modalCard.classList.remove("translate-y-8");
     modalCard.classList.add("translate-y-0");
     document.body.style.overflow = "hidden"; // disable background scroll
+
+    if (triggerElement) {
+      triggerElement.setAttribute("aria-expanded", "true");
+    }
+
+    // Accessibility focus management:
+    // Focus first input (name input)
+    const firstInput = document.getElementById("morse-guest-name");
+    if (firstInput) {
+      setTimeout(() => firstInput.focus(), 100);
+    }
   };
 
   const closeModal = () => {
@@ -288,12 +305,18 @@ const alphabet = [
     modalCard.classList.add("translate-y-8");
     modalCard.classList.remove("translate-y-0");
     document.body.style.overflow = ""; // enable scroll
+
+    if (triggerElement) {
+      triggerElement.setAttribute("aria-expanded", "false");
+      triggerElement.focus();
+    }
   };
 
   // Use event delegation for open button since Footer.astro is loaded after index.astro content slot
   document.addEventListener("click", (e) => {
-    if (e.target instanceof Element && e.target.closest("#open-morse-modal")) {
-      openModal();
+    const trigger = e.target instanceof Element && e.target.closest("#open-morse-modal");
+    if (trigger) {
+      openModal(trigger);
     }
   });
 
@@ -303,6 +326,40 @@ const alphabet = [
   modal?.addEventListener("click", (e) => {
     if (e.target === modal) {
       closeModal();
+    }
+  });
+
+  // Escape key event listener
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal && !modal.classList.contains("opacity-0")) {
+      closeModal();
+    }
+  });
+
+  // Focus trapping
+  modal?.addEventListener("keydown", (e) => {
+    if (e.key !== "Tab") return;
+
+    // Find all focusable elements inside the modal
+    const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusableElements = modalCard ? Array.from(modalCard.querySelectorAll(focusableSelector)) : [];
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) {
+      // Shift + Tab -> loop to last
+      if (document.activeElement === firstElement) {
+        lastElement.focus();
+        e.preventDefault();
+      }
+    } else {
+      // Tab -> loop to first
+      if (document.activeElement === lastElement) {
+        firstElement.focus();
+        e.preventDefault();
+      }
     }
   });
 
@@ -480,6 +537,15 @@ const alphabet = [
     }
   });
 
+  const escapeHtml = (unsafe: string) => {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  };
+
   // Submit Guestbook message
   submitBtn?.addEventListener("click", async () => {
     if (!nameInput || !textInput || !morseInput || !submitBtn || !statusMsg) return;
@@ -512,9 +578,9 @@ const alphabet = [
 
     const postData = new FormData();
     postData.append("form_type", "message");
-    postData.append("name", name);
-    postData.append("morse_message", morseMsg);
-    postData.append("decoded_message", textMsg);
+    postData.append("name", escapeHtml(name));
+    postData.append("morse_message", escapeHtml(morseMsg));
+    postData.append("decoded_message", escapeHtml(textMsg));
 
     try {
       // Post to Google Apps Script

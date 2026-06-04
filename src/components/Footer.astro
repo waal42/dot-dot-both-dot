@@ -48,6 +48,9 @@ const { morseMessage } = wedding.data;
     <div class="mt-10">
       <button
         id="open-morse-modal"
+        aria-haspopup="dialog"
+        aria-controls="morse-modal"
+        aria-expanded="false"
         class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm"
       >
         {morseMessage.buttonText}
@@ -70,12 +73,13 @@ const { morseMessage } = wedding.data;
         </p>
       </div>
 
-      <!-- Interactive Inputs -->
+      {/* Interactive Inputs */}
       <div id="game-controls" class="flex gap-2">
         <input 
           type="text" 
           id="game-input" 
           placeholder="Tvoje odpověď..." 
+          aria-label="Odpověď na mývalí šifru"
           class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark px-3 py-2 text-sm bg-transparent border rounded-sm outline-none flex-1 font-bold tracking-widest uppercase placeholder:text-wedding-medium/40"
         />
         <button 

@@ -56,6 +56,9 @@ const { faq } = wedding.data;
                 <div class="pt-6 flex justify-center">
                   <button
                     id="open-song-modal"
+                    aria-haspopup="dialog"
+                    aria-controls="song-modal"
+                    aria-expanded="false"
                     class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex items-center gap-3 bg-transparent px-8 py-3.5 text-sm font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
                   >
                     {item.button.text}

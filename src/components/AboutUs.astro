@@ -89,7 +89,7 @@ const getSizeClasses = (size: string) => {
                 src={item.src}
                 alt={item.alt}
                 width={800}
-                class="h-full w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0 md:grayscale"
+                class="h-full w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0"
               />
               <div class="absolute inset-0 flex items-center justify-center bg-wedding-dark/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none">
                 <span class="text-wedding-light px-4 text-center text-lg font-bold drop-shadow-md md:text-xl">
@@ -105,41 +105,58 @@ const getSizeClasses = (size: string) => {
 </section>
 
 <script>
+  import PhotoSwipe from "photoswipe";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
+
+  console.log("PhotoSwipe script loading...", {
+    galleryElement: document.getElementById("gallery"),
+    linksCount: document.querySelectorAll("#gallery a").length
+  });
 
   const lightbox = new PhotoSwipeLightbox({
     gallery: "#gallery",
     children: "a",
-    pswpModule: () => import("photoswipe"),
+    pswpModule: () => PhotoSwipe,
     padding: { top: 20, bottom: 60, left: 10, right: 10 },
     bgClickAction: 'close',
     tapAction: 'close',
   });
 
   lightbox.on('uiRegister', function() {
-    lightbox.pswp!.ui!.registerElement({
-      name: 'custom-caption',
-      order: 9,
-      isButton: false,
-      appendTo: 'wrapper',
-      html: 'Caption text',
-      onInit: (el, pswp) => {
-        lightbox.pswp!.on('change', () => {
-          const currSlideElement = lightbox.pswp!.currSlide?.data.element;
-          let captionHTML = '';
-          if (currSlideElement) {
-            const img = currSlideElement.querySelector('img');
-            if (img) {
-              captionHTML = img.getAttribute('alt') || '';
+    console.log("PhotoSwipe uiRegister event fired");
+    try {
+      const pswp = lightbox.pswp!;
+      pswp.ui!.registerElement({
+        name: 'custom-caption',
+        order: 9,
+        isButton: false,
+        appendTo: 'wrapper',
+        html: 'Caption text',
+        onInit: (el, pswpInstance) => {
+          pswpInstance.on('change', () => {
+            const currSlideElement = pswpInstance.currSlide?.data.element;
+            let captionHTML = '';
+            if (currSlideElement) {
+              const img = currSlideElement.querySelector('img');
+              if (img) {
+                captionHTML = img.getAttribute('alt') || '';
+              }
             }
-          }
-          el.innerHTML = captionHTML;
-        });
-      }
-    });
+            el.innerHTML = captionHTML;
+          });
+        }
+      });
+    } catch (e) {
+      console.error("Error in uiRegister:", e);
+    }
   });
 
-  lightbox.init();
+  try {
+    lightbox.init();
+    console.log("PhotoSwipe initialized successfully");
+  } catch (e) {
+    console.error("Error during lightbox.init():", e);
+  }
 </script>
 
 <style is:global>

@@ -28,6 +28,25 @@ const { metaDescription } = wedding.data;
     <link rel="icon" type="image/png" sizes="16x16" href="/svatba/favicon-16x16.png" />
     <link rel="manifest" href="/svatba/site.webmanifest" />
     <link rel="shortcut icon" href="/svatba/favicon.ico" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:image" content={new URL('/svatba/android-chrome-512x512.png', Astro.site).href} />
+    <meta property="og:site_name" content="Naše Svatba | Hanka & Filip" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={metaDescription} />
+    <meta property="twitter:image" content={new URL('/svatba/android-chrome-512x512.png', Astro.site).href} />
+
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,9 +86,7 @@ const { metaDescription } = wedding.data;
       </svg>
     </button>
 
-    <main>
-      <slot />
-    </main>
+    <slot />
     <Footer />
 
     <script>

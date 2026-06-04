@@ -264,12 +264,24 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
       }
     });
 
-    L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    const tileLayer = L.tileLayer(
+      document.documentElement.classList.contains("dark")
+        ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
       {
         attribution: "&copy; OpenStreetMap",
       },
     ).addTo(map);
+
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains("dark");
+      tileLayer.setUrl(
+        isDark
+          ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+      );
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
     const icons = {
       ring: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 6V2"/><path d="m10 2 2 2 2-2"/></svg>`,
