@@ -107,6 +107,18 @@ const { morseMessage } = wedding.data;
         Kód nesouhlasí, zkus to znovu!
       </p>
     </div>
+
+    <!-- Dark Mode Easter Egg Toggle -->
+    <div class="mt-20 flex justify-center opacity-30 hover:opacity-100 transition-opacity duration-500">
+      <button
+        id="theme-toggle"
+        class="flex items-center gap-2 text-xs font-bold tracking-widest uppercase cursor-pointer"
+        aria-label="Přepnout tmavý režim"
+      >
+        <span id="theme-toggle-icon" class="text-lg">🌙</span>
+        <span class="hidden sm:inline">Režim</span>
+      </button>
+    </div>
   </div>
 </footer>
 
@@ -157,5 +169,21 @@ const { morseMessage } = wedding.data;
       gameControls.classList.add("hidden");
       gameSuccess.classList.remove("hidden");
     }
+  }
+
+  // Theme Toggle Logic
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-toggle-icon");
+
+  if (themeToggle && themeIcon) {
+    const isDark = document.documentElement.classList.contains("dark");
+    themeIcon.textContent = isDark ? "☀️" : "🌙";
+
+    themeToggle.addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+      const currentlyDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("theme", currentlyDark ? "dark" : "light");
+      themeIcon.textContent = currentlyDark ? "☀️" : "🌙";
+    });
   }
 </script>

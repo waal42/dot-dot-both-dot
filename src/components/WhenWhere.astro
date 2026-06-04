@@ -233,9 +233,18 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   crossorigin=""
 />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css"
+  type="text/css"
+/>
 <script
   is:inline
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin=""></script>
+<script
+  is:inline
+  src="https://unpkg.com/leaflet-gesture-handling"
   crossorigin=""></script>
 
 <script is:inline define:vars={{ venue: { name: venueName, address, coords, googleMapsUrl }, transportOptions }}>
@@ -245,6 +254,14 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
       zoom: 16,
       scrollWheelZoom: false,
       zoomControl: false, // Cleaner look
+      gestureHandling: true,
+      gestureHandlingOptions: {
+        text: {
+          touch: "Pro posun mapy použijte dva prsty",
+          scroll: "Pro přiblížení mapy použijte Ctrl + posun kolečka",
+          scrollMac: "Pro přiblížení mapy použijte ⌘ + posun kolečka"
+        }
+      }
     });
 
     L.tileLayer(

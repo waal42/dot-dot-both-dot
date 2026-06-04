@@ -1,9 +1,21 @@
 @import "tailwindcss";
 
+:root {
+  --theme-dark: #2d3a2d; /* Forest Pine - Deep green */
+  --theme-light: #f1f3eb; /* Sage Mist - Soft greenish cream */
+  --theme-medium: #7a7084; /* Darker Dusty Lavender for better contrast */
+}
+
+html.dark {
+  --theme-dark: #f1f3eb;
+  --theme-light: #2d3a2d;
+  --theme-medium: #a8a0b0; /* Lighter lavender for dark mode */
+}
+
 @theme {
-  --color-wedding-dark: #2d3a2d; /* Forest Pine - Deep green */
-  --color-wedding-light: #f1f3eb; /* Sage Mist - Soft greenish cream */
-  --color-wedding-medium: #7a7084; /* Darker Dusty Lavender for better contrast */
+  --color-wedding-dark: var(--theme-dark);
+  --color-wedding-light: var(--theme-light);
+  --color-wedding-medium: var(--theme-medium);
   --font-sans:
     "Montserrat", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
