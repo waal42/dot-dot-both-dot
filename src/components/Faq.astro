@@ -10,56 +10,66 @@ const { faq } = wedding.data;
 ---
 
 <section id="faq" class="mx-auto max-w-4xl scroll-mt-24 px-6 pt-24 pb-12">
-  <div class="text-center mb-16">
+  <div class="mb-16 text-center">
     <h2
-      class="text-wedding-dark mb-4 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
+      class="text-wedding-dark animate-fade-in-up mb-4 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
     >
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="F"
-        >··−·</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="N">−·</span
       >
       {faq.title}
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="Q"
-        >−−·−</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="Q">−−·−</span
       >
     </h2>
   </div>
 
-  <div class="space-y-4 animate-fade-in-up delay-100">
+  <div class="animate-fade-in-up space-y-4 delay-100">
     {
       faq.items.map((item, idx) => (
         <div
-          class="morse-border text-wedding-medium/30 bg-wedding-light shadow-sm hover-card-premium overflow-hidden transition-all duration-300"
+          class="morse-border text-wedding-medium/30 bg-wedding-light hover-card-premium overflow-hidden shadow-sm transition-all duration-300"
           style={`animation-delay: ${idx * 100}ms`}
         >
           <button
-            class="faq-trigger flex w-full items-center justify-between px-6 py-6 text-left cursor-pointer md:px-8 focus:outline-none"
+            class="faq-trigger flex w-full cursor-pointer items-center justify-between px-6 py-6 text-left focus:outline-none md:px-8"
             aria-expanded="false"
             data-index={idx}
           >
             <span class="text-wedding-dark text-lg font-bold md:text-xl">
               {item.question}
             </span>
-            <span class="text-wedding-medium ml-4 transition-transform duration-300 transform faq-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <span class="text-wedding-medium faq-icon ml-4 transform transition-transform duration-300">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </span>
           </button>
           <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-            <div class="px-6 pb-6 text-wedding-dark text-base md:text-lg leading-relaxed font-medium italic opacity-95 md:px-8 space-y-4 border-t border-wedding-medium/10 pt-4">
+            <div class="text-wedding-dark border-wedding-medium/10 space-y-4 border-t px-6 pt-4 pb-6 text-base leading-relaxed font-medium italic opacity-95 md:px-8 md:text-lg">
               {item.answer.map((para) => (
                 <p set:html={para} />
               ))}
               {item.button && item.button.action === "song-suggestion" && (
-                <div class="pt-6 flex justify-center">
+                <div class="flex justify-center pt-6">
                   <button
                     id="open-song-modal"
                     aria-haspopup="dialog"
                     aria-controls="song-modal"
                     aria-expanded="false"
-                    class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex items-center gap-3 bg-transparent px-8 py-3.5 text-sm font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
+                    class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex cursor-pointer items-center gap-3 bg-transparent px-8 py-3.5 text-sm font-bold tracking-widest uppercase shadow-sm transition-all duration-300 hover:scale-105 active:scale-95"
                   >
                     {item.button.text}
                   </button>
@@ -86,7 +96,9 @@ const { faq } = wedding.data;
         if (otherTrigger !== trigger) {
           otherTrigger.setAttribute("aria-expanded", "false");
           const otherContent = otherTrigger.nextElementSibling as HTMLElement;
-          const otherIcon = otherTrigger.querySelector(".faq-icon") as HTMLElement;
+          const otherIcon = otherTrigger.querySelector(
+            ".faq-icon",
+          ) as HTMLElement;
           if (otherContent) {
             otherContent.style.maxHeight = "0px";
           }
