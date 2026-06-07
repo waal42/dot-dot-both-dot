@@ -90,7 +90,7 @@ whenWhere:
       morse: "·−"
       morseText: "A"
       title: "Doprava autem"
-      detail: "Parkování přímo u Sokecu nebo v přilehlých ulicích. Pozor ale na to, že nelze zaparkovat na ulici Nádražní a auto tam nechat do druhého dne. V neděli má být v rámci Šlapanických slavností na ulici Nádraždní průvod a zákaz zastavení."
+      detail: "Parkování přímo u Sokecu nebo v přilehlých ulicích. Pozor ale na to, že nelze zaparkovat na ulici Nádražní a auto tam nechat do druhého dne. V neděli má být v rámci Šlapanických slavností na ulici Nádražní průvod a zákaz zastavení."
       marker:
         coords: [49.1594822, 16.7289861]
         title: "Parkoviště u Sokecu"
@@ -101,7 +101,7 @@ whenWhere:
       morse: "···−"
       morseText: "V"
       title: "Vlakem (Linka S6)"
-      detail: "Z hlavního nádraží v Brně (linka S6) na stanici Šlapanice. Sokec se nachází pouhých 5 minut pohodlné chůze od nádraží."
+      detail: "Z Hlavního nádraží (v Brně) vlakem linky S6 do stanice Šlapanice. Sokec se nachází pouhých 5 minut pohodlné chůze od nádraží."
       marker:
         coords: [49.1567917, 16.7294883]
         title: "Vlakové nádraží Šlapanice"
@@ -112,7 +112,7 @@ whenWhere:
       morse: "-"
       morseText: "T"
       title: "Trolejbusem (Linka 31)"
-      detail: "Přímé trolejbusové spojení linkou 31 z Hlavního nádraží Brno na zastávku Šlapanice Kalvodova, odkud je to k Sokecu 10 minut chůze."
+      detail: "Přímé trolejbusové spojení linkou 31 z Hlavního nádraží (v Brně) na zastávku Šlapanice Kalvodova, odkud je to k Sokecu 15 minut chůze."
       marker:
         coords: [49.1664506, 16.7262975]
         title: "Zastávka Šlapanice Kalvodova"
@@ -123,7 +123,7 @@ whenWhere:
       morse: "·−·"
       morseText: "R"
       title: "Rozjezdem (linka N96)"
-      detail: "Ze Šlapanic se v noci dostanete zpátky do Brna rozjezdem N96, který jezdí ze zastávky Šlapanice, Kalvodova. Od Sokecu je to na Kalvodovu asi 10 minut chůze."
+      detail: "Ze Šlapanic se v noci dostanete zpátky do Brna rozjezdem N96, který jezdí ze zastávky Šlapanice, Kalvodova. Od Sokecu je to na Kalvodovu asi 15 minut chůze."
       marker:
         coords: [49.1664506, 16.7262975]
         title: "Zastávka Šlapanice Kalvodova"
@@ -137,7 +137,7 @@ schedule:
       description: ""
     - time: "14:30"
       title: "Příprava na obřad"
-      description: "příchod a přivítaní hostů"
+      description: "příchod a přivítání hostů"
     - time: "15:00"
       title: "Obřad"
       description: ""
