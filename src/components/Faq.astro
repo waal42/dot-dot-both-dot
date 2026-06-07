@@ -91,9 +91,24 @@ const { faq } = wedding.data;
       const content = trigger.nextElementSibling as HTMLElement;
       const icon = trigger.querySelector(".faq-icon") as HTMLElement;
 
+      const rect = trigger.getBoundingClientRect();
+      const initialTop = rect.top + window.pageYOffset;
+      let heightDecrease = 0;
+
       // Close all other accordions
       triggers.forEach((otherTrigger) => {
         if (otherTrigger !== trigger) {
+          const wasExpanded = otherTrigger.getAttribute("aria-expanded") === "true";
+          if (wasExpanded) {
+            const otherIdx = parseInt(otherTrigger.getAttribute("data-index") || "0");
+            const currentIdx = parseInt(trigger.getAttribute("data-index") || "0");
+            if (otherIdx < currentIdx) {
+              const otherContent = otherTrigger.nextElementSibling as HTMLElement;
+              if (otherContent) {
+                heightDecrease += otherContent.scrollHeight;
+              }
+            }
+          }
           otherTrigger.setAttribute("aria-expanded", "false");
           const otherContent = otherTrigger.nextElementSibling as HTMLElement;
           const otherIcon = otherTrigger.querySelector(
@@ -124,6 +139,15 @@ const { faq } = wedding.data;
         if (icon) {
           icon.style.transform = "rotate(180deg)";
         }
+
+        const header = document.getElementById("main-header");
+        const headerHeight = header ? header.offsetHeight : 80;
+        const targetY = Math.max(0, initialTop - heightDecrease - headerHeight - 16);
+        
+        window.scrollTo({
+          top: targetY,
+          behavior: "smooth"
+        });
       }
     });
   });
