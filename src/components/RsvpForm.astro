@@ -7,6 +7,7 @@ if (!wedding) {
   throw new Error("Wedding content 'info' not found");
 }
 const { rsvpForm } = wedding.data;
+const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 ---
 
 <section id="rsvp" class="mx-auto max-w-3xl scroll-mt-24 px-6 py-24">
@@ -173,7 +174,7 @@ const { rsvpForm } = wedding.data;
   </div>
 </section>
 
-<script define:vars={{ rsvpForm }}>
+<script define:vars={{ rsvpForm, googleScriptUrl }}>
   const form = document.getElementById("rsvp-form");
   const statusMsg = document.getElementById("form-status");
   const submitBtn = document.getElementById("submit-btn");
@@ -260,7 +261,7 @@ const { rsvpForm } = wedding.data;
     }
 
     try {
-      if (rsvpForm.rsvpUrl) {
+      if (googleScriptUrl) {
         const postData = new FormData();
         postData.append("name", escapeHtml(String(formData.get("name") || "").trim()));
         postData.append("email", escapeHtml(email));
@@ -282,7 +283,7 @@ const { rsvpForm } = wedding.data;
         
         postData.append("diet", escapeHtml(String(formData.get("diet") || "").trim()));
 
-        await fetch(rsvpForm.rsvpUrl, {
+        await fetch(googleScriptUrl, {
           method: "POST",
           mode: "no-cors",
           body: postData,

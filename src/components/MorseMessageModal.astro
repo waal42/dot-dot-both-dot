@@ -7,6 +7,7 @@ if (!wedding) {
   throw new Error("Wedding content 'info' not found");
 }
 const { morseMessage, rsvpForm } = wedding.data;
+const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 
 // Morse alphabet elements for virtual keyboard rendering
 const alphabet = [
@@ -265,9 +266,9 @@ const alphabet = [
     </div>
   </div>
 
-<script define:vars={{ rsvpUrl: rsvpForm.rsvpUrl, morseMessage }}>
+<script define:vars={{ googleScriptUrl, morseMessage }}>
   // Expose variables globally so they can be accessed by the processed script block
-  window.rsvpUrl = rsvpUrl;
+  window.rsvpUrl = googleScriptUrl;
   window.morseMessage = morseMessage;
 
   // Interactive Modal UI handling

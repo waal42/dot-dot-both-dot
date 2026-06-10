@@ -7,6 +7,7 @@ if (!wedding) {
   throw new Error("Wedding content 'info' not found");
 }
 const { rsvpForm } = wedding.data;
+const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 ---
 
 {/* Modal Container */}
@@ -113,8 +114,8 @@ const { rsvpForm } = wedding.data;
   </div>
 </div>
 
-<script define:vars={{ rsvpUrl: rsvpForm.rsvpUrl }}>
-  window.songRsvpUrl = rsvpUrl;
+<script define:vars={{ googleScriptUrl }}>
+  window.songRsvpUrl = googleScriptUrl;
 
   const modal = document.getElementById("song-modal");
   const modalCard = document.getElementById("song-modal-card");
