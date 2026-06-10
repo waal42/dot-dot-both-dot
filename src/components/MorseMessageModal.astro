@@ -612,9 +612,9 @@ const alphabet = [
 
     const postData = new FormData();
     postData.append("form_type", "message");
-    postData.append("name", escapeHtml(name));
-    postData.append("morse_message", escapeHtml(morseMsg));
-    postData.append("decoded_message", escapeHtml(textMsg));
+    postData.append("Jméno / Podpis", escapeHtml(name));
+    postData.append("Morseovka", escapeHtml(morseMsg));
+    postData.append("Překlad", escapeHtml(textMsg));
 
     try {
       // Post to Google Apps Script

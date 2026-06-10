@@ -267,33 +267,32 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
       if (googleScriptUrl) {
         const postData = new FormData();
         postData.append(
-          "name",
+          "jméno",
           escapeHtml(String(formData.get("name") || "").trim()),
         );
-        postData.append("email", escapeHtml(email));
-        postData.append("attendance", String(formData.get("attendance") || ""));
+        postData.append("e-mail", escapeHtml(email));
+        postData.append("přijde?", String(formData.get("attendance") || ""));
 
         const comingWithChildren =
           formData.get("coming_with_children") === "on" ? "ano" : "ne";
-        postData.append("coming_with_children", comingWithChildren);
+        postData.append("děti?", comingWithChildren);
 
         postData.append(
-          "how_many_children",
+          "kolik dětí? a co dělají?",
           escapeHtml(String(formData.get("how_many_children") || "").trim()),
         );
 
-        const isLunchGuest =
-          formData.get("is_lunch_guest") === "on" ? "ano" : "ne";
-        postData.append("is_lunch_guest", isLunchGuest);
+        const familySide = formData.get("rodina") || formData.get("family") || formData.get("rodina?") || "";
+        postData.append("rodina?", escapeHtml(String(familySide).trim()));
 
         const comingToLunchRaw = formData.get("coming_to_lunch");
         let comingToLunch = "";
-        if (comingToLunchRaw === "yes") comingToLunch = "ano";
-        if (comingToLunchRaw === "no") comingToLunch = "ne";
-        postData.append("coming_to_lunch", comingToLunch);
+        if (comingToLunchRaw === "yes" || comingToLunchRaw === "ano") comingToLunch = "ano";
+        if (comingToLunchRaw === "no" || comingToLunchRaw === "ne") comingToLunch = "ne";
+        postData.append("přijde na oběd?", comingToLunch);
 
         postData.append(
-          "diet",
+          "dieta",
           escapeHtml(String(formData.get("diet") || "").trim()),
         );
 
