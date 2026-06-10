@@ -261,18 +261,21 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
     const originalText = submitBtn.innerHTML;
     submitBtn.textContent = "Odesílám...";
 
-    const postData = new FormData();
+    const postData = new URLSearchParams();
     postData.append("form_type", "song");
     postData.append("song", escapeHtml(song));
     postData.append("link", escapeHtml(link));
 
     try {
-      // @ts-ignore
+       // @ts-ignore
       const targetUrl = (window as any).songRsvpUrl || "";
       if (targetUrl) {
         await fetch(targetUrl, {
           method: "POST",
           mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
           body: postData,
         });
       }

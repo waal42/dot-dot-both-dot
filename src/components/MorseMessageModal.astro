@@ -610,7 +610,7 @@ const alphabet = [
     submitBtn.textContent =
       (window as any).morseMessage?.sendingText || "Odesílám...";
 
-    const postData = new FormData();
+    const postData = new URLSearchParams();
     postData.append("form_type", "message");
     postData.append("Jméno / Podpis", escapeHtml(name));
     postData.append("Morseovka", escapeHtml(morseMsg));
@@ -624,6 +624,9 @@ const alphabet = [
         await fetch(targetUrl, {
           method: "POST",
           mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
           body: postData,
         });
       }
