@@ -158,10 +158,6 @@ gifts:
 rsvpForm:
   title: "Účast"
   description: "Prosíme o potvrzení účasti do 30. června 2026. Každý dospělý host vyplňuje formulář zvlášť, děti vyplňuje jen jeden z rodičů."
-<<<<<<< Updated upstream
-  rsvpUrl: "https://script.google.com/macros/s/AKfycbwqY7nbEL-bK23-XydXGUEBDvpEUALZJ9evGxOYtvBp8QCTAIGiPP2Lhn7KigAxZY3pQQ/exec"
-=======
->>>>>>> Stashed changes
   submitButtonText: "Odeslat potvrzení"
   sendingText: "Odesílám..."
   successMessage:
