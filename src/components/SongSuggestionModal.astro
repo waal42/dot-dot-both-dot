@@ -16,17 +16,17 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
   role="dialog"
   aria-modal="true"
   aria-labelledby="song-modal-title"
-  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-wedding-dark/60 backdrop-blur-sm transition-all duration-500 opacity-0 pointer-events-none"
+  class="bg-wedding-dark/60 pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 backdrop-blur-sm transition-all duration-500"
 >
   {/* Card Wrapper */}
   <div
     id="song-modal-card"
-    class="bg-wedding-light border border-wedding-medium/20 text-wedding-dark w-full max-w-md flex flex-col p-6 md:p-8 shadow-2xl relative translate-y-8 transition-transform duration-500 overflow-hidden rounded-sm"
+    class="bg-wedding-light border-wedding-medium/20 text-wedding-dark relative flex w-full max-w-md translate-y-8 flex-col overflow-hidden rounded-sm border p-6 shadow-2xl transition-transform duration-500 md:p-8"
   >
     {/* Close button */}
     <button
       id="close-song-modal"
-      class="absolute top-4 right-4 text-wedding-medium hover:text-wedding-dark cursor-pointer p-2 transition-colors active:scale-90"
+      class="text-wedding-medium hover:text-wedding-dark absolute top-4 right-4 cursor-pointer p-2 transition-colors active:scale-90"
       aria-label="Zavřít"
     >
       <svg
@@ -48,11 +48,15 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 
     {/* Header */}
     <div class="mb-6 pr-8 text-left">
-      <h3 id="song-modal-title" class="text-2xl font-bold text-wedding-dark mb-2">
+      <h3
+        id="song-modal-title"
+        class="text-wedding-dark mb-2 text-2xl font-bold"
+      >
         Navrhněte písničku
       </h3>
       <p class="text-wedding-medium text-xs font-semibold italic">
-        Pošlete nám tip na vaši oblíbenou pecku, kterou byste rádi slyšeli na svatbě. Rádi ji zařadíme do playlistu!
+        Pošlete nám tip na vaši oblíbenou pecku, kterou byste rádi slyšeli na
+        svatbě. Rádi ji zařadíme do playlistu!
       </p>
     </div>
 
@@ -72,7 +76,7 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
           name="song"
           required
           placeholder="např. Queen - Don't Stop Me Now"
-          class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 placeholder:text-sm w-full border-b bg-transparent py-2.5 text-base font-semibold text-wedding-dark transition-colors outline-none focus:ring-0"
+          class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 text-wedding-dark w-full border-b bg-transparent py-2.5 text-base font-semibold transition-colors outline-none placeholder:text-sm focus:ring-0"
         />
       </div>
 
@@ -89,7 +93,7 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
           id="song-youtube-link"
           name="link"
           placeholder="https://www.youtube.com/... nebo prázdné"
-          class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 placeholder:text-sm w-full border-b bg-transparent py-2.5 text-base font-semibold text-wedding-dark transition-colors outline-none focus:ring-0"
+          class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 text-wedding-dark w-full border-b bg-transparent py-2.5 text-base font-semibold transition-colors outline-none placeholder:text-sm focus:ring-0"
         />
       </div>
 
@@ -101,11 +105,11 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
       </p>
 
       {/* Submit button */}
-      <div class="pt-6 flex gap-3 border-t border-wedding-medium/10">
+      <div class="border-wedding-medium/10 flex gap-3 border-t pt-6">
         <button
           type="submit"
           id="song-submit"
-          class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light flex w-full justify-center items-center gap-3 bg-transparent px-8 py-4 text-xs font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm cursor-pointer rounded-sm"
+          class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light flex w-full cursor-pointer items-center justify-center gap-3 rounded-sm bg-transparent px-8 py-4 text-xs font-bold tracking-widest uppercase shadow-sm transition-all duration-300 hover:scale-105 active:scale-95"
         >
           Odeslat návrh
         </button>
@@ -160,7 +164,8 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 
   // Open modal when clicking the trigger button (using event delegation)
   document.addEventListener("click", (e) => {
-    const trigger = e.target instanceof Element && e.target.closest("#open-song-modal");
+    const trigger =
+      e.target instanceof Element && e.target.closest("#open-song-modal");
     if (trigger) {
       openModal(trigger);
     }
@@ -187,8 +192,11 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
     if (e.key !== "Tab") return;
 
     // Find all focusable elements inside the modal
-    const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const focusableElements = modalCard ? Array.from(modalCard.querySelectorAll(focusableSelector)) : [];
+    const focusableSelector =
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusableElements = modalCard
+      ? Array.from(modalCard.querySelectorAll(focusableSelector))
+      : [];
     if (focusableElements.length === 0) return;
 
     const firstElement = focusableElements[0];
@@ -212,10 +220,18 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 
 <script>
   const form = document.getElementById("song-form") as HTMLFormElement | null;
-  const songInput = document.getElementById("song-name-artist") as HTMLInputElement | null;
-  const linkInput = document.getElementById("song-youtube-link") as HTMLInputElement | null;
-  const submitBtn = document.getElementById("song-submit") as HTMLButtonElement | null;
-  const statusMsg = document.getElementById("song-status") as HTMLParagraphElement | null;
+  const songInput = document.getElementById(
+    "song-name-artist",
+  ) as HTMLInputElement | null;
+  const linkInput = document.getElementById(
+    "song-youtube-link",
+  ) as HTMLInputElement | null;
+  const submitBtn = document.getElementById(
+    "song-submit",
+  ) as HTMLButtonElement | null;
+  const statusMsg = document.getElementById(
+    "song-status",
+  ) as HTMLParagraphElement | null;
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -262,7 +278,8 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
       }
 
       statusMsg.textContent = "Návrh byl úspěšně odeslán do playlistu!";
-      statusMsg.className = "text-center text-xs font-bold uppercase text-green-600 animate-bounce";
+      statusMsg.className =
+        "text-center text-xs font-bold uppercase text-green-600 animate-bounce";
       statusMsg.classList.remove("hidden");
 
       // Reset values
@@ -275,10 +292,10 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
         const closeTrigger = document.getElementById("close-song-modal");
         closeTrigger?.click();
       }, 2500);
-
     } catch (err) {
       statusMsg.textContent = "Chyba při odesílání návrhu.";
-      statusMsg.className = "text-center text-xs font-bold uppercase text-red-500 animate-pulse";
+      statusMsg.className =
+        "text-center text-xs font-bold uppercase text-red-500 animate-pulse";
       statusMsg.classList.remove("hidden");
     } finally {
       submitBtn.removeAttribute("disabled");

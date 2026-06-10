@@ -37,18 +37,16 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
 <section id="dary" class="mx-auto max-w-4xl scroll-mt-24 px-6 py-24">
   <div class="text-center">
     <h2
-      class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
+      class="text-wedding-dark animate-fade-in-up mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
     >
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="S"
-        >···</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="S">···</span
       >
       {gifts.title}
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="Y"
-        >−·−−</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="Y">−·−−</span
       >
     </h2>
   </div>
@@ -58,12 +56,14 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
     data-account-number={gifts.accountNumber}
     data-iban={iban}
     data-qr-message={gifts.qrMessage}
-    class="morse-border text-wedding-medium/30 bg-wedding-light shadow-sm animate-fade-in-up delay-100 hover-card-premium"
+    class="morse-border text-wedding-medium/30 bg-wedding-light animate-fade-in-up hover-card-premium shadow-sm delay-100"
   >
     <div class="px-8 py-16 text-center md:px-16 lg:px-24">
       {/* 1. Introductory Text */}
       <div class="mb-16 space-y-6">
-        <p class="text-wedding-dark text-3xl font-bold md:text-4xl leading-tight">
+        <p
+          class="text-wedding-dark text-3xl leading-tight font-bold md:text-4xl"
+        >
           {gifts.heading}
         </p>
         <p
@@ -83,7 +83,7 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
         >
           {gifts.accountLabel}
         </p>
-        
+
         <div class="flex flex-col items-center justify-center gap-4">
           <p
             id="account-number"
@@ -93,10 +93,25 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
           </p>
           <button
             id="copy-btn"
-            class="border-wedding-medium/40 text-wedding-medium hover:border-wedding-dark hover:text-wedding-dark flex items-center gap-2 border bg-transparent px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-300 active:scale-95 cursor-pointer rounded-sm hover:bg-wedding-dark/5"
+            class="border-wedding-medium/40 text-wedding-medium hover:border-wedding-dark hover:text-wedding-dark hover:bg-wedding-dark/5 flex cursor-pointer items-center gap-2 rounded-sm border bg-transparent px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-300 active:scale-95"
             title="Kopírovat číslo účtu"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-4 w-4"
+              ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"
+              ></rect><path
+                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+              ></path></svg
+            >
             <span id="copy-text">Kopírovat</span>
           </button>
         </div>
@@ -113,29 +128,40 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
 
       {/* 3. Interactive Payment Calculator */}
       <div class="mb-16 space-y-6">
-        <label for="gift-amount" class="block text-wedding-medium text-xs font-bold tracking-[0.4em] uppercase opacity-70 cursor-pointer">
+        <label
+          for="gift-amount"
+          class="text-wedding-medium block cursor-pointer text-xs font-bold tracking-[0.4em] uppercase opacity-70"
+        >
           Zvolte výši příspěvku
         </label>
 
         {/* Currency Input Field */}
-        <div class="relative max-w-xs mx-auto mb-6">
+        <div class="relative mx-auto mb-6 max-w-xs">
           <input
             type="number"
             id="gift-amount"
             placeholder="Libovolná částka"
-            class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark w-full border-b bg-transparent py-3 text-center text-2xl font-bold outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition-colors"
+            class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark w-full [appearance:textfield] border-b bg-transparent py-3 text-center text-2xl font-bold transition-colors outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
-          <div class="absolute right-2 bottom-3 text-wedding-medium/60 text-lg font-bold">Kč</div>
+          <div
+            class="text-wedding-medium/60 absolute right-2 bottom-3 text-lg font-bold"
+          >
+            Kč
+          </div>
         </div>
       </div>
 
       {/* 4. QR Code Section */}
       <div class="flex flex-col items-center">
         <div
-          class="morse-border text-wedding-medium/30 bg-wedding-light relative mb-6 p-4 shadow-sm hover:scale-[1.02] transition-transform duration-500"
+          class="morse-border text-wedding-medium/30 bg-wedding-light relative mb-6 p-4 shadow-sm transition-transform duration-500 hover:scale-[1.02]"
         >
-          <div class="relative flex h-56 w-56 items-center justify-center md:h-64 md:w-64">
-            {/* Dynamic interactive QR Code Image (Pre-rendered default on load) */}
+          <div
+            class="relative flex h-56 w-56 items-center justify-center md:h-64 md:w-64"
+          >
+            {
+              /* Dynamic interactive QR Code Image (Pre-rendered default on load) */
+            }
             <img
               id="qr-image"
               src={qrCodeDataUrl}
@@ -172,10 +198,18 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
       await navigator.clipboard.writeText(rawAccount);
       if (copyText && copyBtn) {
         copyText.textContent = "Zkopírováno!";
-        copyBtn.classList.add("bg-wedding-dark", "text-wedding-light", "border-wedding-dark");
+        copyBtn.classList.add(
+          "bg-wedding-dark",
+          "text-wedding-light",
+          "border-wedding-dark",
+        );
         setTimeout(() => {
           copyText.textContent = "Kopírovat";
-          copyBtn.classList.remove("bg-wedding-dark", "text-wedding-light", "border-wedding-dark");
+          copyBtn.classList.remove(
+            "bg-wedding-dark",
+            "text-wedding-light",
+            "border-wedding-dark",
+          );
         }, 2000);
       }
     } catch (err) {
@@ -184,8 +218,12 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
   });
 
   // Handle Dynamic QR Payment Calculation
-  const qrImage = document.getElementById("qr-image") as HTMLImageElement | null;
-  const giftInput = document.getElementById("gift-amount") as HTMLInputElement | null;
+  const qrImage = document.getElementById(
+    "qr-image",
+  ) as HTMLImageElement | null;
+  const giftInput = document.getElementById(
+    "gift-amount",
+  ) as HTMLInputElement | null;
 
   const generateQRCode = async (amount: number | null) => {
     if (!qrImage) return;

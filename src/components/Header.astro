@@ -16,14 +16,12 @@ import Navigation from "./Navigation.astro";
         <span>Hanka</span>
         <span class="flex items-center gap-1.5 md:gap-2">
           <span
-            class="morse-decoder text-wedding-medium text-sm tracking-widest opacity-30 transition-all hover:opacity-100 md:text-base cursor-help"
-            data-decoded="H"
-            >····</span
+            class="morse-decoder text-wedding-medium cursor-help text-sm tracking-widest opacity-30 transition-all hover:opacity-100 md:text-base"
+            data-decoded="H">····</span
           >
           <span
-            class="morse-decoder text-wedding-medium text-sm tracking-widest opacity-30 transition-all hover:opacity-100 md:text-base cursor-help"
-            data-decoded="F"
-            >··−·</span
+            class="morse-decoder text-wedding-medium cursor-help text-sm tracking-widest opacity-30 transition-all hover:opacity-100 md:text-base"
+            data-decoded="F">··−·</span
           >
         </span>
         <span>Filip</span>
@@ -31,17 +29,17 @@ import Navigation from "./Navigation.astro";
     </div>
 
     <div class="flex items-center gap-2">
-
       <!-- Mobile Menu Button -->
       <button
         id="menu-toggle"
-        class="z-50 flex flex-col gap-1.5 p-2 md:hidden cursor-pointer"
+        class="z-50 flex cursor-pointer flex-col gap-1.5 p-2 md:hidden"
         aria-label="Toggle Menu"
       >
         <span
           class="bg-wedding-dark h-1 w-7 origin-center transition-all duration-300"
         ></span>
-        <span class="bg-wedding-dark h-1 w-7 transition-all duration-300"></span>
+        <span class="bg-wedding-dark h-1 w-7 transition-all duration-300"
+        ></span>
         <span
           class="bg-wedding-dark h-1 w-7 origin-center transition-all duration-300"
         ></span>
@@ -53,7 +51,6 @@ import Navigation from "./Navigation.astro";
 </header>
 
 <script>
-
   const menuToggle = document.getElementById("menu-toggle");
   const navMenu = document.getElementById("nav-menu");
   const menuSpans = menuToggle?.querySelectorAll("span");

@@ -98,12 +98,18 @@ const { faq } = wedding.data;
       // Close all other accordions
       triggers.forEach((otherTrigger) => {
         if (otherTrigger !== trigger) {
-          const wasExpanded = otherTrigger.getAttribute("aria-expanded") === "true";
+          const wasExpanded =
+            otherTrigger.getAttribute("aria-expanded") === "true";
           if (wasExpanded) {
-            const otherIdx = parseInt(otherTrigger.getAttribute("data-index") || "0");
-            const currentIdx = parseInt(trigger.getAttribute("data-index") || "0");
+            const otherIdx = parseInt(
+              otherTrigger.getAttribute("data-index") || "0",
+            );
+            const currentIdx = parseInt(
+              trigger.getAttribute("data-index") || "0",
+            );
             if (otherIdx < currentIdx) {
-              const otherContent = otherTrigger.nextElementSibling as HTMLElement;
+              const otherContent =
+                otherTrigger.nextElementSibling as HTMLElement;
               if (otherContent) {
                 heightDecrease += otherContent.scrollHeight;
               }
@@ -142,11 +148,14 @@ const { faq } = wedding.data;
 
         const header = document.getElementById("main-header");
         const headerHeight = header ? header.offsetHeight : 80;
-        const targetY = Math.max(0, initialTop - heightDecrease - headerHeight - 16);
-        
+        const targetY = Math.max(
+          0,
+          initialTop - heightDecrease - headerHeight - 16,
+        );
+
         window.scrollTo({
           top: targetY,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }
     });

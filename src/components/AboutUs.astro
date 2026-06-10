@@ -16,7 +16,7 @@ const galleryWithOptimizedImages = await Promise.all(
       return { ...item, optimizedSrc: optimizedImage.src };
     }
     return item;
-  })
+  }),
 );
 
 const getSizeClasses = (size: string) => {
@@ -36,40 +36,38 @@ const getSizeClasses = (size: string) => {
 <section id="o-nas" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
   <div class="text-center">
     <h2
-      class="text-wedding-dark mb-4 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
+      class="text-wedding-dark animate-fade-in-up mb-4 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
     >
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="M"
-        >−−</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="M">−−</span
       >
       {aboutUs.title}
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="A"
-        >·−</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="A">·−</span
       >
     </h2>
-    <p class="text-wedding-medium mx-auto max-w-xl text-center text-lg italic opacity-85 mb-16 animate-fade-in-up">
+    <p
+      class="text-wedding-medium animate-fade-in-up mx-auto mb-16 max-w-xl text-center text-lg italic opacity-85"
+    >
       {aboutUs.motto}
     </p>
   </div>
 
-
-
   <div
     id="gallery"
-    class="grid auto-rows-[150px] grid-cols-2 gap-3 md:auto-rows-[300px] md:grid-cols-4 md:gap-4 grid-flow-row-dense animate-fade-in-up"
+    class="animate-fade-in-up grid grid-flow-row-dense auto-rows-[150px] grid-cols-2 gap-3 md:auto-rows-[300px] md:grid-cols-4 md:gap-4"
     style="animation-delay: 300ms;"
   >
     {
       galleryWithOptimizedImages.map((item) => (
         <div
-          class={`${getSizeClasses(item.size)} group bg-wedding-dark/5 overflow-hidden border border-transparent hover:border-wedding-dark/10 transition-all duration-500 shadow-sm`}
+          class={`${getSizeClasses(item.size)} group bg-wedding-dark/5 hover:border-wedding-dark/10 overflow-hidden border border-transparent shadow-sm transition-all duration-500`}
         >
           {item.type === "text" ? (
             <div class="border-wedding-medium/30 bg-wedding-light flex h-full flex-col items-center justify-center border p-4 text-center md:p-8">
-              <p class="text-wedding-dark mb-2 text-xl font-bold md:text-2xl leading-tight">
+              <p class="text-wedding-dark mb-2 text-xl leading-tight font-bold md:text-2xl">
                 {item.title}
               </p>
               <div class="morse-line text-wedding-medium/40 my-4 h-[2px] w-24 md:my-6 md:w-40" />
@@ -83,7 +81,7 @@ const getSizeClasses = (size: string) => {
               data-pswp-width={item.src.width}
               data-pswp-height={item.src.height}
               data-cropped="true"
-              class="block h-full w-full cursor-zoom-in relative"
+              class="relative block h-full w-full cursor-zoom-in"
             >
               <Image
                 src={item.src}
@@ -91,7 +89,7 @@ const getSizeClasses = (size: string) => {
                 width={800}
                 class="h-full w-full scale-105 object-cover grayscale transition-all duration-700 group-hover:scale-100 group-hover:grayscale-0"
               />
-              <div class="absolute inset-0 flex items-center justify-center bg-wedding-dark/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none">
+              <div class="bg-wedding-dark/60 pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100">
                 <span class="text-wedding-light px-4 text-center text-lg font-bold drop-shadow-md md:text-xl">
                   {item.alt}
                 </span>
@@ -110,7 +108,7 @@ const getSizeClasses = (size: string) => {
 
   console.log("PhotoSwipe script loading...", {
     galleryElement: document.getElementById("gallery"),
-    linksCount: document.querySelectorAll("#gallery a").length
+    linksCount: document.querySelectorAll("#gallery a").length,
   });
 
   const lightbox = new PhotoSwipeLightbox({
@@ -118,33 +116,33 @@ const getSizeClasses = (size: string) => {
     children: "a",
     pswpModule: () => PhotoSwipe,
     padding: { top: 20, bottom: 60, left: 10, right: 10 },
-    bgClickAction: 'close',
-    tapAction: 'close',
+    bgClickAction: "close",
+    tapAction: "close",
   });
 
-  lightbox.on('uiRegister', function() {
+  lightbox.on("uiRegister", function () {
     console.log("PhotoSwipe uiRegister event fired");
     try {
       const pswp = lightbox.pswp!;
       pswp.ui!.registerElement({
-        name: 'custom-caption',
+        name: "custom-caption",
         order: 9,
         isButton: false,
-        appendTo: 'wrapper',
-        html: 'Caption text',
+        appendTo: "wrapper",
+        html: "Caption text",
         onInit: (el, pswpInstance) => {
-          pswpInstance.on('change', () => {
+          pswpInstance.on("change", () => {
             const currSlideElement = pswpInstance.currSlide?.data.element;
-            let captionHTML = '';
+            let captionHTML = "";
             if (currSlideElement) {
-              const img = currSlideElement.querySelector('img');
+              const img = currSlideElement.querySelector("img");
               if (img) {
-                captionHTML = img.getAttribute('alt') || '';
+                captionHTML = img.getAttribute("alt") || "";
               }
             }
             el.innerHTML = captionHTML;
           });
-        }
+        },
       });
     } catch (e) {
       console.error("Error in uiRegister:", e);
@@ -169,7 +167,7 @@ const getSizeClasses = (size: string) => {
     font-size: 1.25rem;
     font-weight: bold;
     text-align: center;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 1000;
     pointer-events: none;
     max-width: 90%;

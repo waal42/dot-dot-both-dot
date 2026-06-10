@@ -23,29 +23,55 @@ const { metaDescription } = wedding.data;
     <meta charset="UTF-8" />
     <meta name="description" content={metaDescription} />
     <meta name="viewport" content="width=device-width" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/svatba/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/svatba/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/svatba/favicon-16x16.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/svatba/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/svatba/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/svatba/favicon-16x16.png"
+    />
     <link rel="manifest" href="/svatba/site.webmanifest" />
     <link rel="shortcut icon" href="/svatba/favicon.ico" />
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+    <meta
+      property="og:url"
+      content={new URL(Astro.url.pathname, Astro.site).href}
+    />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={metaDescription} />
-    <meta property="og:image" content={new URL('/svatba/android-chrome-512x512.png', Astro.site).href} />
+    <meta
+      property="og:image"
+      content={new URL("/svatba/android-chrome-512x512.png", Astro.site).href}
+    />
     <meta property="og:site_name" content="Naše Svatba | Hanka & Filip" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+    <meta
+      property="twitter:url"
+      content={new URL(Astro.url.pathname, Astro.site).href}
+    />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={metaDescription} />
-    <meta property="twitter:image" content={new URL('/svatba/android-chrome-512x512.png', Astro.site).href} />
+    <meta
+      property="twitter:image"
+      content={new URL("/svatba/android-chrome-512x512.png", Astro.site).href}
+    />
 
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -55,10 +81,14 @@ const { metaDescription } = wedding.data;
       rel="stylesheet"
     />
     <script is:inline>
-      (function() {
-        const storedTheme = localStorage.getItem('theme');
-        if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
+      (function () {
+        const storedTheme = localStorage.getItem("theme");
+        if (
+          storedTheme === "dark" ||
+          (!storedTheme &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
         }
       })();
     </script>
@@ -70,16 +100,36 @@ const { metaDescription } = wedding.data;
     <!-- Floating Audio Toggle -->
     <button
       id="sound-toggle"
-      class="fixed bottom-6 right-6 z-40 bg-wedding-light border border-wedding-medium/30 text-wedding-medium hover:text-wedding-dark hover:border-wedding-dark flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 hover:scale-110 active:scale-95 shadow-md cursor-pointer select-none"
+      class="bg-wedding-light border-wedding-medium/30 text-wedding-medium hover:text-wedding-dark hover:border-wedding-dark fixed right-6 bottom-6 z-40 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border shadow-md transition-all duration-300 select-none hover:scale-110 active:scale-95"
       aria-label="Toggle Morse Audio"
       title="Zapnout zvukovou telegrafii (Morseovy efekty)"
     >
-      <svg id="sound-icon-muted" class="h-5 w-5 block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        id="sound-icon-muted"
+        class="block h-5 w-5"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
         <line x1="23" y1="9" x2="17" y2="15"></line>
         <line x1="17" y1="9" x2="23" y2="15"></line>
       </svg>
-      <svg id="sound-icon-unmuted" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        id="sound-icon-unmuted"
+        class="hidden h-5 w-5"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
         <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
         <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>

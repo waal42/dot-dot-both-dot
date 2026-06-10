@@ -8,7 +8,7 @@
     "hero": {
       "type": "object",
       "properties": {
-        "logo": {"type": "object"},
+        "logo": { "type": "object" },
         "title": { "type": "string" },
         "date": { "type": "string" },
         "subtitle": { "type": "string" },
@@ -16,7 +16,14 @@
         "morseCodeText": { "type": "string" },
         "buttonText": { "type": "string" }
       },
-      "required": ["title", "date", "subtitle", "morseCode", "morseCodeText", "buttonText"]
+      "required": [
+        "title",
+        "date",
+        "subtitle",
+        "morseCode",
+        "morseCodeText",
+        "buttonText"
+      ]
     },
     "aboutUs": {
       "type": "object",
@@ -32,7 +39,10 @@
                 "properties": {
                   "src": { "type": "string" },
                   "alt": { "type": "string" },
-                  "size": { "type": "string", "enum": ["small", "large", "vertical", "horizontal"] },
+                  "size": {
+                    "type": "string",
+                    "enum": ["small", "large", "vertical", "horizontal"]
+                  },
                   "type": { "type": "string", "enum": ["image"] }
                 },
                 "required": ["src", "alt", "size"]
@@ -45,7 +55,10 @@
                   "type": { "type": "string", "enum": ["text"] },
                   "title": { "type": "string" },
                   "detail": { "type": "string" },
-                  "size": { "type": "string", "enum": ["small", "large", "vertical", "horizontal"] }
+                  "size": {
+                    "type": "string",
+                    "enum": ["small", "large", "vertical", "horizontal"]
+                  }
                 },
                 "required": ["src", "alt", "type", "title", "detail", "size"]
               }
@@ -95,7 +108,14 @@
               "required": ["uid", "start", "end"]
             }
           },
-          "required": ["summary", "description", "location", "prodId", "family", "guest"]
+          "required": [
+            "summary",
+            "description",
+            "location",
+            "prodId",
+            "family",
+            "guest"
+          ]
         },
         "transportOptions": {
           "type": "array",
@@ -119,16 +139,37 @@
                     "maxItems": 2
                   },
                   "title": { "type": "string" },
-                  "icon": { "type": "string", "enum": ["parking", "train", "bus"] }
+                  "icon": {
+                    "type": "string",
+                    "enum": ["parking", "train", "bus"]
+                  }
                 },
                 "required": ["coords", "title", "icon"]
               }
             },
-            "required": ["id", "label", "icon", "morse", "morseText", "title", "detail", "marker"]
+            "required": [
+              "id",
+              "label",
+              "icon",
+              "morse",
+              "morseText",
+              "title",
+              "detail",
+              "marker"
+            ]
           }
         }
       },
-      "required": ["title", "venueName", "address", "coords", "googleMapsUrl", "description", "calendar", "transportOptions"]
+      "required": [
+        "title",
+        "venueName",
+        "address",
+        "coords",
+        "googleMapsUrl",
+        "description",
+        "calendar",
+        "transportOptions"
+      ]
     },
     "schedule": {
       "type": "object",
@@ -161,7 +202,16 @@
         "qrLabel": { "type": "string" },
         "qrMessage": { "type": "string" }
       },
-      "required": ["title", "heading", "description", "accountLabel", "accountNumber", "accountNote", "qrLabel", "qrMessage"]
+      "required": [
+        "title",
+        "heading",
+        "description",
+        "accountLabel",
+        "accountNumber",
+        "accountNote",
+        "qrLabel",
+        "qrMessage"
+      ]
     },
     "rsvpForm": {
       "type": "object",
@@ -197,7 +247,10 @@
                     "id": { "type": "string" },
                     "name": { "type": "string" },
                     "label": { "type": "string" },
-                    "type": { "type": "string", "enum": ["text", "email", "radio", "select", "checkbox"] },
+                    "type": {
+                      "type": "string",
+                      "enum": ["text", "email", "radio", "select", "checkbox"]
+                    },
                     "required": { "type": "boolean" },
                     "placeholder": { "type": ["string", "null"] },
                     "text": { "type": "string" },
@@ -216,7 +269,15 @@
                       }
                     }
                   },
-                  "required": ["id", "name", "label", "type", "required", "placeholder", "condition"]
+                  "required": [
+                    "id",
+                    "name",
+                    "label",
+                    "type",
+                    "required",
+                    "placeholder",
+                    "condition"
+                  ]
                 }
               }
             },
@@ -224,7 +285,15 @@
           }
         }
       },
-      "required": ["title", "description", "submitButtonText", "sendingText", "successMessage", "errorMessage", "schema"]
+      "required": [
+        "title",
+        "description",
+        "submitButtonText",
+        "sendingText",
+        "successMessage",
+        "errorMessage",
+        "schema"
+      ]
     },
     "faq": {
       "type": "object",

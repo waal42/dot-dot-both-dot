@@ -13,29 +13,27 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 <section id="rsvp" class="mx-auto max-w-3xl scroll-mt-24 px-6 py-24">
   <div class="mb-16 text-center">
     <h2
-      class="text-wedding-dark mb-6 flex items-center justify-center gap-4 text-4xl font-bold md:text-5xl animate-fade-in-up"
+      class="text-wedding-dark animate-fade-in-up mb-6 flex items-center justify-center gap-4 text-4xl font-bold md:text-5xl"
     >
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="U"
-        >··−</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="U">··−</span
       >
       {rsvpForm.title}
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="T"
-        >−</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="T">−</span
       >
     </h2>
     <p
-      class="text-wedding-dark text-base font-medium tracking-widest uppercase italic md:text-lg opacity-80 animate-fade-in-up delay-100"
+      class="text-wedding-dark animate-fade-in-up text-base font-medium tracking-widest uppercase italic opacity-80 delay-100 md:text-lg"
     >
       {rsvpForm.description}
     </p>
   </div>
 
   <div
-    class="morse-border text-wedding-medium/30 bg-wedding-light p-8 shadow-sm md:p-12 animate-fade-in-up delay-200"
+    class="morse-border text-wedding-medium/30 bg-wedding-light animate-fade-in-up p-8 shadow-sm delay-200 md:p-12"
   >
     <form id="rsvp-form" class="space-y-12">
       {
@@ -76,7 +74,7 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
                       name={field.name}
                       required={field.required}
                       placeholder={field.placeholder}
-                      class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 placeholder:text-sm w-full border-b bg-transparent py-4 text-lg font-medium text-wedding-dark transition-colors outline-none focus:ring-0"
+                      class="border-wedding-medium/30 focus:border-wedding-dark placeholder:text-wedding-medium/40 text-wedding-dark w-full border-b bg-transparent py-4 text-lg font-medium transition-colors outline-none placeholder:text-sm focus:ring-0"
                     />
                   )}
 
@@ -111,7 +109,10 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
                       class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark bg-wedding-light w-full border p-4 text-lg font-semibold outline-none"
                     >
                       {field.options?.map((opt) => (
-                        <option value={opt.value} class="text-wedding-dark bg-wedding-light">
+                        <option
+                          value={opt.value}
+                          class="text-wedding-dark bg-wedding-light"
+                        >
                           {opt.label}
                         </option>
                       ))}
@@ -159,7 +160,7 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
         <button
           type="submit"
           id="submit-btn"
-          class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex justify-center items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
+          class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light animate-fade-in-up inline-flex cursor-pointer items-center justify-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase shadow-sm transition-all delay-200 duration-300 hover:scale-105 active:scale-95"
         >
           {rsvpForm.submitButtonText}
         </button>
@@ -191,7 +192,9 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
       let field = document.getElementById(conditionKey);
 
       // If not found or if it's not a checkbox/radio, try finding by Name (for radio groups)
-      const inputsByName = form.querySelectorAll(`input[name="${conditionKey}"]`);
+      const inputsByName = form.querySelectorAll(
+        `input[name="${conditionKey}"]`,
+      );
 
       let isVisible = false;
 
@@ -263,25 +266,36 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
     try {
       if (googleScriptUrl) {
         const postData = new FormData();
-        postData.append("name", escapeHtml(String(formData.get("name") || "").trim()));
+        postData.append(
+          "name",
+          escapeHtml(String(formData.get("name") || "").trim()),
+        );
         postData.append("email", escapeHtml(email));
         postData.append("attendance", String(formData.get("attendance") || ""));
-        
-        const comingWithChildren = formData.get("coming_with_children") === "on" ? "ano" : "ne";
+
+        const comingWithChildren =
+          formData.get("coming_with_children") === "on" ? "ano" : "ne";
         postData.append("coming_with_children", comingWithChildren);
-        
-        postData.append("how_many_children", escapeHtml(String(formData.get("how_many_children") || "").trim()));
-        
-        const isLunchGuest = formData.get("is_lunch_guest") === "on" ? "ano" : "ne";
+
+        postData.append(
+          "how_many_children",
+          escapeHtml(String(formData.get("how_many_children") || "").trim()),
+        );
+
+        const isLunchGuest =
+          formData.get("is_lunch_guest") === "on" ? "ano" : "ne";
         postData.append("is_lunch_guest", isLunchGuest);
-        
+
         const comingToLunchRaw = formData.get("coming_to_lunch");
         let comingToLunch = "";
         if (comingToLunchRaw === "yes") comingToLunch = "ano";
         if (comingToLunchRaw === "no") comingToLunch = "ne";
         postData.append("coming_to_lunch", comingToLunch);
-        
-        postData.append("diet", escapeHtml(String(formData.get("diet") || "").trim()));
+
+        postData.append(
+          "diet",
+          escapeHtml(String(formData.get("diet") || "").trim()),
+        );
 
         await fetch(googleScriptUrl, {
           method: "POST",

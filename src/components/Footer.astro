@@ -1,7 +1,6 @@
 ---
 import { getEntry } from "astro:content";
 
-
 const wedding = await getEntry("wedding", "info");
 if (!wedding) {
   throw new Error("Wedding content 'info' not found");
@@ -18,24 +17,22 @@ const { morseMessage } = wedding.data;
     >
       <div class="flex items-center gap-4">
         <span class="opacity-60">H</span>
-        <span 
-          class="morse-decoder text-3xl opacity-30 hover:opacity-100 transition-all cursor-help md:text-4xl" 
-          data-decoded="H"
-          >····</span
+        <span
+          class="morse-decoder cursor-help text-3xl opacity-30 transition-all hover:opacity-100 md:text-4xl"
+          data-decoded="H">····</span
         >
       </div>
       <span class="mx-4 hidden text-4xl font-light opacity-20 md:block">/</span>
       <div class="flex items-center gap-4">
         <span class="opacity-60">F</span>
-        <span 
-          class="morse-decoder text-3xl opacity-30 hover:opacity-100 transition-all cursor-help md:text-4xl" 
-          data-decoded="F"
-          >··−·</span
+        <span
+          class="morse-decoder cursor-help text-3xl opacity-30 transition-all hover:opacity-100 md:text-4xl"
+          data-decoded="F">··−·</span
         >
       </div>
     </div>
-    
-    <p class="mb-2 text-3xl font-bold text-wedding-dark">Těšíme se na vás!</p>
+
+    <p class="text-wedding-dark mb-2 text-3xl font-bold">Těšíme se na vás!</p>
     <p class="text-wedding-dark text-lg font-bold tracking-[0.2em] uppercase">
       Hanka & Filip
     </p>
@@ -51,54 +48,70 @@ const { morseMessage } = wedding.data;
         aria-haspopup="dialog"
         aria-controls="morse-modal"
         aria-expanded="false"
-        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm"
+        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light animate-fade-in-up mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase shadow-sm transition-all delay-200 duration-300 hover:scale-105 active:scale-95"
       >
         {morseMessage.buttonText}
       </button>
     </div>
-    
+
     <!-- 🦝 MÝVALÍ MINI-ŠIFRA GAME -->
-    <div class="mt-16 max-w-md mx-auto p-6 bg-wedding-light/50 border border-wedding-medium/20 shadow-sm rounded-sm hover-card-premium">
-      <h4 class="text-wedding-dark font-bold text-sm tracking-widest uppercase mb-3 flex items-center justify-center gap-2">
+    <div
+      class="bg-wedding-light/50 border-wedding-medium/20 hover-card-premium mx-auto mt-16 max-w-md rounded-sm border p-6 shadow-sm"
+    >
+      <h4
+        class="text-wedding-dark mb-3 flex items-center justify-center gap-2 text-sm font-bold tracking-widest uppercase"
+      >
         🦝 Mývalí mini-šifra
       </h4>
-      <p class="text-wedding-dark text-xs italic font-medium opacity-80 mb-5 leading-relaxed">
+      <p
+        class="text-wedding-dark mb-5 text-xs leading-relaxed font-medium italic opacity-80"
+      >
         Dokážeš rozluštit tajný kód pro vstup k mývalům?
       </p>
-      
+
       <!-- Morse Code to decode -->
-      <div class="mb-5 py-3.5 bg-wedding-dark/5 border border-wedding-medium/10 rounded-sm">
-        <p class="text-wedding-dark text-lg font-bold tracking-[0.25em] select-all">
-          −− &nbsp; −·−− &nbsp; ···− &nbsp; ·− &nbsp; ·−·· &nbsp; −−− &nbsp; ···− &nbsp; ·
+      <div
+        class="bg-wedding-dark/5 border-wedding-medium/10 mb-5 rounded-sm border py-3.5"
+      >
+        <p
+          class="text-wedding-dark text-lg font-bold tracking-[0.25em] select-all"
+        >
+          −− / −·−− / ···− / ·− / ·−·· / −−− / ···− / ·
         </p>
       </div>
 
       {/* Interactive Inputs */}
       <div id="game-controls" class="flex gap-2">
-        <input 
-          type="text" 
-          id="game-input" 
-          placeholder="Tvoje odpověď..." 
+        <input
+          type="text"
+          id="game-input"
+          placeholder="Tvoje odpověď..."
           aria-label="Odpověď na mývalí šifru"
-          class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark px-3 py-2 text-sm bg-transparent border rounded-sm outline-none flex-1 font-bold tracking-widest uppercase placeholder:text-wedding-medium/40"
+          class="border-wedding-medium/30 focus:border-wedding-dark text-wedding-dark placeholder:text-wedding-medium/40 flex-1 rounded-sm border bg-transparent px-3 py-2 text-sm font-bold tracking-widest uppercase outline-none"
         />
-        <button 
-          id="game-btn" 
-          class="border border-wedding-dark text-wedding-dark hover:bg-wedding-dark hover:text-wedding-light px-5 py-2 text-xs font-bold tracking-widest uppercase rounded-sm cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm"
+        <button
+          id="game-btn"
+          class="border-wedding-dark text-wedding-dark hover:bg-wedding-dark hover:text-wedding-light cursor-pointer rounded-sm border px-5 py-2 text-xs font-bold tracking-widest uppercase shadow-sm transition-all duration-300 hover:scale-105 active:scale-95"
         >
           Ověřit
         </button>
       </div>
-      
+
       <!-- Output Message (Initially Hidden) -->
-      <div id="game-success" class="hidden mt-6 text-center animate-fade-in-up">
-        <div class="morse-line text-wedding-medium/20 mx-auto h-[2px] w-24 mb-4"></div>
-        <p class="text-wedding-dark text-sm font-bold mb-1">🎉 Kód je správný! Vítej v mývalím doupěti.</p>
-        <p class="text-wedding-medium text-[10px] font-medium italic mb-4">
+      <div id="game-success" class="animate-fade-in-up mt-6 hidden text-center">
+        <div
+          class="morse-line text-wedding-medium/20 mx-auto mb-4 h-[2px] w-24"
+        >
+        </div>
+        <p class="text-wedding-dark mb-1 text-sm font-bold">
+          🎉 Kód je správný! Vítej v mývalím doupěti.
+        </p>
+        <p class="text-wedding-medium mb-4 text-[10px] font-medium italic">
           Tady je tvůj tajný mývalí maskot:
         </p>
         <!-- Cute Text Art Raccoons -->
-        <pre class="text-wedding-dark text-[10px] leading-tight font-mono inline-block text-left p-3.5 bg-wedding-dark/5 border border-wedding-medium/15 rounded-sm select-all">
+        <pre
+          class="text-wedding-dark bg-wedding-dark/5 border-wedding-medium/15 inline-block rounded-sm border p-3.5 text-left font-mono text-[10px] leading-tight select-all">
        ( -\_- )     ( -\_- )
        /     \\=====/     \\
       |  (o)  | ❤  |  (o)  |
@@ -106,17 +119,22 @@ const { morseMessage } = wedding.data;
         `---'         `---'
         </pre>
       </div>
-      
-      <p id="game-error" class="hidden mt-3 text-xs text-red-600 font-bold tracking-widest uppercase animate-pulse">
+
+      <p
+        id="game-error"
+        class="mt-3 hidden animate-pulse text-xs font-bold tracking-widest text-red-600 uppercase"
+      >
         Kód nesouhlasí, zkus to znovu!
       </p>
     </div>
 
     <!-- Dark Mode Easter Egg Toggle -->
-    <div class="mt-20 flex justify-center opacity-30 hover:opacity-100 transition-opacity duration-500">
+    <div
+      class="mt-20 flex justify-center opacity-30 transition-opacity duration-500 hover:opacity-100"
+    >
       <button
         id="theme-toggle"
-        class="flex items-center gap-2 text-xs font-bold tracking-widest uppercase cursor-pointer"
+        class="flex cursor-pointer items-center gap-2 text-xs font-bold tracking-widest uppercase"
         aria-label="Přepnout tmavý režim"
       >
         <span id="theme-toggle-icon" class="text-lg">🌙</span>
@@ -135,7 +153,7 @@ const { morseMessage } = wedding.data;
 
   gameBtn?.addEventListener("click", () => {
     if (!gameInput || !gameSuccess || !gameError || !gameControls) return;
-    
+
     // Normalize input (ignore case, spaces, diacritics)
     const answer = gameInput.value
       .trim()
@@ -148,7 +166,7 @@ const { morseMessage } = wedding.data;
       gameError.classList.add("hidden");
       gameControls.classList.add("hidden");
       gameSuccess.classList.remove("hidden");
-      
+
       // Save puzzle state in localStorage so it stays solved on reload!
       localStorage.setItem("myvalove_puzzle_solved", "true");
     } else {

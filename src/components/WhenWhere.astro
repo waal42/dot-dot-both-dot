@@ -7,10 +7,22 @@ if (!wedding) {
   throw new Error("Wedding content 'info' not found");
 }
 const { whenWhere } = wedding.data;
-const { venueName, address, coords, googleMapsUrl, description, transportOptions, calendar } = whenWhere;
+const {
+  venueName,
+  address,
+  coords,
+  googleMapsUrl,
+  description,
+  transportOptions,
+  calendar,
+} = whenWhere;
 
 // Generate .ics standard iCalendar files & Google Calendar links dynamically
-const generateIcsDataUri = (eventConfig: { uid: string; start: string; end: string }) => {
+const generateIcsDataUri = (eventConfig: {
+  uid: string;
+  start: string;
+  end: string;
+}) => {
   const icsLines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -24,7 +36,7 @@ const generateIcsDataUri = (eventConfig: { uid: string; start: string; end: stri
     `DESCRIPTION:${calendar.description}`,
     `LOCATION:${calendar.location}`,
     "END:VEVENT",
-    "END:VCALENDAR"
+    "END:VCALENDAR",
   ];
   return `data:text/calendar;charset=utf8,${encodeURIComponent(icsLines.join("\r\n"))}`;
 };
@@ -49,78 +61,106 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
 
 <section id="kdy-a-kde" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
   <h2
-    class="text-wedding-dark mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
+    class="text-wedding-dark animate-fade-in-up mb-20 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
   >
     <span
-      class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-      data-decoded="K"
-      >−·−</span
+      class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+      data-decoded="K">−·−</span
     >
     {whenWhere.title}
     <span
-      class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-      data-decoded="E"
-      >·</span
+      class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+      data-decoded="E">·</span
     >
   </h2>
 
-  <div class="grid items-stretch gap-12 lg:grid-cols-5 animate-fade-in-up delay-100">
+  <div
+    class="animate-fade-in-up grid items-stretch gap-12 delay-100 lg:grid-cols-5"
+  >
     <!-- Venue Info, Calendar & Transport Info (Side Column) -->
     <div class="flex flex-col justify-between space-y-10 lg:col-span-2">
-      
       <!-- WHEN SECTION (Kdy se potkáme) -->
-      <div class="text-center lg:text-left space-y-4">
-        <p class="text-wedding-medium text-xs font-bold tracking-[0.4em] uppercase">
+      <div class="space-y-4 text-center lg:text-left">
+        <p
+          class="text-wedding-medium text-xs font-bold tracking-[0.4em] uppercase"
+        >
           Kdy se potkáme?
         </p>
-        <div class="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start">
+        <div
+          class="flex flex-col items-center justify-center gap-6 sm:flex-row lg:justify-start"
+        >
           <!-- Calendar Card Graphic -->
-          <div class="bg-wedding-dark text-wedding-light p-4 shadow-md rounded-sm w-28 text-center flex flex-col justify-center border border-wedding-medium/20 hover-card-premium shrink-0 select-none">
-            <span class="text-xs uppercase tracking-widest opacity-80 font-bold">Srpen</span>
-            <span class="text-4xl font-extrabold my-1 leading-none">15</span>
-            <span class="text-[10px] uppercase tracking-wider font-semibold opacity-75">Sobota</span>
+          <div
+            class="bg-wedding-dark text-wedding-light border-wedding-medium/20 hover-card-premium flex w-28 shrink-0 flex-col justify-center rounded-sm border p-4 text-center shadow-md select-none"
+          >
+            <span class="text-xs font-bold tracking-widest uppercase opacity-80"
+              >Srpen</span
+            >
+            <span class="my-1 text-4xl leading-none font-extrabold">15</span>
+            <span
+              class="text-[10px] font-semibold tracking-wider uppercase opacity-75"
+              >Sobota</span
+            >
           </div>
-          
-          <div class="text-center lg:text-left space-y-4">
-            <p class="text-wedding-dark text-2xl font-bold tracking-tight">Sobota, 15. srpna 2026</p>
-            
+
+          <div class="space-y-4 text-center lg:text-left">
+            <p class="text-wedding-dark text-2xl font-bold tracking-tight">
+              Sobota, 15. srpna 2026
+            </p>
+
             <div class="space-y-4 pt-1 text-center lg:text-left">
               <div class="space-y-1">
-                <p class="text-wedding-dark text-xs font-bold uppercase tracking-wider opacity-85">Pro rodinu (oběd od 13:00)</p>
-                <div class="flex items-center justify-center lg:justify-start gap-3">
-                  <a 
-                    href={familyGoogleUrl} 
-                    target="_blank" 
-                    class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+                <p
+                  class="text-wedding-dark text-xs font-bold tracking-wider uppercase opacity-85"
+                >
+                  Pro rodinu (oběd od 13:00)
+                </p>
+                <div
+                  class="flex items-center justify-center gap-3 lg:justify-start"
+                >
+                  <a
+                    href={familyGoogleUrl}
+                    target="_blank"
+                    class="text-wedding-dark border-wedding-dark/30 hover:border-wedding-dark cursor-pointer border-b pb-0.5 text-[10px] font-bold tracking-widest uppercase transition-colors select-none"
                   >
                     + Google Kalendář
                   </a>
-                  <span class="text-wedding-medium/40 text-xs select-none">•</span>
-                  <a 
-                    href={familyIcsDataUri} 
-                    download="svatba-rodina.ics" 
-                    class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+                  <span class="text-wedding-medium/40 text-xs select-none"
+                    >•</span
+                  >
+                  <a
+                    href={familyIcsDataUri}
+                    download="svatba-rodina.ics"
+                    class="text-wedding-dark border-wedding-dark/30 hover:border-wedding-dark cursor-pointer border-b pb-0.5 text-[10px] font-bold tracking-widest uppercase transition-colors select-none"
                   >
                     + Pozvánka (.ics)
                   </a>
                 </div>
               </div>
-              
+
               <div class="space-y-1 pt-1">
-                <p class="text-wedding-dark text-xs font-bold uppercase tracking-wider opacity-85">Pro ostatní hosty (od 14:30)</p>
-                <div class="flex items-center justify-center lg:justify-start gap-3">
-                  <a 
-                    href={guestGoogleUrl} 
-                    target="_blank" 
-                    class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+                <p
+                  class="text-wedding-dark text-xs font-bold tracking-wider uppercase opacity-85"
+                >
+                  Pro ostatní hosty (od 14:30)
+                </p>
+                <div
+                  class="flex items-center justify-center gap-3 lg:justify-start"
+                >
+                  <a
+                    href={guestGoogleUrl}
+                    target="_blank"
+                    class="text-wedding-dark border-wedding-dark/30 hover:border-wedding-dark cursor-pointer border-b pb-0.5 text-[10px] font-bold tracking-widest uppercase transition-colors select-none"
                   >
                     + Google Kalendář
                   </a>
-                  <span class="text-wedding-medium/40 text-xs select-none">•</span>
-                  <a 
-                    href={guestIcsDataUri} 
-                    download="svatba-hoste.ics" 
-                    class="text-[10px] font-bold tracking-widest uppercase text-wedding-dark border-b border-wedding-dark/30 hover:border-wedding-dark pb-0.5 transition-colors cursor-pointer select-none"
+                  <span class="text-wedding-medium/40 text-xs select-none"
+                    >•</span
+                  >
+                  <a
+                    href={guestIcsDataUri}
+                    download="svatba-hoste.ics"
+                    class="text-wedding-dark border-wedding-dark/30 hover:border-wedding-dark cursor-pointer border-b pb-0.5 text-[10px] font-bold tracking-widest uppercase transition-colors select-none"
                   >
                     + Pozvánka (.ics)
                   </a>
@@ -132,17 +172,22 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
       </div>
 
       <!-- Divider line -->
-      <div class="morse-line text-wedding-medium/20 mx-auto h-[2px] w-full max-w-md lg:mx-0"></div>
+      <div
+        class="morse-line text-wedding-medium/20 mx-auto h-[2px] w-full max-w-md lg:mx-0"
+      >
+      </div>
 
       <!-- WHERE SECTION (Kde) -->
-      <div class="text-center lg:text-left space-y-6">
+      <div class="space-y-6 text-center lg:text-left">
         <div>
           <p
             class="text-wedding-medium mb-3 text-xs font-bold tracking-[0.4em] uppercase"
           >
             Místo konání
           </p>
-          <h3 class="mb-3 text-4xl font-bold tracking-tight md:text-5xl text-wedding-dark leading-tight">
+          <h3
+            class="text-wedding-dark mb-3 text-4xl leading-tight font-bold tracking-tight md:text-5xl"
+          >
             {venueName}
           </h3>
           <p class="text-wedding-medium text-lg font-medium italic">
@@ -151,16 +196,16 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
         </div>
 
         <p
-          class="text-wedding-dark mx-auto text-base leading-relaxed lg:mx-0 opacity-90 font-medium italic text-justify lg:text-left"
+          class="text-wedding-dark mx-auto text-justify text-base leading-relaxed font-medium italic opacity-90 lg:mx-0 lg:text-left"
         >
           {description}
         </p>
-        
-        <div class="pt-2 flex justify-center lg:justify-start">
+
+        <div class="flex justify-center pt-2 lg:justify-start">
           <a
             href={googleMapsUrl}
             target="_blank"
-            class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex justify-center items-center gap-3 bg-transparent px-8 py-3.5 text-xs font-bold tracking-widest uppercase transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm select-none cursor-pointer"
+            class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex cursor-pointer items-center justify-center gap-3 bg-transparent px-8 py-3.5 text-xs font-bold tracking-widest uppercase shadow-sm transition-all duration-300 select-none hover:scale-105 active:scale-95"
           >
             Navigovat
           </a>
@@ -169,17 +214,21 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
 
       <!-- Transportation Selector -->
       <div class="space-y-6 pt-6">
-        <p class="text-wedding-medium text-center lg:text-left text-xs font-bold tracking-[0.4em] uppercase">
+        <p
+          class="text-wedding-medium text-center text-xs font-bold tracking-[0.4em] uppercase lg:text-left"
+        >
           Jak se k nám dostanete?
         </p>
-        
+
         <!-- Tabs Grid -->
-        <div class="bg-wedding-light border-wedding-medium/20 flex gap-1 border p-1 shadow-sm rounded-sm">
+        <div
+          class="bg-wedding-light border-wedding-medium/20 flex gap-1 rounded-sm border p-1 shadow-sm"
+        >
           {
             transportOptions.map((opt, idx) => (
               <button
                 data-tab={opt.id}
-                class={`transport-tab flex-1 px-3 py-3 text-[10px] sm:text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer text-center rounded-sm select-none ${idx === 0 ? "bg-wedding-dark text-wedding-light" : "text-wedding-dark/60 hover:bg-wedding-medium/10"}`}
+                class={`transport-tab flex-1 cursor-pointer rounded-sm px-3 py-3 text-center text-[10px] font-bold tracking-wider uppercase transition-all duration-300 select-none sm:text-xs ${idx === 0 ? "bg-wedding-dark text-wedding-light" : "text-wedding-dark/60 hover:bg-wedding-medium/10"}`}
               >
                 {opt.label}
               </button>
@@ -193,14 +242,14 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
             transportOptions.map((opt, idx) => (
               <div
                 id={`panel-${opt.id}`}
-                class={`transport-panel bg-wedding-light/40 border border-wedding-medium/20 p-6 shadow-sm rounded-sm transition-all duration-500 ${idx === 0 ? "translate-y-0 opacity-100" : "pointer-events-none hidden translate-y-4 opacity-0"}`}
+                class={`transport-panel bg-wedding-light/40 border-wedding-medium/20 rounded-sm border p-6 shadow-sm transition-all duration-500 ${idx === 0 ? "translate-y-0 opacity-100" : "pointer-events-none hidden translate-y-4 opacity-0"}`}
               >
                 <p class="text-wedding-medium mb-2 text-[10px] font-bold tracking-[0.3em] uppercase">
                   <span class="morse-decoder" data-decoded={opt.morseText}>
                     {opt.morse}
                   </span>
                 </p>
-                <h4 class="text-wedding-dark mb-2 text-lg font-bold leading-tight">
+                <h4 class="text-wedding-dark mb-2 text-lg leading-tight font-bold">
                   {opt.title}
                 </h4>
                 <p class="text-wedding-dark text-sm leading-relaxed font-medium italic opacity-95">
@@ -215,7 +264,7 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
 
     <!-- Clean Map Container (No clutter overlays, full visibility!) -->
     <div
-      class="morse-border text-wedding-medium/30 bg-wedding-light relative h-[450px] lg:h-auto overflow-hidden shadow-sm lg:col-span-3 min-h-[450px] lg:min-h-[550px]"
+      class="morse-border text-wedding-medium/30 bg-wedding-light relative h-[450px] min-h-[450px] overflow-hidden shadow-sm lg:col-span-3 lg:h-auto lg:min-h-[550px]"
     >
       <!-- Map Element -->
       <div
@@ -247,7 +296,13 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
   src="https://unpkg.com/leaflet-gesture-handling"
   crossorigin=""></script>
 
-<script is:inline define:vars={{ venue: { name: venueName, address, coords, googleMapsUrl }, transportOptions }}>
+<script
+  is:inline
+  define:vars={{
+    venue: { name: venueName, address, coords, googleMapsUrl },
+    transportOptions,
+  }}
+>
   document.addEventListener("DOMContentLoaded", () => {
     const map = L.map("map", {
       center: venue.coords,
@@ -259,9 +314,9 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
         text: {
           touch: "Pro posun mapy použijte dva prsty",
           scroll: "Pro přiblížení mapy použijte Ctrl + posun kolečka",
-          scrollMac: "Pro přiblížení mapy použijte ⌘ + posun kolečka"
-        }
-      }
+          scrollMac: "Pro přiblížení mapy použijte ⌘ + posun kolečka",
+        },
+      },
     });
 
     const tileLayer = L.tileLayer(
@@ -278,10 +333,13 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
       tileLayer.setUrl(
         isDark
           ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
       );
     });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     const icons = {
       ring: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 6V2"/><path d="m10 2 2 2 2-2"/></svg>`,
@@ -329,7 +387,12 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
         tab.classList.remove("text-wedding-dark/60");
 
         panels.forEach((p) => {
-          p.classList.add("hidden", "opacity-0", "translate-y-4", "pointer-events-none");
+          p.classList.add(
+            "hidden",
+            "opacity-0",
+            "translate-y-4",
+            "pointer-events-none",
+          );
           p.classList.remove("opacity-100", "translate-y-0");
         });
 

@@ -16,8 +16,6 @@ import { Image } from "astro:assets";
 // Import Content Collection
 import { getEntry } from "astro:content";
 
-
-
 const wedding = await getEntry("wedding", "info");
 if (!wedding) {
   throw new Error("Wedding content 'info' not found");
@@ -32,19 +30,23 @@ const { metaTitle, hero } = wedding.data;
     <header
       class="flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-6 py-20 text-center"
     >
-      <Image src={hero.logo.src} alt={hero.logo.alt} class="mb-20 dark:invert transition-all duration-500" />
+      <Image
+        src={hero.logo.src}
+        alt={hero.logo.alt}
+        class="mb-20 transition-all duration-500 dark:invert"
+      />
       <h1
-        class="text-wedding-dark mb-8 text-6xl font-bold tracking-tight md:text-8xl animate-fade-in-up"
+        class="text-wedding-dark animate-fade-in-up mb-8 text-6xl font-bold tracking-tight md:text-8xl"
       >
         {hero.title}
       </h1>
       <p
-        class="text-wedding-dark mb-8 text-4xl font-bold tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
+        class="text-wedding-dark animate-fade-in-up mb-8 text-4xl font-bold tracking-tight uppercase opacity-80 delay-100 md:text-2xl"
       >
         {hero.date}
       </p>
       <p
-        class="text-wedding-dark mb-16 text-xl font-medium tracking-tight uppercase opacity-80 md:text-2xl animate-fade-in-up delay-100"
+        class="text-wedding-dark animate-fade-in-up mb-16 text-xl font-medium tracking-tight uppercase opacity-80 delay-100 md:text-2xl"
       >
         <span class="morse-decoder" data-decoded={hero.morseCodeText}>
           {hero.morseCode}
@@ -52,7 +54,7 @@ const { metaTitle, hero } = wedding.data;
       </p>
       <a
         href="#rsvp"
-        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase transition-all duration-300 animate-fade-in-up delay-200 hover:scale-105 active:scale-95 shadow-sm"
+        class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light animate-fade-in-up mt-8 inline-flex items-center gap-3 bg-transparent px-12 py-5 text-lg font-bold tracking-widest uppercase shadow-sm transition-all delay-200 duration-300 hover:scale-105 active:scale-95"
       >
         {hero.buttonText}
       </a>

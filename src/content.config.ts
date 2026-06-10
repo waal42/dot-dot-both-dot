@@ -3,7 +3,10 @@ import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 const wedding = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.{yaml,yml}", base: "./src/content/wedding" }),
+  loader: glob({
+    pattern: "**/[^_]*.{yaml,yml}",
+    base: "./src/content/wedding",
+  }),
   schema: ({ image }) =>
     z.object({
       metaTitle: z.string(),
@@ -39,7 +42,7 @@ const wedding = defineCollection({
               detail: z.string(),
               size: z.enum(["small", "large", "vertical", "horizontal"]),
             }),
-          ])
+          ]),
         ),
       }),
       whenWhere: z.object({
@@ -79,7 +82,7 @@ const wedding = defineCollection({
               title: z.string(),
               icon: z.enum(["parking", "train", "bus"]),
             }),
-          })
+          }),
         ),
       }),
       schedule: z.object({
@@ -89,7 +92,7 @@ const wedding = defineCollection({
             time: z.string(),
             title: z.string(),
             description: z.string(),
-          })
+          }),
         ),
       }),
       gifts: z.object({
@@ -137,12 +140,12 @@ const wedding = defineCollection({
                       value: z.string(),
                       label: z.string(),
                       checked: z.boolean(),
-                    })
+                    }),
                   )
                   .optional(),
-              })
+              }),
             ),
-          })
+          }),
         ),
       }),
       faq: z.object({
@@ -157,7 +160,7 @@ const wedding = defineCollection({
                 action: z.enum(["song-suggestion"]),
               })
               .optional(),
-          })
+          }),
         ),
       }),
       morseMessage: z.object({

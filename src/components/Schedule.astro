@@ -12,23 +12,21 @@ const { schedule } = wedding.data;
 <section id="harmonogram" class="mx-auto max-w-6xl scroll-mt-24 px-6 py-24">
   <div class="text-center">
     <h2
-      class="text-wedding-dark mb-24 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl animate-fade-in-up"
+      class="text-wedding-dark animate-fade-in-up mb-24 flex items-center justify-center gap-4 text-center text-4xl font-bold md:text-5xl"
     >
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="H"
-        >····</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="H">····</span
       >
       {schedule.title}
       <span
-        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 md:text-3xl hover:opacity-100"
-        data-decoded="M"
-        >−−</span
+        class="morse-decoder text-wedding-medium text-2xl tracking-tighter opacity-30 hover:opacity-100 md:text-3xl"
+        data-decoded="M">−−</span
       >
     </h2>
   </div>
 
-  <div class="relative mx-auto max-w-2xl animate-fade-in-up delay-100">
+  <div class="animate-fade-in-up relative mx-auto max-w-2xl delay-100">
     <!-- Vertical Line -->
     <div
       class="morse-line-vertical text-wedding-medium/30 absolute top-0 bottom-0 left-4 w-[2px] md:left-1/2 md:-translate-x-1/2"
@@ -39,10 +37,10 @@ const { schedule } = wedding.data;
       {
         schedule.items.map((item, index) => (
           <div
-            class={`relative flex flex-col items-start md:flex-row group ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}
+            class={`group relative flex flex-col items-start md:flex-row ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}
           >
             {/* Timeline Marker (Alternating Dot and Dash) */}
-            <div class="bg-wedding-light border-wedding-medium/50 absolute top-0 left-4 z-10 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border md:left-1/2 transition-all duration-300 group-hover:scale-110 group-hover:border-wedding-dark">
+            <div class="bg-wedding-light border-wedding-medium/50 group-hover:border-wedding-dark absolute top-0 left-4 z-10 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border transition-all duration-300 group-hover:scale-110 md:left-1/2">
               {index % 2 === 0 ? (
                 <div class="bg-wedding-dark h-1.5 w-1.5 rounded-full transition-transform duration-300 group-hover:scale-125" />
               ) : (
@@ -60,7 +58,7 @@ const { schedule } = wedding.data;
               <h3 class="text-wedding-dark mb-1 text-2xl font-bold">
                 {item.title}
               </h3>
-              <p class="text-wedding-dark text-base font-medium italic opacity-85 leading-relaxed">
+              <p class="text-wedding-dark text-base leading-relaxed font-medium italic opacity-85">
                 {item.description}
               </p>
             </div>
