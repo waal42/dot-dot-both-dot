@@ -282,8 +282,9 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
           escapeHtml(String(formData.get("how_many_children") || "").trim()),
         );
 
-        const familySide = formData.get("rodina") || formData.get("family") || formData.get("rodina?") || "";
-        postData.append("rodina?", escapeHtml(String(familySide).trim()));
+        const familySide =
+          formData.get("is_lunch_guest") === "on" ? "ano" : "ne";
+        postData.append("rodina?", familySide);
 
         const comingToLunchRaw = formData.get("coming_to_lunch");
         let comingToLunch = "";
