@@ -25,7 +25,7 @@ def parse_children_count(text, is_coming_with_children):
     if not is_coming_with_children or str(is_coming_with_children).lower().strip() != 'ano':
         return 0
     if pd.isna(text) or not str(text).strip():
-        return 0  # Do not count empty text details to avoid double-counting across parents
+        return 0  # Do not count empty text details to avoid double-counting across partners
     
     text_lower = str(text).lower().strip()
     
@@ -85,6 +85,7 @@ def main():
     col_family = find_col(df_hoste, ['rodina?', 'family', 'rodina']) or df_hoste.columns[5]
     col_lunch = find_col(df_hoste, ['oběd?', 'lunch', 'obed']) or df_hoste.columns[6]
     col_diet = find_col(df_hoste, ['dieta', 'diet', 'alergie', 'omezení']) or df_hoste.columns[7]
+    col_date = find_col(df_hoste, ['datum', 'date', 'timestamp', 'vyplně']) or df_hoste.columns[8]
 
     # Fill NaNs with empty string
     df_hoste = df_hoste.fillna("")
@@ -109,6 +110,7 @@ def main():
             if cnt > 0:  # Only add to detailed UI list if there is a count > 0
                 children_list.append({
                     "parent": row[col_name],
+                    "email": row[col_email] if col_email else "Neuvedeno",
                     "count": cnt,
                     "detail": kids_detail if kids_detail else "Bez bližšího popisu"
                 })
@@ -132,6 +134,16 @@ def main():
                 "email": row[col_email] if col_email else "Neuvedeno",
                 "diet": str(diet_val).strip()
             })
+
+    # Get recent RSVPs (latest 5 answers based on file ordering)
+    activity_df = df_hoste[df_hoste[col_name].str.strip() != ""]
+    recent_rsvps = []
+    for _, row in activity_df.tail(5).iloc[::-1].iterrows():
+        recent_rsvps.append({
+            "name": row[col_name],
+            "date": row[col_date] if col_date in row else "",
+            "rsvp": row[col_rsvp]
+        })
 
     # Prepare songs list
     songs_col = find_col(df_pisnicky, ['song', 'písnička', 'pisnicka', 'název']) or df_pisnicky.columns[0]
@@ -228,6 +240,12 @@ def main():
         <button onclick="switchTab('tab-guests')" id="btn-tab-guests" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
             👥 Hosté ({total_confirmed_adults})
         </button>
+        <button onclick="switchTab('tab-kids')" id="btn-tab-kids" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
+            🧸 Děti ({total_children})
+        </button>
+        <button onclick="switchTab('tab-diets')" id="btn-tab-diets" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
+            🍽️ Diety ({len(diets_list)})
+        </button>
         <button onclick="switchTab('tab-songs')" id="btn-tab-songs" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
             🎵 Písničky ({len(songs_list)})
         </button>
@@ -262,7 +280,7 @@ def main():
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Left Column (Families & Diets) -->
+                <!-- Left Column (Categories & Recent Activity) -->
                 <div class="lg:col-span-2 space-y-8">
                     <!-- Family Breakdown -->
                     <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
@@ -289,45 +307,32 @@ def main():
                         </div>
                     </div>
 
-                    <!-- Diets Mapped to Names -->
+                    <!-- Recent Activity -->
                     <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
-                        <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">🍽️ Alergie a speciální stravování</h2>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm border-collapse">
-                                <thead>
-                                    <tr class="border-b border-[#2d3a2d]/10 text-[#7a7084] font-bold text-xs uppercase">
-                                        <th class="pb-3 pr-4">Host</th>
-                                        <th class="pb-3 pr-4">E-mail</th>
-                                        <th class="pb-3">Omezení / Alergie</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-[#2d3a2d]/5">
-                                    {"".join([f'''
-                                    <tr>
-                                        <td class="py-3 font-semibold text-[#2d3a2d] pr-4">{item['name']}</td>
-                                        <td class="py-3 text-slate-500 pr-4 text-xs font-mono">{item['email']}</td>
-                                        <td class="py-3"><span class="inline-block bg-rose-50 text-rose-800 font-bold text-xs px-2.5 py-1 rounded-sm border border-rose-150">{item['diet']}</span></td>
-                                    </tr>
-                                    ''' for item in diets_list]) if diets_list else '<tr><td colspan="3" class="py-6 text-[#7a7084]/60 text-center font-medium">Žádné speciální požadavky na dietu.</td></tr>'}
-                                </tbody>
-                            </table>
+                        <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">⏱️ Nejnovější odpovědi</h2>
+                        <div class="divide-y divide-[#2d3a2d]/5">
+                            {"".join([f'''
+                            <div class="py-3 flex justify-between items-center text-sm">
+                                <div>
+                                    <span class="font-bold text-[#2d3a2d]">{item['name']}</span>
+                                    <span class="text-slate-400 text-xs block font-semibold">{item['date']}</span>
+                                </div>
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold { 'bg-emerald-50 text-emerald-800 border border-emerald-200' if item['rsvp'].lower() == 'ano' else 'bg-rose-50 text-rose-800 border border-rose-200' }">
+                                    { 'Přijde' if item['rsvp'].lower() == 'ano' else 'Nepřijde' }
+                                </span>
+                            </div>
+                            ''' for item in recent_rsvps]) if recent_rsvps else '<p class="text-[#7a7084]/60 text-sm py-4">Zatím žádné odpovědi.</p>'}
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column (Kids Details) -->
+                <!-- Right Column (Quick Contacts & Overview Guide) -->
                 <div class="space-y-8">
                     <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
-                        <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">🧸 Poznámky k dětem</h2>
-                        <div class="space-y-4 max-h-[500px] overflow-y-auto pr-1">
-                            {"".join([f'''
-                            <div class="border-l-4 border-[#7a7084] pl-4 py-2 bg-[#f1f3eb]/40 rounded-r-sm pr-2 border border-l-[#7a7084] border-[#2d3a2d]/5">
-                                <span class="font-bold text-[#2d3a2d] block text-sm">{item['parent']}</span>
-                                <span class="text-xs font-bold text-[#7a7084] block mb-1">Počet dětí: {item['count']}</span>
-                                <p class="text-xs text-[#2d3a2d] leading-relaxed font-medium italic">"{item['detail']}"</p>
-                            </div>
-                            ''' for item in children_list]) if children_list else '<p class="text-[#7a7084]/60 text-sm text-center py-6 font-medium">Žádné děti nejsou nahlášeny.</p>'}
-                        </div>
+                        <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-4">💡 Rychlý tip</h2>
+                        <p class="text-xs text-[#7a7084] leading-relaxed font-semibold">
+                            Chcete vyhledat konkrétní diety, bezlepkové stravování nebo vegetariány? Přejděte na novou záložku <strong>Diety</strong> nebo využijte vyhledávač v záložce <strong>Hosté</strong>.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -358,12 +363,14 @@ def main():
                         <option value="NE">Na oběd: Ne</option>
                     </select>
                     <select id="filter-kids" onchange="filterGuestsTable()" class="px-3 py-2 rounded-sm border border-[#2d3a2d]/10 text-xs font-bold bg-white text-[#2d3a2d] focus:outline-none focus:ring-1 focus:ring-[#2d3a2d]">
-                        <option value="ALL">Všechny děti</option>
-                        <option value="ANO">S dětmi</option>
+                        <option value="ALL">Děti: Vše</option>
+                        <option value="ANO">Pouze S dětmi</option>
+                        <option value="NE">Pouze Bez dětí</option>
                     </select>
                     <select id="filter-diet" onchange="filterGuestsTable()" class="px-3 py-2 rounded-sm border border-[#2d3a2d]/10 text-xs font-bold bg-white text-[#2d3a2d] focus:outline-none focus:ring-1 focus:ring-[#2d3a2d]">
-                        <option value="ALL">Všechny diety</option>
-                        <option value="DIET">Pouze s omezením</option>
+                        <option value="ALL">Diety: Vše</option>
+                        <option value="DIET">Pouze S dietou</option>
+                        <option value="NODIET">Pouze Bez diety</option>
                     </select>
                 </div>
             </div>
@@ -407,11 +414,11 @@ def main():
                                 <td class="p-4 text-center">
                                     { f'<span class="inline-block bg-indigo-50 border border-indigo-150 text-indigo-850 px-2 py-0.5 rounded-sm text-xs font-bold">Oběd</span>' if g['lunch'].lower() == 'ano' else '<span class="text-slate-300 text-xs">-</span>' }
                                 </td>
-                                <td class="p-4">
-                                    { f'<span class="text-xs text-[#7a7084] font-semibold block">{g["kids_detail"]}</span>' if g['kids'].lower() == 'ano' else '<span class="text-slate-300 text-xs">-</span>' }
+                                <td class="p-4 text-slate-600 text-xs">
+                                    { g["kids_detail"] if g['kids'].lower() == 'ano' else '<span class="text-slate-300">-</span>' }
                                 </td>
-                                <td class="p-4">
-                                    { f'<span class="text-xs bg-rose-50 text-rose-800 border border-rose-150 px-2 py-0.5 rounded-sm font-semibold">{g["diet"]}</span>' if g['diet'] else '<span class="text-slate-300 text-xs">-</span>' }
+                                <td class="p-4 text-[#2d3a2d]">
+                                    { g["diet"] if g['diet'] else '<span class="text-slate-300">-</span>' }
                                 </td>
                             </tr>
                             ''' for g in guests_list])}
@@ -421,7 +428,57 @@ def main():
             </div>
         </section>
 
-        <!-- 3. SONGS TAB -->
+        <!-- 3. CHILDREN TAB -->
+        <section id="tab-kids" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">🧸 Přehled nahlášených dětí ({total_children})</h2>
+                <div class="space-y-4 max-w-3xl">
+                    {"".join([f'''
+                    <div class="p-4 rounded-sm border border-[#2d3a2d]/5 bg-[#f1f3eb]/20 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                        <div>
+                            <span class="font-bold text-[#2d3a2d] block">{item['parent']}</span>
+                            <span class="text-xs text-slate-400 font-semibold block">{item['email']}</span>
+                            <p class="text-xs text-[#2d3a2d] mt-2 italic font-medium">"{item['detail']}"</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-block bg-[#7a7084] text-white px-3 py-1 rounded-sm text-xs font-bold uppercase tracking-wider">
+                                Počet dětí: {item['count']}
+                            </span>
+                        </div>
+                    </div>
+                    ''' for item in children_list]) if children_list else '<p class="text-[#7a7084]/60 text-sm text-center py-12 font-medium">Žádné děti nejsou nahlášeny.</p>'}
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. DIETS TAB -->
+        <section id="tab-diets" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">🍽️ Alergie a speciální stravování</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-[#2d3a2d]/10 text-[#7a7084] font-bold text-xs uppercase">
+                                <th class="pb-3 pr-4">Host</th>
+                                <th class="pb-3 pr-4">E-mail</th>
+                                <th class="pb-3">Omezení / Alergie</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#2d3a2d]/5">
+                            {"".join([f'''
+                            <tr>
+                                <td class="py-4 font-bold text-[#2d3a2d] pr-4">{item['name']}</td>
+                                <td class="py-4 text-slate-500 pr-4 text-xs font-mono">{item['email']}</td>
+                                <td class="py-4 text-slate-800 leading-relaxed font-semibold">{item['diet']}</td>
+                            </tr>
+                            ''' for item in diets_list]) if diets_list else '<tr><td colspan="3" class="py-6 text-[#7a7084]/60 text-center font-medium">Žádné speciální požadavky na stravu.</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SONGS TAB -->
         <section id="tab-songs" class="tab-content space-y-6 hidden">
             <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
                 <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">🎵 Písničky na přání</h2>
@@ -436,7 +493,7 @@ def main():
             </div>
         </section>
 
-        <!-- 4. MESSAGES TAB -->
+        <!-- 6. MESSAGES TAB -->
         <section id="tab-messages" class="tab-content space-y-6 hidden">
             <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
                 <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">✉️ Vzkazy v morseovce</h2>
@@ -514,8 +571,12 @@ def main():
                 const matchRsvp = rsvpFilter === 'ALL' || rsvp === rsvpFilter;
                 const matchFamily = familyFilter === 'ALL' || family === familyFilter;
                 const matchLunch = lunchFilter === 'ALL' || lunch === lunchFilter;
-                const matchKids = kidsFilter === 'ALL' || kids === kidsFilter;
-                const matchDiet = dietFilter === 'ALL' || (dietFilter === 'DIET' && diet === 'yes');
+                
+                // Kids filter (All, Yes, No)
+                const matchKids = kidsFilter === 'ALL' || (kidsFilter === 'ANO' && kids === 'ANO') || (kidsFilter === 'NE' && kids !== 'ANO');
+                
+                // Diet filter (All, Yes, No)
+                const matchDiet = dietFilter === 'ALL' || (dietFilter === 'DIET' && diet === 'yes') || (dietFilter === 'NODIET' && diet !== 'yes');
 
                 if (matchSearch && matchRsvp && matchFamily && matchLunch && matchKids && matchDiet) {{
                     row.classList.remove('hidden');
