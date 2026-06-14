@@ -207,6 +207,25 @@ const { metaDescription } = wedding.data;
       // Keep dynamic elements synced (such as tabs changes or success states)
       const observer = new MutationObserver(initMorseListeners);
       observer.observe(document.body, { childList: true, subtree: true });
+
+      // Global smooth scroll for anchor links, even when clicking the same active hash
+      document.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement;
+        const link = target.closest('a[href^="#"]');
+        if (link && link.id !== "logo-link") {
+          const href = link.getAttribute("href");
+          if (href && href !== "#") {
+            e.preventDefault();
+            const targetId = href.substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: "smooth" });
+              // Update URL hash without page reload
+              history.pushState(null, "", href);
+            }
+          }
+        }
+      });
     </script>
   </body>
 </html>

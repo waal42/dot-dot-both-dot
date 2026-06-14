@@ -327,6 +327,8 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
             </p>
           </div>
         `;
+        // Scroll back to the RSVP section to keep the success message visible
+        document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" });
       }
     } catch (error) {
       statusMsg.textContent = rsvpForm.errorMessage;
