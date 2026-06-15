@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="cs" class="bg-[#f1f3eb] text-[#2d3a2d]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Svatební Administrace</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght=0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+            background-color: #f1f3eb;
+            color: #2d3a2d;
+        }
+        .morse-line-dashboard {
+            background-image: repeating-linear-gradient(
+                to right,
+                currentColor,
+                currentColor 4px,
+                transparent 4px,
+                transparent 8px,
+                currentColor 8px,
+                currentColor 20px,
+                transparent 20px,
+                transparent 24px
+            );
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 max-w-7xl mx-auto min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-[#2d3a2d]/10 pb-6 gap-4">
+        <div>
+            <h1 class="text-3xl font-extrabold text-[#2d3a2d] tracking-wider uppercase flex items-center gap-3">
+                Svatební Dashboard
+            </h1>
+            <div class="morse-line-dashboard h-[2px] w-32 mt-2 text-[#7a7084]"></div>
+        </div>
+        <div class="text-left md:text-right bg-white border border-[#2d3a2d]/10 rounded-sm p-3 text-xs text-[#2d3a2d] font-bold shadow-xs">
+            Poslední synchronizace: {{LAST_SYNC}}
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="flex border-b border-[#2d3a2d]/10 mb-8 overflow-x-auto whitespace-nowrap scrollbar-none gap-2">
+        <button onclick="switchTab('tab-overview')" id="btn-tab-overview" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-[#2d3a2d] text-[#2d3a2d] transition-all cursor-pointer">
+            📊 Přehled
+        </button>
+        <button onclick="switchTab('tab-guests')" id="btn-tab-guests" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
+            👥 Hosté ({{TAB_GUESTS_COUNT}})
+        </button>
+        <button onclick="switchTab('tab-kids')" id="btn-tab-kids" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
+            🧸 Děti ({{TAB_CHILDREN_COUNT}})
+        </button>
+        <button onclick="switchTab('tab-diets')" id="btn-tab-diets" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
+            🍽️ Diety ({{TAB_DIETS_COUNT}})
+        </button>
+        <button onclick="switchTab('tab-songs')" id="btn-tab-songs" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
+            🎵 Písničky ({{TAB_SONGS_COUNT}})
+        </button>
+        <button onclick="switchTab('tab-messages')" id="btn-tab-messages" class="tab-btn py-3 px-6 text-xs font-bold uppercase tracking-widest border-b-2 border-transparent text-[#7a7084] hover:text-[#2d3a2d] transition-all cursor-pointer">
+            ✉️ Vzkazy ({{TAB_MESSAGES_COUNT}})
+        </button>
+    </nav>
+
+    <!-- Content Sections -->
+    <main class="flex-grow">
+
+        <!-- 1. OVERVIEW TAB -->
+        <section id="tab-overview" class="tab-content space-y-8 block">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10 flex flex-col justify-between">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#7a7084]">Potvrzení Dospělí</span>
+                    <span class="text-4xl font-black text-[#2d3a2d] mt-2">{{STATS_ADULTS}}</span>
+                </div>
+                <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10 flex flex-col justify-between">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#7a7084]">Celkem Děti</span>
+                    <span class="text-4xl font-black text-[#7a7084] mt-2">{{STATS_CHILDREN}}</span>
+                    <span class="text-[10px] text-[#7a7084] font-semibold mt-1">Rodina na oběd: {{FAMILY_CHILDREN}} | Kamarádi: {{FRIENDS_CHILDREN}}</span>
+                </div>
+                <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10 flex flex-col justify-between">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#7a7084]">Hosté na Oběd</span>
+                    <span class="text-4xl font-black text-[#2d3a2d] mt-2">{{STATS_LUNCH}}</span>
+                </div>
+                <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10 flex flex-col justify-between">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#7a7084]">Omluvení (RSVP Ne)</span>
+                    <span class="text-4xl font-black text-rose-700 mt-2">{{STATS_DECLINED}}</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column (Categories & Recent Activity) -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Family Breakdown -->
+                    <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                        <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">👨‍👩‍👧‍👦 Kategorie hostů</h2>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between text-xs font-bold uppercase mb-1">
+                                    <span class="text-[#7a7084]">Rodina (Zvaní k obědu)</span>
+                                    <span class="text-[#2d3a2d]">{{FAMILY_COUNT}} hostů</span>
+                                </div>
+                                <div class="w-full bg-[#f1f3eb] rounded-sm h-3">
+                                    <div class="bg-[#2d3a2d] h-3 rounded-sm" style="width: {{FAMILY_PERCENT}}%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-bold uppercase mb-1">
+                                    <span class="text-[#7a7084]">Kamarádi (Zvaní na večerní oslavu)</span>
+                                    <span class="text-[#2d3a2d]">{{FRIENDS_COUNT}} hostů</span>
+                                </div>
+                                <div class="w-full bg-[#f1f3eb] rounded-sm h-3">
+                                    <div class="bg-[#7a7084] h-3 rounded-sm" style="width: {{FRIENDS_PERCENT}}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                        <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">⏱️ Nejnovější odpovědi</h2>
+                        <div class="divide-y divide-[#2d3a2d]/5">
+                            {{RECENT_RSVPS_ROWS}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column (Quick Contacts & Overview Guide) -->
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                        <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-4">💡 Rychlý tip</h2>
+                        <p class="text-xs text-[#7a7084] leading-relaxed font-semibold">
+                            Chcete vyhledat konkrétní diety, bezlepkové stravování nebo vegetariány? Přejděte na novou záložku <strong>Diety</strong> nebo využijte vyhledávač v záložce <strong>Hosté</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. GUESTS TAB -->
+        <section id="tab-guests" class="tab-content space-y-6 hidden">
+            <!-- Search & Filters Bar -->
+            <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10 flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+                <div class="flex-grow max-w-md">
+                    <input type="text" id="guest-search" oninput="filterGuestsTable()" placeholder="Vyhledat hosta podle jména, e-mailu..." 
+                           class="w-full px-4 py-2.5 rounded-sm border border-[#2d3a2d]/10 text-sm focus:outline-none focus:ring-1 focus:ring-[#2d3a2d] font-medium bg-[#f1f3eb]/20">
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <select id="filter-rsvp" onchange="filterGuestsTable()" class="px-3 py-2 rounded-sm border border-[#2d3a2d]/10 text-xs font-bold bg-white text-[#2d3a2d] focus:outline-none focus:ring-1 focus:ring-[#2d3a2d]">
+                        <option value="ALL">Všechny RSVP</option>
+                        <option value="ANO">RSVP: Přijde</option>
+                        <option value="NE">RSVP: Nepřijde</option>
+                    </select>
+                    <select id="filter-family" onchange="filterGuestsTable()" class="px-3 py-2 rounded-sm border border-[#2d3a2d]/10 text-xs font-bold bg-white text-[#2d3a2d] focus:outline-none focus:ring-1 focus:ring-[#2d3a2d]">
+                        <option value="ALL">Všichni hosté</option>
+                        <option value="ANO">Pouze Rodina</option>
+                        <option value="NE">Pouze Kamarádi</option>
+                    </select>
+                    <select id="filter-lunch" onchange="filterGuestsTable()" class="px-3 py-2 rounded-sm border border-[#2d3a2d]/10 text-xs font-bold bg-white text-[#2d3a2d] focus:outline-none focus:ring-1 focus:ring-[#2d3a2d]">
+                        <option value="ALL">Všechny obědy</option>
+                        <option value="ANO">Na oběd: Ano</option>
+                        <option value="NE">Na oběd: Ne</option>
+                    </select>
+                    <select id="filter-kids" onchange="filterGuestsTable()" class="px-3 py-2 rounded-sm border border-[#2d3a2d]/10 text-xs font-bold bg-white text-[#2d3a2d] focus:outline-none focus:ring-1 focus:ring-[#2d3a2d]">
+                        <option value="ALL">Děti: Vše</option>
+                        <option value="ANO">Pouze S dětmi</option>
+                        <option value="NE">Pouze Bez dětí</option>
+                    </select>
+                    <select id="filter-diet" onchange="filterGuestsTable()" class="px-3 py-2 rounded-sm border border-[#2d3a2d]/10 text-xs font-bold bg-white text-[#2d3a2d] focus:outline-none focus:ring-1 focus:ring-[#2d3a2d]">
+                        <option value="ALL">Diety: Vše</option>
+                        <option value="DIET">Pouze S dietou</option>
+                        <option value="NODIET">Pouze Bez diety</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="bg-white rounded-sm shadow-xs border border-[#2d3a2d]/10 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm" id="guests-table-el">
+                        <thead>
+                            <tr class="bg-[#f1f3eb]/45 border-b border-[#2d3a2d]/10 text-[#7a7084] font-bold text-xs uppercase">
+                                <th class="p-4">Jméno</th>
+                                <th class="p-4">E-mail</th>
+                                <th class="p-4 text-center">RSVP</th>
+                                <th class="p-4 text-center">Skupina</th>
+                                <th class="p-4 text-center">Oběd</th>
+                                <th class="p-4">Děti</th>
+                                <th class="p-4">Dieta</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#2d3a2d]/5 font-medium">
+                            {{GUEST_TABLE_ROWS}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. CHILDREN TAB -->
+        <section id="tab-kids" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">🧸 Přehled nahlášených dětí ({{STATS_CHILDREN}})</h2>
+                <div class="space-y-4 max-w-3xl">
+                    {{CHILDREN_LIST_BLOCKS}}
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. DIETS TAB -->
+        <section id="tab-diets" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">🍽️ Alergie a speciální stravování</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-[#2d3a2d]/10 text-[#7a7084] font-bold text-xs uppercase">
+                                <th class="pb-3 pr-4">Host</th>
+                                <th class="pb-3 pr-4">E-mail</th>
+                                <th class="pb-3">Omezení / Alergie</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#2d3a2d]/5">
+                            {{DIETS_TABLE_ROWS}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SONGS TAB -->
+        <section id="tab-songs" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">🎵 Písničky na přání</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {{SONGS_LIST_BLOCKS}}
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. MESSAGES TAB -->
+        <section id="tab-messages" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-sm shadow-xs border border-[#2d3a2d]/10">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-[#2d3a2d] mb-6 flex items-center gap-2">✉️ Vzkazy v morseovce</h2>
+                <div class="space-y-4 max-w-3xl">
+                    {{MESSAGES_LIST_BLOCKS}}
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 pt-6 border-t border-[#2d3a2d]/10 text-center text-[10px] font-bold uppercase tracking-widest text-[#7a7084]">
+        Wedding Admin Dashboard &copy; {{FOOTER_YEAR}}
+    </footer>
+
+    <!-- Interactive Client-Side logic -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all sections
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('block');
+            });
+            // Show target section
+            const target = document.getElementById(tabId);
+            target.classList.remove('hidden');
+            target.classList.add('block');
+
+            // Reset navigation tab indicators
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-[#2d3a2d]', 'text-[#2d3a2d]');
+                btn.classList.add('border-transparent', 'text-[#7a7084]');
+            });
+            
+            // Activate selected tab button indicator
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-[#7a7084]');
+            activeBtn.classList.add('border-[#2d3a2d]', 'text-[#2d3a2d]');
+        }
+
+        function filterGuestsTable() {
+            const searchQuery = document.getElementById('guest-search').value.toLowerCase().trim();
+            const rsvpFilter = document.getElementById('filter-rsvp').value;
+            const familyFilter = document.getElementById('filter-family').value;
+            const lunchFilter = document.getElementById('filter-lunch').value;
+            const kidsFilter = document.getElementById('filter-kids').value;
+            const dietFilter = document.getElementById('filter-diet').value;
+
+            document.querySelectorAll('.guest-row').forEach(row => {
+                const allText = row.getAttribute('data-all-text') || '';
+                const rsvp = row.getAttribute('data-rsvp') || '';
+                const lunch = row.getAttribute('data-lunch') || '';
+                const kids = row.getAttribute('data-kids') || '';
+                const family = row.getAttribute('data-family') || '';
+                const diet = row.getAttribute('data-diet') || '';
+
+                // Search query match
+                const matchSearch = searchQuery === '' || allText.includes(searchQuery);
+
+                // Filters match
+                const matchRsvp = rsvpFilter === 'ALL' || rsvp === rsvpFilter;
+                const matchFamily = familyFilter === 'ALL' || family === familyFilter;
+                const matchLunch = lunchFilter === 'ALL' || lunch === lunchFilter;
+                
+                // Kids filter (All, Yes, No)
+                const matchKids = kidsFilter === 'ALL' || (kidsFilter === 'ANO' && kids === 'ANO') || (kidsFilter === 'NE' && kids !== 'ANO');
+                
+                // Diet filter (All, Yes, No)
+                const matchDiet = dietFilter === 'ALL' || (dietFilter === 'DIET' && diet === 'yes') || (dietFilter === 'NODIET' && diet !== 'yes');
+
+                if (matchSearch && matchRsvp && matchFamily && matchLunch && matchKids && matchDiet) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
