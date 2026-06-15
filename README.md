@@ -19,6 +19,13 @@ npm run dev
 
 Push to `main` and the site deploys automatically via GitHub Actions to the VPS.
 
+### ⚠️ Environment Variables & GitHub Secrets
+
+If you modify `PUBLIC_GOOGLE_SCRIPT_URL` or `DASHBOARD_API_TOKEN` in your `.env` file, you **MUST** update:
+1. **GitHub Secrets:** Go to your GitHub repository -> *Settings* -> *Secrets and variables* -> *Actions* -> *Repository secrets* and update `PUBLIC_GOOGLE_SCRIPT_URL`. The static website compiler inside GitHub Actions embeds this URL at build-time.
+2. **VPS configuration:** Update the `.env` file in the VPS directory.
+3. **Local dev server:** Stop and restart the Astro server (`npm run dev`) to load the new `.env` variables.
+
 ---
 
 ### ❓ Questions?

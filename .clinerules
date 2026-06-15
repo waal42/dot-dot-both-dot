@@ -1,0 +1,18 @@
+# Project Rules and Persistent Agent Memories
+
+## ⚠️ Critical Deployment Checklist
+When modifying any environment variables (`PUBLIC_GOOGLE_SCRIPT_URL`, `DASHBOARD_API_TOKEN`, etc.) in `.env` files:
+1. **GitHub Secrets:** You must remind the user to update the corresponding secrets in the GitHub Repository Settings (**Settings -> Secrets and variables -> Actions -> Repository secrets**). The frontend is built as a static site via GitHub Actions, which embeds `PUBLIC_GOOGLE_SCRIPT_URL` at compile-time. If the secret is not updated, the production site will use the old/broken URL.
+2. **VPS Deployment:** Remind the user to sync the `.env` file to the VPS (directory `/opt/svatba-dashboard/` or equivalent) so the Python script `update_dashboard.py` can load it.
+3. **Local Dev Server:** Remind the user to restart the Astro dev server (`npm run dev`) since it only loads `.env` variables on startup.
+
+## 🛠️ Google Apps Script Configuration
+* **Spustit jako / Execute as:** Must be set to "Já / Me" (e.g. `filipvalasek@gmail.com`).
+* **Kdo má přístup / Who has access:** Must be set to "Kdokoli / Anyone".
+* **Deployment Updates:** Any script changes must be deployed as a "New version" (Nové nasazení or Spravovat nasazení -> Upravit -> Nová verze -> Nasadit) to take effect.
+* **Typo warning:** The URL ID contains case-sensitive characters. For example, `AKfycbxu4pTV0kljCj2IxflZP...` has a capital `I` (Igloo), not a lowercase `l` (lemon) on index 21.
+
+## 🤖 Form Submission Debugging
+* If form submissions silently fail (i.e. UI shows success but spreadsheet is not populated):
+  1. Open Browser DevTools (F12) -> Console. Check for `"Spam submission blocked."` or `"Spam detected."`. This indicates the honeypot field (`website_hp`) was autofilled by the browser.
+  2. Open Browser DevTools (F12) -> Network. Check if the POST request goes to the correct script URL.
