@@ -23,7 +23,7 @@ def esc(val):
     return html.escape(str(val))
 
 # 1. CONFIGURATION
-BASE_URL = "https://script.google.com/macros/s/AKfycbz-gPc1HW6SuyQMTfgBU3WWw-Dg4qSwPqn9Hy5ht0xJ-Zis_H_JnN8bPrQe82bPS4YPlA/exec"
+BASE_URL = os.environ.get("PUBLIC_GOOGLE_SCRIPT_URL", "")
 API_TOKEN = os.environ.get("DASHBOARD_API_TOKEN", "")
 
 URL_HOST_CSV = f"{BASE_URL}?sheet=Hosté&token={API_TOKEN}"
@@ -72,6 +72,12 @@ def parse_children_count(text, is_coming_with_children):
     return 1  # Safe default if text has content but count cannot be parsed
 
 def main():
+    if not BASE_URL:
+        print("Chyba: V konfiguraci (.env) chybí hodnota PUBLIC_GOOGLE_SCRIPT_URL.")
+        return
+    if not API_TOKEN:
+        print("Chyba: V konfiguraci (.env) chybí hodnota DASHBOARD_API_TOKEN.")
+        return
     try:
         # Load data from Google Sheets API / CSV Proxy
         df_hoste = download_csv(URL_HOST_CSV)
