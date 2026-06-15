@@ -120,7 +120,9 @@ def main():
 
     # Calculations for stats
     total_confirmed_adults = len(confirmed)
-    total_de    # Calculate children counts (with family vs friends breakdown)
+    total_declined = len(declined)
+
+    # Calculate children counts (with family vs friends breakdown)
     children_list = []
     total_children = 0
     family_children = 0
