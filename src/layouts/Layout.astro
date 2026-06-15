@@ -2,6 +2,10 @@
 // src/layouts/Layout.astro
 import "../styles/global.css";
 import "photoswipe/style.css";
+import "@fontsource/montserrat/400.css";
+import "@fontsource/montserrat/500.css";
+import "@fontsource/montserrat/700.css";
+import "@fontsource/montserrat/800.css";
 import Footer from "../components/Footer.astro";
 import { getEntry } from "astro:content";
 
@@ -74,12 +78,6 @@ const { metaDescription } = wedding.data;
     />
 
     <title>{title}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap"
-      rel="stylesheet"
-    />
     <script is:inline>
       (function () {
         const storedTheme = localStorage.getItem("theme");
@@ -180,33 +178,24 @@ const { metaDescription } = wedding.data;
         }
       });
 
-      // Bind teletype events to Morse decoders
-      const initMorseListeners = () => {
-        const decoders = document.querySelectorAll(".morse-decoder");
-        decoders.forEach((el) => {
-          if (el.getAttribute("data-audio-bound") === "true") return;
-          el.setAttribute("data-audio-bound", "true");
+      // Listen to mouseenter/mouseleave on morse decoders using Event Delegation on document.body
+      document.body.addEventListener("mouseenter", (e) => {
+        const target = e.target as HTMLElement;
+        const decoder = target.closest(".morse-decoder");
+        if (decoder && soundEnabled) {
+          const text = decoder.textContent?.trim() || "";
+          if (text) {
+            playMorse(text);
+          }
+        }
+      }, true); // Use capture phase to catch mouseenter (which does not bubble)
 
-          el.addEventListener("mouseenter", () => {
-            if (!soundEnabled) return;
-            const text = el.textContent?.trim() || "";
-            if (text) {
-              playMorse(text);
-            }
-          });
-
-          el.addEventListener("mouseleave", () => {
-            stopMorse();
-          });
-        });
-      };
-
-      // Initial execution
-      initMorseListeners();
-
-      // Keep dynamic elements synced (such as tabs changes or success states)
-      const observer = new MutationObserver(initMorseListeners);
-      observer.observe(document.body, { childList: true, subtree: true });
+      document.body.addEventListener("mouseleave", (e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest(".morse-decoder")) {
+          stopMorse();
+        }
+      }, true);
 
       // Global smooth scroll for anchor links, even when clicking the same active hash
       document.addEventListener("click", (e) => {

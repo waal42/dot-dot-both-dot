@@ -114,7 +114,7 @@ const getSizeClasses = (size: string) => {
   const lightbox = new PhotoSwipeLightbox({
     gallery: "#gallery",
     children: "a",
-    pswpModule: () => PhotoSwipe,
+    pswpModule: () => Promise.resolve(PhotoSwipe),
     padding: { top: 20, bottom: 60, left: 10, right: 10 },
     bgClickAction: "close",
     tapAction: "close",

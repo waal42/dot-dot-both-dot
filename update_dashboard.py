@@ -4,13 +4,31 @@ import requests
 import io
 import os
 import re
+import html
+
+# Helper to load .env variables locally (avoiding dependency on python-dotenv)
+def load_env():
+    env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+    if os.path.exists(env_path):
+        with open(env_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                if '=' in line and not line.strip().startswith('#'):
+                    key, val = line.strip().split('=', 1)
+                    os.environ[key.strip()] = val.strip().strip('"').strip("'")
+
+load_env()
+
+# Helper for secure HTML escaping
+def esc(val):
+    return html.escape(str(val))
 
 # 1. CONFIGURATION
 BASE_URL = "https://script.google.com/macros/s/AKfycbz-gPc1HW6SuyQMTfgBU3WWw-Dg4qSwPqn9Hy5ht0xJ-Zis_H_JnN8bPrQe82bPS4YPlA/exec"
+API_TOKEN = os.environ.get("DASHBOARD_API_TOKEN", "")
 
-URL_HOST_CSV = f"{BASE_URL}?sheet=Hosté"
-URL_PISNICKY_CSV = f"{BASE_URL}?sheet=Písničky"
-URL_ZPRAVY_CSV = f"{BASE_URL}?sheet=Zprávy"
+URL_HOST_CSV = f"{BASE_URL}?sheet=Hosté&token={API_TOKEN}"
+URL_PISNICKY_CSV = f"{BASE_URL}?sheet=Písničky&token={API_TOKEN}"
+URL_ZPRAVY_CSV = f"{BASE_URL}?sheet=Zprávy&token={API_TOKEN}"
 
 # Target production path on the VPS
 TARGET_HTML_PATH = "/var/www/mywalove/svatba/dashboard/index.html"
@@ -109,10 +127,10 @@ def main():
             total_children += cnt
             if cnt > 0:  # Only add to detailed UI list if there is a count > 0
                 children_list.append({
-                    "parent": row[col_name],
-                    "email": row[col_email] if col_email else "Neuvedeno",
+                    "parent": esc(row[col_name]),
+                    "email": esc(row[col_email]) if col_email else "Neuvedeno",
                     "count": cnt,
-                    "detail": kids_detail if kids_detail else "Bez bližšího popisu"
+                    "detail": esc(kids_detail) if kids_detail else "Bez bližšího popisu"
                 })
 
     # Family vs Friends Breakdown (based on YES/NO in 'rodina?')
@@ -130,9 +148,9 @@ def main():
         diet_val = row[col_diet]
         if diet_val and str(diet_val).strip():
             diets_list.append({
-                "name": row[col_name],
-                "email": row[col_email] if col_email else "Neuvedeno",
-                "diet": str(diet_val).strip()
+                "name": esc(row[col_name]),
+                "email": esc(row[col_email]) if col_email else "Neuvedeno",
+                "diet": esc(str(diet_val).strip())
             })
 
     # Get recent RSVPs (latest 5 answers based on file ordering)
@@ -140,9 +158,9 @@ def main():
     recent_rsvps = []
     for _, row in activity_df.tail(5).iloc[::-1].iterrows():
         recent_rsvps.append({
-            "name": row[col_name],
-            "date": row[col_date] if col_date in row else "",
-            "rsvp": row[col_rsvp]
+            "name": esc(row[col_name]),
+            "date": esc(row[col_date]) if col_date in row else "",
+            "rsvp": esc(row[col_rsvp])
         })
 
     # Prepare songs list
@@ -154,8 +172,8 @@ def main():
         song_name = row[songs_col]
         if song_name and str(song_name).strip():
             songs_list.append({
-                "song": song_name,
-                "link": row[link_col]
+                "song": esc(song_name),
+                "link": esc(row[link_col])
             })
 
     # Prepare messages
@@ -168,23 +186,23 @@ def main():
         msg_decoded = row[msg_decoded_col]
         if msg_decoded and str(msg_decoded).strip():
             messages_list.append({
-                "name": row[msg_name_col] if row[msg_name_col] else "Anonym",
-                "morse": row[msg_morse_col],
-                "decoded": msg_decoded
+                "name": esc(row[msg_name_col]) if row[msg_name_col] else "Anonym",
+                "morse": esc(row[msg_morse_col]),
+                "decoded": esc(msg_decoded)
             })
 
     # Prepare guest table rows for client side
     guests_list = []
     for _, row in df_hoste.iterrows():
         guests_list.append({
-            "name": row[col_name],
-            "email": row[col_email] if col_email else "Neuvedeno",
-            "rsvp": row[col_rsvp],
-            "lunch": row[col_lunch] if col_lunch in row else "",
-            "family": row[col_family] if col_family in row else "",
-            "kids": row[col_kids] if col_kids in row else "",
-            "kids_detail": row[col_kids_detail] if col_kids_detail in row else "",
-            "diet": row[col_diet] if col_diet in row else ""
+            "name": esc(row[col_name]),
+            "email": esc(row[col_email]) if col_email else "Neuvedeno",
+            "rsvp": esc(row[col_rsvp]),
+            "lunch": esc(row[col_lunch]) if col_lunch in row else "",
+            "family": esc(row[col_family]) if col_family in row else "",
+            "kids": esc(row[col_kids]) if col_kids in row else "",
+            "kids_detail": esc(row[col_kids_detail]) if col_kids_detail in row else "",
+            "diet": esc(row[col_diet]) if col_diet in row else ""
         })
 
     # HTML Generator aligned with wedding web design (Forest Pine & Sage Mist)

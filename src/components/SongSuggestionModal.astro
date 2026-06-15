@@ -97,6 +97,11 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
         />
       </div>
 
+      <!-- Spam protection honeypot -->
+      <div class="hidden" aria-hidden="true">
+        <input type="text" id="song-website-hp" name="website_hp" tabindex="-1" autocomplete="off" />
+      </div>
+
       {/* Status message */}
       <p
         id="song-status"
@@ -237,6 +242,35 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
     e.preventDefault();
     if (!songInput || !submitBtn || !statusMsg) return;
 
+    // Honeypot check
+    const hpInput = document.getElementById("song-website-hp") as HTMLInputElement | null;
+    const honeypot = hpInput ? hpInput.value.trim() : "";
+    
+    const showSuccessState = () => {
+      if (!statusMsg) return;
+      statusMsg.textContent = "Návrh byl úspěšně odeslán do playlistu!";
+      statusMsg.className =
+        "text-center text-xs font-bold uppercase text-green-600 animate-bounce";
+      statusMsg.classList.remove("hidden");
+
+      // Reset values
+      if (songInput) songInput.value = "";
+      if (linkInput) linkInput.value = "";
+
+      setTimeout(() => {
+        statusMsg.classList.add("hidden");
+        // Close modal automatically
+        const closeTrigger = document.getElementById("close-song-modal");
+        closeTrigger?.click();
+      }, 2500);
+    };
+
+    if (honeypot) {
+      console.warn("Spam submission blocked.");
+      showSuccessState();
+      return;
+    }
+
     const escapeHtml = (unsafe: string) => {
       return unsafe
         .replace(/&/g, "&amp;")
@@ -263,6 +297,7 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 
     const postData = new URLSearchParams();
     postData.append("form_type", "song");
+    postData.append("website_hp", honeypot);
     postData.append("song", escapeHtml(song));
     postData.append("link", escapeHtml(link));
 
@@ -280,21 +315,7 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
         });
       }
 
-      statusMsg.textContent = "Návrh byl úspěšně odeslán do playlistu!";
-      statusMsg.className =
-        "text-center text-xs font-bold uppercase text-green-600 animate-bounce";
-      statusMsg.classList.remove("hidden");
-
-      // Reset values
-      songInput.value = "";
-      if (linkInput) linkInput.value = "";
-
-      setTimeout(() => {
-        statusMsg.classList.add("hidden");
-        // Close modal automatically
-        const closeTrigger = document.getElementById("close-song-modal");
-        closeTrigger?.click();
-      }, 2500);
+      showSuccessState();
     } catch (err) {
       statusMsg.textContent = "Chyba při odesílání návrhu.";
       statusMsg.className =

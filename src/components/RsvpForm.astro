@@ -156,6 +156,11 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
         ))
       }
 
+      <!-- Spam protection honeypot -->
+      <div class="hidden" aria-hidden="true">
+        <input type="text" name="website_hp" tabindex="-1" autocomplete="off" />
+      </div>
+
       <div class="flex justify-center pt-8">
         <button
           type="submit"
@@ -240,6 +245,39 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
 
     const formData = new FormData(form);
 
+    const showSuccessState = () => {
+      const formCard = form.parentElement;
+      if (formCard) {
+        formCard.innerHTML = `
+          <div class="text-center py-16 px-6 animate-fade-in-up">
+            <div class="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-wedding-dark text-wedding-light shadow-md animate-bounce">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <h3 class="text-wedding-dark text-3xl font-bold mb-4">${rsvpForm.successMessage.title}</h3>
+            <p class="text-wedding-medium text-lg font-medium mb-8 max-w-md mx-auto leading-relaxed">
+              ${rsvpForm.successMessage.subtitle}
+            </p>
+            <div class="morse-line text-wedding-medium/30 mx-auto h-[2px] w-32 mb-8"></div>
+            <p class="text-wedding-dark text-xs font-bold tracking-[0.4em] uppercase opacity-60">
+              <span class="morse-decoder hover:opacity-100 cursor-help transition-all" data-decoded="${rsvpForm.successMessage.morseCodeText}">
+              ${rsvpForm.successMessage.morseCode}
+              </span>
+            </p>
+          </div>
+        `;
+        // Scroll back to the RSVP section to keep the success message visible
+        document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
+    // Honeypot check
+    const honeypot = formData.get("website_hp");
+    if (honeypot && honeypot.toString().trim() !== "") {
+      console.warn("Spam submission blocked.");
+      showSuccessState();
+      return;
+    }
+
     const escapeHtml = (unsafe) => {
       return String(unsafe || "")
         .replace(/&/g, "&amp;")
@@ -266,6 +304,7 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
     try {
       if (googleScriptUrl) {
         const postData = new URLSearchParams();
+        postData.append("website_hp", String(honeypot || ""));
         postData.append(
           "jméno",
           escapeHtml(String(formData.get("name") || "").trim()),
@@ -307,29 +346,7 @@ const googleScriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL;
         });
       }
 
-      // Elegant Success Card State loaded from Config
-      const formCard = form.parentElement;
-      if (formCard) {
-        formCard.innerHTML = `
-          <div class="text-center py-16 px-6 animate-fade-in-up">
-            <div class="mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-wedding-dark text-wedding-light shadow-md animate-bounce">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            </div>
-            <h3 class="text-wedding-dark text-3xl font-bold mb-4">${rsvpForm.successMessage.title}</h3>
-            <p class="text-wedding-medium text-lg font-medium mb-8 max-w-md mx-auto leading-relaxed">
-              ${rsvpForm.successMessage.subtitle}
-            </p>
-            <div class="morse-line text-wedding-medium/30 mx-auto h-[2px] w-32 mb-8"></div>
-            <p class="text-wedding-dark text-xs font-bold tracking-[0.4em] uppercase opacity-60">
-              <span class="morse-decoder hover:opacity-100 cursor-help transition-all" data-decoded="${rsvpForm.successMessage.morseCodeText}">
-              ${rsvpForm.successMessage.morseCode}
-              </span>
-            </p>
-          </div>
-        `;
-        // Scroll back to the RSVP section to keep the success message visible
-        document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" });
-      }
+      showSuccessState();
     } catch (error) {
       statusMsg.textContent = rsvpForm.errorMessage;
       statusMsg.classList.remove("hidden", "text-green-600");

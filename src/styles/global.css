@@ -3,7 +3,7 @@
 :root {
   --theme-dark: #2d3a2d; /* Forest Pine - Deep green */
   --theme-light: #f1f3eb; /* Sage Mist - Soft greenish cream */
-  --theme-medium: #7a7084; /* Darker Dusty Lavender for better contrast */
+  --theme-medium: #5c5266; /* Darker Lavender slate for WCAG AA compliance (4.5:1+) */
 }
 
 html.dark {
@@ -226,4 +226,11 @@ html.dark {
   box-shadow:
     0 20px 25px -5px rgb(0 0 0 / 0.05),
     0 8px 10px -6px rgb(0 0 0 / 0.05);
+}
+
+@utility focus-ring-premium {
+  &:focus-visible {
+    outline: 2px solid var(--color-wedding-dark) !important;
+    outline-offset: 4px !important;
+  }
 }
