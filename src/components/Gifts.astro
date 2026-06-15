@@ -3,6 +3,7 @@
 import QRCode from "qrcode";
 import { composeIBAN } from "ibantools";
 import { getEntry } from "astro:content";
+import morseMotif from "../assets/morse-motif.svg";
 
 const wedding = await getEntry("wedding", "info");
 if (!wedding) {
@@ -26,7 +27,7 @@ const spayd = `SPD*1.0*ACC:${iban}*MSG:${gifts.qrMessage}`;
 const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
   margin: 2,
   width: 600,
-  errorCorrectionLevel: "M",
+  errorCorrectionLevel: "H",
   color: {
     dark: "#2d3a2d", // wedding-dark
     light: "#f1f3eb", // wedding-light
@@ -169,6 +170,16 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
               loading="lazy"
               class="h-full w-full"
             />
+            {/* Center Motif Overlay */}
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div class="bg-wedding-light rounded-full shadow-md w-14 h-14 flex items-center justify-center border border-wedding-medium/20 overflow-hidden">
+                <img
+                  src={morseMotif.src}
+                  alt="Morse motif badge"
+                  class="w-full h-full object-contain scale-[1.5]"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <p
@@ -242,7 +253,7 @@ const qrCodeDataUrl = await QRCode.toDataURL(spayd, {
       const dataUrl = await QRCode.toDataURL(spaydString, {
         margin: 2,
         width: 600,
-        errorCorrectionLevel: "M",
+        errorCorrectionLevel: "H",
         color: {
           dark: "#2d3a2d", // wedding-dark
           light: "#f1f3eb", // wedding-light
