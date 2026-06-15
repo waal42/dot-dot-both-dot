@@ -58,7 +58,7 @@ const { faq } = wedding.data;
             </span>
           </button>
           <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
-            <div class="text-wedding-dark border-wedding-medium/10 space-y-4 border-t px-6 pt-4 pb-6 text-base leading-relaxed font-medium italic opacity-95 md:px-8 md:text-lg">
+            <div class="text-wedding-dark border-wedding-medium/10 space-y-4 border-t px-6 pt-4 pb-6 text-base leading-relaxed font-medium opacity-95 md:px-8 md:text-lg">
               {item.answer.map((para) => (
                 <p set:html={para} />
               ))}
