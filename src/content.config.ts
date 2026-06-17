@@ -157,7 +157,8 @@ const wedding = defineCollection({
             button: z
               .object({
                 text: z.string(),
-                action: z.enum(["song-suggestion"]),
+                action: z.enum(["song-suggestion", "color-generator"]),
+                description: z.string().optional(),
               })
               .optional(),
           }),

@@ -313,7 +313,8 @@
                 "type": "object",
                 "properties": {
                   "text": { "type": "string" },
-                  "action": { "type": "string", "enum": ["song-suggestion"] }
+                  "action": { "type": "string", "enum": ["song-suggestion", "color-generator"] },
+                  "description": { "type": "string" }
                 },
                 "required": ["text", "action"]
               }

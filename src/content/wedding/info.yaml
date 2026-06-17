@@ -275,6 +275,10 @@ faq:
     - question: "Jaký je dress code?"
       answer:
         - "Žádný! Přijďte v tom, v čem se cítíte dobře!"
+      button:
+        text: "Vyber mi barvu"
+        action: "color-generator"
+        description: "Chcete přesto poradit, co si vzít na sebe? Klikněte sem a my vám barvu náhodně vybereme!"
     - question: "Kdo bude DJ?"
       answer:
         - "Všichni! Oba máme hodně rádi hudbu, takže budeme mít přichystané playlisty s osvědčenými párty peckami. Pokud máte přání zahrát svůj oblíbený hit, můžete s tím přijít přímo na párty – k dispozici bude notebook, na kterém bude možné přidávat písničky do fronty. A jestli vás nějaké vály napadají už teď, sem s nimi! Můžete nám je posílat průběžně a my je rádi zařadíme."

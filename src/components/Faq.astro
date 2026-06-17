@@ -75,6 +75,37 @@ const { faq } = wedding.data;
                   </button>
                 </div>
               )}
+              {item.button && item.button.action === "color-generator" && (
+                <div class="mt-6 border-t border-wedding-medium/10 pt-6">
+                  {item.button.description && (
+                    <p class="text-wedding-dark/85 mb-4 text-base">
+                      {item.button.description}
+                    </p>
+                  )}
+                  <div class="flex flex-col md:flex-row items-center justify-center gap-6 mt-4">
+                    <button
+                      id="generate-color-btn"
+                      class="morse-border text-wedding-dark border-wedding-dark hover:bg-wedding-dark hover:text-wedding-light inline-flex cursor-pointer items-center justify-center gap-3 bg-transparent px-8 py-3.5 text-sm font-bold tracking-widest uppercase shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 shrink-0"
+                    >
+                      {item.button.text}
+                    </button>
+                    
+                    <div
+                      id="color-result-container"
+                      class="hidden w-full max-w-sm flex items-center gap-4 rounded-xl px-5 py-3.5 bg-white/40 border border-wedding-medium/10 shadow-sm transition-all duration-300 scale-95 opacity-0"
+                    >
+                      <div
+                        id="color-preview-swatch"
+                        class="h-10 w-10 rounded-full shadow-md border border-black/10 transition-all duration-300 shrink-0"
+                      />
+                      <div class="text-left">
+                        <span class="text-xs uppercase tracking-wider text-wedding-medium/85 font-bold block mb-0.5">Vylosovaná barva:</span>
+                        <h4 id="color-name-display" class="text-wedding-dark text-lg font-bold leading-tight"></h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -160,4 +191,71 @@ const { faq } = wedding.data;
       }
     });
   });
+
+  // Color generator logic
+  const colorBtn = document.getElementById("generate-color-btn");
+  const colorContainer = document.getElementById("color-result-container");
+  const colorSwatch = document.getElementById("color-preview-swatch");
+  const colorName = document.getElementById("color-name-display");
+
+  const colors = [
+    { name: "Šalvějová (Sage green)", hex: "#87A987" },
+    { name: "Pudrová růžová (Dusty rose)", hex: "#DCAEAE" },
+    { name: "Námořnická modrá (Navy)", hex: "#1D2D44" },
+    { name: "Terakotová (Terracotta)", hex: "#C05C46" },
+    { name: "Smaragdově zelená (Emerald)", hex: "#0E5D4E" },
+    { name: "Vínová / Burgundy", hex: "#6B1D2F" },
+    { name: "Olivová (Olive)", hex: "#707A50" },
+    { name: "Meruňková (Peach)", hex: "#F5C396" },
+    { name: "Zlatá (Gold)", hex: "#D4AF37" },
+    { name: "Levandulová (Lavender)", hex: "#B39EB5" },
+    { name: "Champagne", hex: "#F7E7CE" },
+    { name: "Švestková (Plum)", hex: "#4E3652" },
+    { name: "Mátová (Mint)", hex: "#98FF98" },
+    { name: "Hořčicová (Mustard)", hex: "#E1AD01" },
+    { name: "Holubí šeď (Dove grey)", hex: "#A8B6C1" }
+  ];
+
+  if (colorBtn && colorContainer && colorSwatch && colorName) {
+    colorBtn.addEventListener("click", () => {
+      let count = 0;
+      colorContainer.classList.remove("hidden");
+      
+      // Update parent accordion's maxHeight so it fits the color container smoothly
+      const faqContent = colorBtn.closest(".faq-content") as HTMLElement;
+      if (faqContent) {
+        // Temp set to auto or update height dynamically
+        faqContent.style.maxHeight = "none";
+      }
+
+      // Force reflow and add opacity/scale transition classes
+      void colorContainer.offsetHeight;
+      colorContainer.classList.add("scale-100", "opacity-100");
+      colorContainer.classList.remove("scale-95", "opacity-0");
+      
+      const interval = setInterval(() => {
+        const tempColor = colors[Math.floor(Math.random() * colors.length)];
+        colorSwatch.style.backgroundColor = tempColor.hex;
+        colorName.textContent = tempColor.name;
+        count++;
+        
+        if (count > 12) {
+          clearInterval(interval);
+          const finalColor = colors[Math.floor(Math.random() * colors.length)];
+          colorSwatch.style.backgroundColor = finalColor.hex;
+          colorName.textContent = finalColor.name;
+          
+          colorSwatch.classList.add("scale-110");
+          setTimeout(() => {
+            colorSwatch.classList.remove("scale-110");
+          }, 200);
+
+          // Update parent accordion height to final scrollHeight
+          if (faqContent) {
+            faqContent.style.maxHeight = `${faqContent.scrollHeight}px`;
+          }
+        }
+      }, 65);
+    });
+  }
 </script>
