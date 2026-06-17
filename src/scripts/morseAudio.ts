@@ -47,7 +47,7 @@ export const playMorse = (morseStr: string) => {
       time += unit;
       gain.gain.setValueAtTime(0, time);
       time += unit;
-    } else if (char === "−" || char === "-" || char === "–") {
+    } else if (char === "−" || char === "-" || char === "–" || char === "—") {
       // Dah (3 units sound + 1 unit silent)
       gain.gain.setValueAtTime(0.12, time);
       time += unit * 3;

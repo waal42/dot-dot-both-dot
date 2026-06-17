@@ -16,3 +16,8 @@ When modifying any environment variables (`PUBLIC_GOOGLE_SCRIPT_URL`, `DASHBOARD
 * If form submissions silently fail (i.e. UI shows success but spreadsheet is not populated):
   1. Open Browser DevTools (F12) -> Console. Check for `"Spam submission blocked."` or `"Spam detected."`. This indicates the honeypot field (`website_hp`) was autofilled by the browser.
   2. Open Browser DevTools (F12) -> Network. Check if the POST request goes to the correct script URL.
+
+## 📡 Morse Code Guidelines
+* **Legibility:** Morse code dash symbols must always be written using the em-dash (`—`, U+2014) instead of standard hyphens (`-`) or mathematical minus signs (`−`). This keeps them highly distinguishable from dots (`·`).
+* **Visual Separation:** Morse content elements must always include sufficient `letter-spacing` (e.g. via Tailwind tracking utility or CSS style) to prevent consecutive dashes (like `——` or `———`) from blending into a single continuous line.
+* **Audio & Translator Sync:** When adding new Morse decoding/encoding or sound functionality, ensure the script Translator and Audio classes handle the em-dash (`—`) character correctly.

@@ -137,6 +137,7 @@ html.dark {
   position: relative;
   cursor: help;
   transition: color 0.3s ease;
+  letter-spacing: 0.12em;
 }
 
 .morse-decoder::after {

@@ -1,47 +1,47 @@
 // src/scripts/morseTranslator.ts
 
 export const MORSE_DICT: Record<string, string> = {
-  "A": "·−",
-  "B": "−···",
-  "C": "−·−·",
-  "D": "−··",
+  "A": "·—",
+  "B": "—···",
+  "C": "—·—·",
+  "D": "—··",
   "E": "·",
-  "F": "··−·",
-  "G": "−−·",
+  "F": "··—·",
+  "G": "——·",
   "H": "····",
-  "CH": "−−−−", // Special Czech Morse Character
+  "CH": "————", // Special Czech Morse Character
   "I": "··",
-  "J": "·−−−",
-  "K": "−·−",
-  "L": "·−··",
-  "M": "−−",
-  "N": "−·",
-  "O": "−−−",
-  "P": "·−−·",
-  "Q": "−−·−",
-  "R": "·−·",
+  "J": "·———",
+  "K": "—·—",
+  "L": "·—··",
+  "M": "——",
+  "N": "—·",
+  "O": "———",
+  "P": "·——·",
+  "Q": "——·—",
+  "R": "·—·",
   "S": "···",
-  "T": "−",
-  "U": "··−",
-  "V": "···−",
-  "W": "·−−",
-  "X": "−··−",
-  "Y": "−·−−",
-  "Z": "−−··",
-  "0": "−−−−−",
-  "1": "·−−−−",
-  "2": "··−−−",
-  "3": "···−−",
-  "4": "····−",
+  "T": "—",
+  "U": "··—",
+  "V": "···—",
+  "W": "·——",
+  "X": "—··—",
+  "Y": "—·——",
+  "Z": "——··",
+  "0": "—————",
+  "1": "·————",
+  "2": "··———",
+  "3": "···——",
+  "4": "····—",
   "5": "·····",
-  "6": "−····",
-  "7": "−−···",
-  "8": "−−−··",
-  "9": "−−−−·",
-  ".": "·−·−·−",
-  ",": "−−··−−",
+  "6": "—····",
+  "7": "——···",
+  "8": "———··",
+  "9": "————·",
+  ".": "·—·—·—",
+  ",": "——··——",
   "?": "··−−··",
-  "!": "−−·−−−"
+  "!": "——·———"
 };
 
 // Create an inverted dictionary for fast decoding
@@ -99,11 +99,12 @@ export function textToMorse(text: string): string {
 export function morseToText(morse: string): string {
   if (!morse) return "";
 
-  // Standardize potential inputs (dots can be . or ·, dashes can be -, –, −)
+  // Standardize potential inputs (dots can be . or ·, dashes can be -, –, −, —)
   const cleanMorse = morse
     .replace(/\./g, "·")
-    .replace(/-/g, "−")
-    .replace(/–/g, "−");
+    .replace(/-/g, "—")
+    .replace(/–/g, "—")
+    .replace(/−/g, "—");
 
   // Words are separated by double slashes (e.g. "//" or " // ")
   const words = cleanMorse.trim().split(/\s*\/\/\s*/);
