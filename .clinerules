@@ -1,23 +1,68 @@
 # Project Rules and Persistent Agent Memories
 
+## 📁 Project Overview & Architecture
+This project, **dot-dot-both-dot**, is a premium, single-page wedding invitation and RSVP portal built with **Astro 6**, **Tailwind CSS v4 (Beta/Vite)**, and **TypeScript**. 
+* **Data-Driven Content:** Content is driven by YAML files located in [src/content/wedding/](file:///c:/Users/filip/source/dot-dot-both-dot/src/content/wedding/) (validated via [src/content.config.ts](file:///c:/Users/filip/source/dot-dot-both-dot/src/content.config.ts)).
+* **Integrations:** Form submissions (RSVP & Morse Messages) are captured via a Google Apps Script deployment writing to a Google Sheet.
+* **Dashboard Sync:** There is a python script `update_dashboard.py` and `dashboard_template.html` used to synchronize/update the wedding administration dashboard from the Google Sheets backend.
+
+---
+
+## 🎨 UI/UX Design System & Theme Rules
+Aesthetics must look elegant, modern, and highly polished ("premium wedding vibe"). 
+
+### 1. Colors & Variables
+The color scheme is defined dynamically in [src/styles/global.css](file:///c:/Users/filip/source/dot-dot-both-dot/src/styles/global.css) and supports a fluid Dark/Light mode:
+* **wedding-dark** (`#2d3a2d` Forest Pine): Deep green in light mode, flips to soft cream (`#f1f3eb`) in dark mode.
+* **wedding-light** (`#f1f3eb` Sage Mist): Soft greenish cream in light mode, flips to deep green (`#2d3a2d`) in dark mode.
+* **wedding-medium** (`#5c5266` / `#a8a0b0` Lavender Slate): Darker lavender slate chosen to comply with WCAG AA contrast ratios (4.5:1+).
+* Do not use standard arbitrary Tailwind colors (like `red-500` or `blue-500`) unless they are part of a curated user feature (e.g. FAQ color picker). Maintain the cohesive forest green, cream, and lavender theme.
+
+### 2. Tailored CSS Utilities
+Always reuse the custom classes defined in [global.css](file:///c:/Users/filip/source/dot-dot-both-dot/src/styles/global.css):
+* **`hover-card-premium`:** Applies a smooth translateY lift and subtle drop shadow (`cubic-bezier(0.16, 1, 0.3, 1)` transition).
+* **`morse-border`:** Draws a customized dashed/dotted border matching the Morse aesthetic.
+* **`focus-ring-premium`:** Ensures accessible focus states with customized outline offset.
+* **`animate-fade-in-up` / `delay-100` / `delay-200` / `delay-300`:** Smooth entry animations for sections and cards on load.
+
+---
+
+## 📡 Morse Code Guidelines
+The project heavily utilizes Morse code as a decorative and interactive motif.
+
+* **Legibility Rule:** Morse code dashes must always use the **em-dash** character (`—`, U+2014) instead of standard hyphens (`-`) or mathematical minus signs (`−`). This distinguishes dashes clearly from dots (`·`).
+* **Visual Separation:** Morse characters and sequences must always include sufficient `letter-spacing` (e.g. Tailwind `tracking-tighter` / `tracking-widest` or custom CSS style) to prevent contiguous em-dashes (e.g., `——` or `———`) from merging into a single continuous solid line.
+* **Interactive Tooltips:** Use the class `.morse-decoder` with a `data-decoded="DECODED_TEXT"` attribute on elements. This triggers a stylized, animated CSS tooltip showing the translation on hover.
+* **Audio & Script Sync:** Any script handling Morse translation or audio generation must be compatible with the em-dash (`—`) character format.
+
+---
+
+## 🛠️ Astro Component Code Styles
+* **Structure:** Place data fetch and TS logic in the frontmatter (`---`). Keep JS/TS client-side scripts inside `<script>` tags at the bottom.
+* **Aria Attributes:** Ensure modals and interactive elements have appropriate ARIA bindings (e.g. `aria-expanded`, `aria-haspopup`, `aria-controls`, and `aria-hidden`) for accessibility.
+* **Dynamic Content:** Do not hardcode content in templates. Read it from Astro Content Collections or schema configuration.
+
+---
+
+## 📡 Form Submission & Anti-Spam
+* **Honeypot Protection:** Forms use a honeypot field (`website_hp`) hidden from users.
+* If a form submission fails silently (UI displays success but the spreadsheet remains empty):
+  1. Open DevTools (F12) -> Console. Look for `"Spam submission blocked."` or `"Spam detected."` warnings, indicating `website_hp` was autofilled by the browser.
+  2. Open DevTools (F12) -> Network. Verify the request endpoint matches the current `PUBLIC_GOOGLE_SCRIPT_URL`.
+
+---
+
+## 🛠️ Google Apps Script Configuration
+* **Spustit jako / Execute as:** Must be configured as "Já / Me" (e.g., `filipvalasek@gmail.com`).
+* **Kdo má přístup / Who has access:** Must be configured as "Kdokoli / Anyone".
+* **Deployment Updates:** Any modifications to Google Apps Script files must be deployed as a **"New version"** (Nové nasazení or Spravovat nasazení -> Upravit -> Nová verze -> Nasadit) in Google Apps Script to take effect.
+* **Typo warning:** The URL ID is case-sensitive. For example, `AKfycbxu4pTV0kljCj2IxflZP...` has a capital `I` (Igloo), not a lowercase `l` (lemon) at index 21.
+
+---
+
 ## ⚠️ Critical Deployment Checklist
-When modifying any environment variables (`PUBLIC_GOOGLE_SCRIPT_URL`, `DASHBOARD_API_TOKEN`, etc.) in `.env` files:
-1. **GitHub Secrets:** You must remind the user to update the corresponding secrets in the GitHub Repository Settings (**Settings -> Secrets and variables -> Actions -> Repository secrets**). The frontend is built as a static site via GitHub Actions, which embeds `PUBLIC_GOOGLE_SCRIPT_URL` at compile-time. If the secret is not updated, the production site will use the old/broken URL.
+When updating environment variables (`PUBLIC_GOOGLE_SCRIPT_URL`, `DASHBOARD_API_TOKEN`, etc.) in `.env` files:
+1. **GitHub Secrets:** You must remind the user to update the corresponding secrets in the GitHub Repository Settings (**Settings -> Secrets and variables -> Actions -> Repository secrets**). The frontend is compiled as a static site via GitHub Actions, which embeds `PUBLIC_GOOGLE_SCRIPT_URL` at compile-time. If the secret is not updated, the production site will use the old/broken URL.
 2. **VPS Deployment:** Remind the user to sync the `.env` file to the VPS (directory `/opt/svatba-dashboard/` or equivalent) so the Python script `update_dashboard.py` can load it.
 3. **Local Dev Server:** Remind the user to restart the Astro dev server (`npm run dev`) since it only loads `.env` variables on startup.
 
-## 🛠️ Google Apps Script Configuration
-* **Spustit jako / Execute as:** Must be set to "Já / Me" (e.g. `filipvalasek@gmail.com`).
-* **Kdo má přístup / Who has access:** Must be set to "Kdokoli / Anyone".
-* **Deployment Updates:** Any script changes must be deployed as a "New version" (Nové nasazení or Spravovat nasazení -> Upravit -> Nová verze -> Nasadit) to take effect.
-* **Typo warning:** The URL ID contains case-sensitive characters. For example, `AKfycbxu4pTV0kljCj2IxflZP...` has a capital `I` (Igloo), not a lowercase `l` (lemon) on index 21.
-
-## 🤖 Form Submission Debugging
-* If form submissions silently fail (i.e. UI shows success but spreadsheet is not populated):
-  1. Open Browser DevTools (F12) -> Console. Check for `"Spam submission blocked."` or `"Spam detected."`. This indicates the honeypot field (`website_hp`) was autofilled by the browser.
-  2. Open Browser DevTools (F12) -> Network. Check if the POST request goes to the correct script URL.
-
-## 📡 Morse Code Guidelines
-* **Legibility:** Morse code dash symbols must always be written using the em-dash (`—`, U+2014) instead of standard hyphens (`-`) or mathematical minus signs (`−`). This keeps them highly distinguishable from dots (`·`).
-* **Visual Separation:** Morse content elements must always include sufficient `letter-spacing` (e.g. via Tailwind tracking utility or CSS style) to prevent consecutive dashes (like `——` or `———`) from blending into a single continuous line.
-* **Audio & Translator Sync:** When adding new Morse decoding/encoding or sound functionality, ensure the script Translator and Audio classes handle the em-dash (`—`) character correctly.
