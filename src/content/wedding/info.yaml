@@ -255,7 +255,7 @@ rsvpForm:
       fields:
         - id: "diet"
           name: "diet"
-          label: "Alergie / Dietní omezení (napište také, co mají nejraději děti, pokud mají specifické chutě)"
+          label: "Alergie / Dietní omezení (kvůli rautu; napište také, co mají nejraději děti, pokud mají specifické chutě)"
           type: "text"
           placeholder: "např. bezlepková dieta, vegetarián, bez ořechů..."
           condition: null
