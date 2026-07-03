@@ -157,7 +157,7 @@ gifts:
 
 rsvpForm:
   title: "Účast"
-  description: "Prosíme o potvrzení účasti do 30. června 2026. Každý dospělý host vyplňuje formulář zvlášť, děti vyplňuje jen jeden z rodičů."
+  description: "Prosíme, vyplňte co nejdříve. Každý dospělý host vyplňuje formulář zvlášť, děti vyplňuje jen jeden z rodičů."
   submitButtonText: "Odeslat potvrzení"
   sendingText: "Odesílám..."
   successMessage:
@@ -270,7 +270,7 @@ faq:
         - "Filip má kvůli svému příjmení (Valášek) přezdívku Wal. Po svatbě budeme oba Valáškovi, tedy tak trochu Walovi. Název MyWalove pak můžete číst různě: jako My Walové, Mývalové nebo třeba MyWa.Love. Necháme to na vás."
     - question: "Proč Hrachovina a Filipíny?"
       answer:
-        - "Jak asi víte, oba rádi chodíme na šifrovačky. Hrachovina a Filipíny jsou pomocná slova pro zápis morseovky, což je jeden z šifrovacích principů, kde tečka reprezentuje krátký tón/slabiku a čárka dlouhý tón/slabiku (H: <span class=\"morse-decoder\" data-decoded=\"H\">····</span>, F: <span class=\"morse-decoder\" data-decoded=\"F\">··—·</span>). Slovo HrAchoviNA obsahuje všechna písmena jména HANA a slovo FILIPíny zase všechna písmena jména FILIP, v obou případech ve správném pořadí. A to nemůže být náhoda!"
+        - 'Jak asi víte, oba rádi chodíme na šifrovačky. Hrachovina a Filipíny jsou pomocná slova pro zápis morseovky, což je jeden z šifrovacích principů, kde tečka reprezentuje krátký tón/slabiku a čárka dlouhý tón/slabiku (H: <span class="morse-decoder" data-decoded="H">····</span>, F: <span class="morse-decoder" data-decoded="F">··—·</span>). Slovo HrAchoviNA obsahuje všechna písmena jména HANA a slovo FILIPíny zase všechna písmena jména FILIP, v obou případech ve správném pořadí. A to nemůže být náhoda!'
         - "Pokud bychom chtěli hledat souvislosti ještě dál, Hanka studovala genetiku a hrachovina může připomínat Mendelovy pokusy s hrachem. A Filip studoval matematiku a ve slově Filipíny lze najít i π."
     - question: "Jaký je dress code?"
       answer:
