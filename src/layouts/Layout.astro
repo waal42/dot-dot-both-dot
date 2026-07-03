@@ -138,7 +138,7 @@ const { metaDescription } = wedding.data;
     <Footer />
 
     <script>
-      import { playMorse, stopMorse } from "../scripts/morseAudio";
+      import { playMorse, stopMorse, unlockAudioContext } from "../scripts/morseAudio";
 
       const soundToggle = document.getElementById("sound-toggle");
       const iconMuted = document.getElementById("sound-icon-muted");
@@ -173,7 +173,9 @@ const { metaDescription } = wedding.data;
         soundEnabled = !soundEnabled;
         localStorage.setItem("morse-sound-enabled", String(soundEnabled));
         updateSoundIcons(soundEnabled);
-        if (!soundEnabled) {
+        if (soundEnabled) {
+          unlockAudioContext();
+        } else {
           stopMorse();
         }
       });
@@ -196,6 +198,23 @@ const { metaDescription } = wedding.data;
           stopMorse();
         }
       }, true);
+
+      // Listen to clicks/taps on morse decoders to support touch screen devices
+      document.body.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement;
+        const decoder = target.closest(".morse-decoder");
+        if (decoder) {
+          if (soundEnabled) {
+            const text = decoder.textContent?.trim() || "";
+            if (text) {
+              playMorse(text);
+            }
+          }
+        } else {
+          // Tapping outside stops the sound (mimics mouseleave on desktop)
+          stopMorse();
+        }
+      });
 
       // Global smooth scroll for anchor links, even when clicking the same active hash
       document.addEventListener("click", (e) => {
