@@ -33,3 +33,14 @@ Tato složka obsahuje bezpečný a ořezaný kód pro Google Apps Script, který
    - Klikněte na **Nasadit (Deploy)**.
    - Pokud se objeví výzva k udělení oprávnění (Authorize Access), potvrďte ji a schvalte přístup k tabulkám a externím službám (Discord).
    - Zkopírujte **URL adresu webové aplikace (Web app URL)**. Tato URL musí odpovídat hodnotě `PUBLIC_GOOGLE_SCRIPT_URL` ve vašem `.env` souboru.
+
+5. **Povolení YouTube Playlist Synchronizace (Nepovinné):**
+   Pokud chcete využít automatickou synchronizaci schválených písniček z tabulky do YouTube playlistu:
+   - V levém panelu editoru klikněte na tlačítko **+** vedle položky **Služby (Services)**.
+   - Vyhledejte a vyberte **YouTube Data API v3** a klikněte na **Přidat (Add)**.
+   - Jděte do **Nastavení projektu (Project Settings)** -> **Vlastnosti skriptu (Script Properties)**.
+   - Klikněte na **Přidat vlastnost skriptu (Add script property)** a přidejte klíč:
+     * **`YOUTUBE_PLAYLIST_ID`**: ID vašeho YouTube playlistu (např. část URL za `list=`, např. `PL12345XYZ...`).
+   - Uložte vlastnosti skriptu.
+   - **Tip:** Po obnovení tabulky (Google Sheet) se vám v horním menu zobrazí položka **Svatba** -> **Synchronizovat playlist 🎵**.
+   - První spuštění vyvolá standardní Google dialog pro udělení oprávnění k přístupu k vašemu YouTube účtu.
