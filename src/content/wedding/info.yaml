@@ -90,7 +90,7 @@ whenWhere:
       morse: "·—"
       morseText: "A"
       title: "Doprava autem"
-      detail: "Parkování přímo u Sokecu nebo v přilehlých ulicích. Pozor ale na to, že nelze zaparkovat na ulici Nádražní a auto tam nechat do druhého dne. V neděli má být v rámci Šlapanických slavností na ulici Nádražní průvod a zákaz zastavení."
+      detail: "Parkování je možné přímo u Sokecu nebo v okolních ulicích. Jen pozor: pokud zaparkujete v ulici Nádražní a auto tam necháte do neděle, je potřeba odjet nejpozději do 13:00. Poté zde kvůli průvodu Šlapanických slavností platí zákaz zastavení."
       marker:
         coords: [49.1594822, 16.7289861]
         title: "Parkoviště u Sokecu"
