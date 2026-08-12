@@ -73,9 +73,9 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
         class="bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 flex items-center justify-between rounded-2xl border p-5 shadow-sm"
       >
         <div>
-          <h1 class="text-wedding-dark text-xl font-bold">Správa Dnu D</h1>
+          <h1 class="text-wedding-dark text-xl font-bold">Administrace</h1>
           <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400"
-            >Přihlášen jako Admin</span
+            >přihlášen jako admin</span
           >
         </div>
         <button
@@ -149,9 +149,9 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
           </button>
         </form>
 
-        <div class="mt-5 border-t border-wedding-medium/15 pt-4">
+        <div class="border-wedding-medium/15 mt-5 border-t pt-4">
           <h4
-            class="text-wedding-dark mb-2 text-xs font-bold uppercase tracking-wider"
+            class="text-wedding-dark mb-2 text-xs font-bold tracking-wider uppercase"
           >
             Aktivní zprávy:
           </h4>
@@ -169,37 +169,86 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
           🎯 Správa svatebního programu & aktivit
         </h3>
         <p class="text-wedding-medium mb-4 text-xs">
-          Vkládejte informace o tom, co a kde se dá na svatbě dělat (např. Fotokoutek, Prskavky, Kvíz, Vodní dýmky). Zobrazí se v hlavním programu.
+          Vkládejte informace o tom, co a kde se dá na svatbě dělat (např.
+          Fotokoutek, Prskavky, Kvíz, Vodní dýmky). Zobrazí se v hlavním
+          programu.
         </p>
 
-        <form id="post-program-form" class="space-y-3 bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/15 rounded-xl border p-4">
+        <form
+          id="post-program-form"
+          class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/15 space-y-3 rounded-xl border p-4"
+        >
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div>
-              <label for="prog-time" class="text-wedding-dark mb-1 block font-bold text-xs">Čas / Kdy</label>
-              <input type="text" id="prog-time" placeholder="např. 16:00 nebo Průběžně" class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-bold" />
+              <label
+                for="prog-time"
+                class="text-wedding-dark mb-1 block text-xs font-bold"
+                >Čas / Kdy</label
+              >
+              <input
+                type="text"
+                id="prog-time"
+                placeholder="např. 16:00 nebo Průběžně"
+                class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-bold"
+              />
             </div>
             <div>
-              <label for="prog-title" class="text-wedding-dark mb-1 block font-bold text-xs">Název aktivity *</label>
-              <input type="text" id="prog-title" required placeholder="např. Fotokoutek & Kniha" class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-bold" />
+              <label
+                for="prog-title"
+                class="text-wedding-dark mb-1 block text-xs font-bold"
+                >Název aktivity *</label
+              >
+              <input
+                type="text"
+                id="prog-title"
+                required
+                placeholder="např. Fotokoutek & Kniha"
+                class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-bold"
+              />
             </div>
             <div>
-              <label for="prog-location" class="text-wedding-dark mb-1 block font-bold text-xs">Kde / Místo</label>
-              <input type="text" id="prog-location" placeholder="např. Salónek v 1. patře" class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-semibold" />
+              <label
+                for="prog-location"
+                class="text-wedding-dark mb-1 block text-xs font-bold"
+                >Kde / Místo</label
+              >
+              <input
+                type="text"
+                id="prog-location"
+                placeholder="např. Salónek v 1. patře"
+                class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-semibold"
+              />
             </div>
           </div>
 
           <div>
-            <label for="prog-description" class="text-wedding-dark mb-1 block font-bold text-xs">Popis / Pokyny pro hosty</label>
-            <input type="text" id="prog-description" placeholder="např. Vyfoťte se a nalepte fotku do knížky přání!" class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-medium" />
+            <label
+              for="prog-description"
+              class="text-wedding-dark mb-1 block text-xs font-bold"
+              >Popis / Pokyny pro hosty</label
+            >
+            <input
+              type="text"
+              id="prog-description"
+              placeholder="např. Vyfoťte se a nalepte fotku do knížky přání!"
+              class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-medium"
+            />
           </div>
 
-          <button type="submit" class="bg-emerald-700 text-white hover:bg-emerald-800 active:scale-95 inline-flex items-center gap-1.5 rounded-lg px-4 py-2.5 font-bold text-xs uppercase tracking-wider shadow-sm transition-all">
+          <button
+            type="submit"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-4 py-2.5 text-xs font-bold tracking-wider text-white uppercase shadow-sm transition-all hover:bg-emerald-800 active:scale-95"
+          >
             <span>➕</span> Přidat do programu
           </button>
         </form>
 
-        <div class="mt-5 border-t border-wedding-medium/15 pt-4">
-          <h4 class="text-wedding-dark mb-2 text-xs font-bold uppercase tracking-wider">Aktivní položky programu:</h4>
+        <div class="border-wedding-medium/15 mt-5 border-t pt-4">
+          <h4
+            class="text-wedding-dark mb-2 text-xs font-bold tracking-wider uppercase"
+          >
+            Aktivní položky programu:
+          </h4>
           <div id="program-items-list" class="space-y-2 text-xs">
             <!-- Program items loaded dynamically -->
           </div>
@@ -317,8 +366,8 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
             <span class="bg-wedding-dark text-wedding-light font-mono font-bold px-1.5 py-0.5 rounded text-[10px]">${item.time || "Průběžně"}</span>
             <p class="font-bold text-wedding-dark">${item.title}</p>
           </div>
-          ${item.location ? `<p class="text-wedding-medium text-[11px] font-semibold mt-0.5">📍 ${item.location}</p>` : ''}
-          ${item.description ? `<p class="text-wedding-medium text-[11px] mt-0.5">${item.description}</p>` : ''}
+          ${item.location ? `<p class="text-wedding-medium text-[11px] font-semibold mt-0.5">📍 ${item.location}</p>` : ""}
+          ${item.description ? `<p class="text-wedding-medium text-[11px] mt-0.5">${item.description}</p>` : ""}
         </div>
         <button data-id="${item.id}" class="delete-prog-btn bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-2.5 py-1 rounded-lg text-xs transition-colors shrink-0 ml-2">
           🗑️ Smazat
@@ -330,7 +379,9 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
 
     document.querySelectorAll(".delete-prog-btn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
-        const id = (e.currentTarget as HTMLButtonElement).getAttribute("data-id");
+        const id = (e.currentTarget as HTMLButtonElement).getAttribute(
+          "data-id",
+        );
         if (id) deleteProgramItem(id);
       });
     });
@@ -462,10 +513,18 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
       .getElementById("post-program-form")
       ?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const timeInput = (document.getElementById("prog-time") as HTMLInputElement).value;
-        const titleInput = (document.getElementById("prog-title") as HTMLInputElement).value;
-        const locationInput = (document.getElementById("prog-location") as HTMLInputElement).value;
-        const descInput = (document.getElementById("prog-description") as HTMLInputElement).value;
+        const timeInput = (
+          document.getElementById("prog-time") as HTMLInputElement
+        ).value;
+        const titleInput = (
+          document.getElementById("prog-title") as HTMLInputElement
+        ).value;
+        const locationInput = (
+          document.getElementById("prog-location") as HTMLInputElement
+        ).value;
+        const descInput = (
+          document.getElementById("prog-description") as HTMLInputElement
+        ).value;
 
         if (!titleInput.trim()) return;
 
@@ -481,14 +540,19 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
               time: timeInput.trim(),
               title: titleInput.trim(),
               location: locationInput.trim(),
-              description: descInput.trim()
+              description: descInput.trim(),
             }),
           });
 
           if (res.ok) {
-            (document.getElementById("prog-title") as HTMLInputElement).value = "";
-            (document.getElementById("prog-location") as HTMLInputElement).value = "";
-            (document.getElementById("prog-description") as HTMLInputElement).value = "";
+            (document.getElementById("prog-title") as HTMLInputElement).value =
+              "";
+            (
+              document.getElementById("prog-location") as HTMLInputElement
+            ).value = "";
+            (
+              document.getElementById("prog-description") as HTMLInputElement
+            ).value = "";
             checkAdminAuth();
           } else {
             alert("Chyba při přidávání položky programu.");

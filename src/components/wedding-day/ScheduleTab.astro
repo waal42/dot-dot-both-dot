@@ -8,56 +8,73 @@ const staticScheduleItems = wedding?.data.schedule.items || [];
 
 <div class="space-y-6">
   <!-- Program & Activities Section -->
-  <div class="bg-wedding-light/80 dark:bg-wedding-dark/60 border-wedding-medium/20 rounded-2xl border p-5 shadow-xs">
+  <div
+    class="bg-wedding-light/80 dark:bg-wedding-dark/60 border-wedding-medium/20 rounded-2xl border p-5 shadow-xs"
+  >
     <div class="mb-5 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="bg-wedding-dark/10 dark:bg-wedding-light/10 text-wedding-dark flex h-10 w-10 items-center justify-center rounded-xl text-xl font-bold">
+        <div
+          class="bg-wedding-dark/10 dark:bg-wedding-light/10 text-wedding-dark flex h-10 w-10 items-center justify-center rounded-xl text-xl font-bold"
+        >
           🎯
         </div>
         <div>
-          <h2 class="text-wedding-dark text-xl font-bold tracking-tight">Program & Co kde dělat</h2>
-          <p class="text-wedding-medium text-xs">Aktivity, stanoviště a zábava pro svatebčany</p>
+          <h2 class="text-wedding-dark text-xl font-bold tracking-tight">
+            Program
+          </h2>
+          <p class="text-wedding-medium text-xs">
+            Aktivity, stanoviště a zábava
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Container for dynamic admin-added program activities -->
-    <div id="dynamic-program-feed" class="space-y-3 mb-4">
-      <div class="py-4 text-center text-wedding-medium italic text-xs">
+    <div id="dynamic-program-feed" class="mb-4 space-y-3">
+      <div class="text-wedding-medium py-4 text-center text-xs italic">
         Načítám program...
       </div>
     </div>
 
     <!-- Collapsible Static Schedule Baseline -->
-    <div class="mt-6 border-t border-wedding-medium/15 pt-4">
+    <div class="border-wedding-medium/15 mt-6 border-t pt-4">
       <button
         id="toggle-static-schedule-btn"
         type="button"
-        class="flex w-full items-center justify-between text-left cursor-pointer"
+        class="flex w-full cursor-pointer items-center justify-between text-left"
       >
         <div class="flex items-center gap-2">
           <span class="text-xs">🕒</span>
-          <span class="text-wedding-dark font-bold text-xs">Zobrazit orientační harmonogram Dne D</span>
+          <span class="text-wedding-dark text-xs font-bold"
+            >Zobrazit orientační harmonogram dne</span
+          >
         </div>
-        <span id="static-schedule-chevron" class="text-wedding-medium text-[11px] font-bold">
+        <span
+          id="static-schedule-chevron"
+          class="text-wedding-medium text-[11px] font-bold"
+        >
           Rozbalit ▾
         </span>
       </button>
 
       <div id="static-schedule-content" class="mt-3 hidden space-y-2">
-        {staticScheduleItems.map((item) => (
-          <div class="flex items-start gap-3 rounded-xl bg-wedding-light/90 dark:bg-wedding-dark/80 p-3 border border-wedding-medium/10 text-xs">
-            <span class="bg-wedding-dark text-wedding-light rounded-lg px-2.5 py-1 font-mono text-[11px] font-extrabold shrink-0">
-              {item.time}
-            </span>
-            <div>
-              <h4 class="text-wedding-dark font-bold">{item.title}</h4>
-              {item.description && (
-                <p class="text-wedding-medium mt-0.5 text-[11px] leading-relaxed">{item.description}</p>
-              )}
+        {
+          staticScheduleItems.map((item) => (
+            <div class="bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/10 flex items-start gap-3 rounded-xl border p-3 text-xs">
+              <span class="bg-wedding-dark text-wedding-light shrink-0 rounded-lg px-2.5 py-1 font-mono text-[11px] font-extrabold">
+                {item.time}
+              </span>
+              <div>
+                <h4 class="text-wedding-dark font-bold">{item.title}</h4>
+                {item.description && (
+                  <p class="text-wedding-medium mt-0.5 text-[11px] leading-relaxed">
+                    {item.description}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </div>
@@ -78,17 +95,18 @@ const staticScheduleItems = wedding?.data.schedule.items || [];
         feedContainer.innerHTML = `
           <div class="bg-wedding-dark/5 dark:bg-wedding-light/5 rounded-2xl p-5 text-center">
             <span class="text-2xl block mb-2">🎈</span>
-            <p class="text-wedding-dark font-bold text-sm mb-1">Všechny aktivity připraveny!</p>
+            <p class="text-wedding-dark font-bold text-sm mb-1">Zatím tu nic není.</p>
             <p class="text-wedding-medium text-xs leading-relaxed max-w-sm mx-auto">
-              Postupně zde budeme přidávat stanoviště a info o tom, co a kde můžete na svatbě vyzkoušet.
+            Ale my to sem postupně všechno přidáme!
             </p>
           </div>
         `;
         return;
       }
 
-      feedContainer.innerHTML = items.map((item: any) => {
-        return `
+      feedContainer.innerHTML = items
+        .map((item: any) => {
+          return `
           <div class="bg-wedding-light dark:bg-wedding-dark/90 border-wedding-medium/20 rounded-2xl border p-4 shadow-2xs hover:shadow-xs transition-all">
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-start gap-3">
@@ -102,20 +120,29 @@ const staticScheduleItems = wedding?.data.schedule.items || [];
                     </span>
                     <h3 class="text-wedding-dark font-extrabold text-sm">${item.title}</h3>
                   </div>
-                  ${item.location ? `
+                  ${
+                    item.location
+                      ? `
                     <div class="mt-1 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded-md">
                       📍 ${item.location}
                     </div>
-                  ` : ''}
-                  ${item.description ? `
+                  `
+                      : ""
+                  }
+                  ${
+                    item.description
+                      ? `
                     <p class="text-wedding-medium mt-2 text-xs leading-relaxed font-medium">${item.description}</p>
-                  ` : ''}
+                  `
+                      : ""
+                  }
                 </div>
               </div>
             </div>
           </div>
         `;
-      }).join("");
+        })
+        .join("");
     } catch (e) {
       console.warn("Error loading program items feed:", e);
     }
