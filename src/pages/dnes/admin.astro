@@ -255,7 +255,15 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || 'Hanka & Filip'}
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username: user, password: pass })
         });
-        const data = await res.json();
+        
+        const rawText = await res.text();
+        let data: any = {};
+        try {
+          data = rawText ? JSON.parse(rawText) : {};
+        } catch (e) {
+          alert(`Server vrátil ne-JSON odpověď (HTTP ${res.status}): ${rawText.slice(0, 150)}`);
+          return;
+        }
 
         if (res.ok && data.token) {
           adminToken = data.token;
@@ -265,7 +273,7 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || 'Hanka & Filip'}
           alert(data.error || "Neplatné přihlašovací údaje.");
         }
       } catch (err) {
-        alert("Chyba spojení s serverem (" + err + "). Zkontrolujte přihlašovací údaje v .env a restartujte svatba-dnes.service na VPS.");
+        alert("Chyba spojení s serverem (" + err + ").");
       }
     });
 
