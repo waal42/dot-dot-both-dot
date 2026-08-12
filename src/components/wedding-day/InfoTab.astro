@@ -1,0 +1,121 @@
+---
+// src/components/wedding-day/InfoTab.astro
+import TransitDepartures from "./TransitDepartures.astro";
+import { getEntry } from "astro:content";
+
+const wedding = await getEntry("wedding", "info");
+const whenWhere = wedding?.data.whenWhere;
+---
+
+<div class="space-y-6">
+  <div>
+    <h2 class="text-wedding-dark text-xl font-bold tracking-tight">
+      Informace & Kontakty
+    </h2>
+    <p class="text-wedding-medium text-xs">Vše důležité na jednom místě</p>
+  </div>
+
+  <!-- Venue & Map Card -->
+  <div
+    class="morse-border bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm"
+  >
+    <div class="mb-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span
+          class="bg-wedding-dark/10 dark:bg-wedding-light/10 text-wedding-dark flex h-10 w-10 items-center justify-center rounded-xl font-bold"
+        >
+          📍
+        </span>
+        <div>
+          <h3 class="text-wedding-dark text-base font-bold">
+            {whenWhere?.venueName || "Sokec, Šlapanice"}
+          </h3>
+          <p class="text-wedding-medium text-xs">
+            {whenWhere?.address || "Nádražní 87, 664 51 Šlapanice"}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-wedding-medium mb-4 text-xs leading-relaxed">
+      {
+        whenWhere?.description ||
+          "Sokec je fajn restaurace pod Sokolovnou s dětským hřištěm a pláckem na oslavu."
+      }
+    </p>
+
+    <a
+      href={whenWhere?.googleMapsUrl ||
+        "https://maps.app.goo.gl/AJ5MkMekiaeEhSGf6"}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-wedding-dark border-wedding-dark/40 hover:bg-wedding-dark hover:text-wedding-light inline-flex w-full items-center justify-center gap-2 rounded-xl border p-3 text-xs font-bold tracking-wider uppercase transition-all active:scale-95"
+    >
+      <span>🗺️</span> Otevřít v Google Mapách
+    </a>
+  </div>
+
+  <!-- Quick Emergency Contacts -->
+  <div
+    class="bg-wedding-light/60 dark:bg-wedding-dark/40 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm"
+  >
+    <h3 class="text-wedding-dark mb-3 text-sm font-bold">
+      📞 Rychlé kontakty pro svatebčany
+    </h3>
+    <div class="space-y-2.5">
+      <div
+        class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 flex items-center justify-between rounded-xl border p-3"
+      >
+        <div>
+          <span class="text-wedding-dark block text-sm font-bold"
+            >Martin (Svědek)</span
+          >
+          <span class="text-wedding-medium block text-xs"
+            >Organizace, odvozy a koordinace</span
+          >
+        </div>
+        <a
+          href="tel:+420777123456"
+          class="inline-flex items-center gap-1 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-2xs transition-all hover:bg-emerald-700 active:scale-95"
+        >
+          <span>📞</span> Zavolat
+        </a>
+      </div>
+
+      <div
+        class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 flex items-center justify-between rounded-xl border p-3"
+      >
+        <div>
+          <span class="text-wedding-dark block text-sm font-bold"
+            >Katka (Svědkyně)</span
+          >
+          <span class="text-wedding-medium block text-xs"
+            >Program, hry a dotazy</span
+          >
+        </div>
+        <a
+          href="tel:+420777654321"
+          class="inline-flex items-center gap-1 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-2xs transition-all hover:bg-emerald-700 active:scale-95"
+        >
+          <span>📞</span> Zavolat
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parking Warning -->
+  <div
+    class="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-900 dark:text-amber-200"
+  >
+    <span class="font-bold">⚠️ Důležité upozornění k parkování:</span>
+    <p class="mt-1">
+      Parkování je možné přímo u Sokecu nebo v okolních ulicích. Jen pozor:
+      pokud zaparkujete v ulici Nádražní a auto tam necháte do neděle, je
+      potřeba odjet nejpozději do 13:00. Poté zde kvůli průvodu Šlapanických
+      slavností platí zákaz zastavení.
+    </p>
+  </div>
+
+  <!-- Transit Departures Widget -->
+  <TransitDepartures />
+</div>

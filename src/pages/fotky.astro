@@ -1,0 +1,61 @@
+---
+// src/pages/fotky.astro
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import { getEntry } from "astro:content";
+
+const wedding = await getEntry("wedding", "info");
+const metaTitle = `Fotoalbum | ${wedding?.data.metaTitle || 'Hanka & Filip'}`;
+---
+
+<Layout title={metaTitle}>
+  <Header />
+
+  <div class="flex min-h-[70vh] flex-col items-center justify-center px-4 py-12 text-center">
+    <div class="morse-border bg-wedding-light dark:bg-wedding-dark/95 border-wedding-dark/30 max-w-md rounded-3xl p-8 shadow-2xl">
+      <div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-wedding-dark/10 text-wedding-dark text-3xl dark:bg-wedding-light/10">
+        📸
+      </div>
+
+      <h1 class="text-wedding-dark mb-2 text-2xl font-bold">Přesměrovávám na fotoalbum...</h1>
+      <p class="text-wedding-medium mb-6 text-xs">Za okamžik budete přesměrováni na sdílené fotoalbum z našich svatebních momentek.</p>
+
+      <div class="mb-6 flex justify-center">
+        <span class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-wedding-dark border-t-transparent"></span>
+      </div>
+
+      <a
+        id="manual-photo-btn"
+        href="/svatba/dnes#fotky"
+        class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium active:scale-95 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3.5 font-bold text-xs uppercase tracking-wider transition-all"
+      >
+        <span>📷</span> Přejít na svatební fotoalbum
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  async function performPhotoRedirect() {
+    try {
+      const res = await fetch("/svatba/dnes/api/data");
+      if (res.ok) {
+        const data = await res.json();
+        const redirects = data.redirects || {};
+        const targetUrl = redirects["fotky"];
+
+        if (targetUrl && targetUrl.startsWith("http")) {
+          window.location.replace(targetUrl);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to fetch photo redirect target", e);
+    }
+
+    // Fallback to D-Day photo tab if no custom URL is set yet
+    window.location.replace("/svatba/dnes#fotky");
+  }
+
+  document.addEventListener("DOMContentLoaded", performPhotoRedirect);
+</script>

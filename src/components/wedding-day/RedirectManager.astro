@@ -1,0 +1,259 @@
+---
+// src/components/wedding-day/RedirectManager.astro
+---
+
+<div class="space-y-6">
+  <div class="bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm">
+    <h3 class="text-wedding-dark mb-1 text-lg font-bold">🔗 Správce přesměrování & QR kódů pro tisk</h3>
+    <p class="text-wedding-medium mb-4 text-xs">
+      Založte si libovolnou novou zkratku (např. <code class="bg-wedding-dark/5 dark:bg-wedding-light/10 font-bold px-1.5 py-0.5 rounded">fotky</code> nebo <code class="bg-wedding-dark/5 dark:bg-wedding-light/10 font-bold px-1.5 py-0.5 rounded">disk</code>). Návštěvník bude po naskenování QR přesměrován na cílovou URL.
+    </p>
+
+    <!-- Add New Redirect Form -->
+    <form id="add-redirect-form" class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/20 mb-6 space-y-3 rounded-xl border p-4">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div>
+          <label for="red-slug" class="text-wedding-dark mb-1 block font-bold text-xs">
+            Zkratka (Slug) *
+          </label>
+          <input
+            type="text"
+            id="red-slug"
+            required
+            placeholder="např. fotky, disk, kviz"
+            class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-mono font-bold"
+          />
+        </div>
+        <div>
+          <label for="red-url" class="text-wedding-dark mb-1 block font-bold text-xs">
+            Cílová URL adresa *
+          </label>
+          <input
+            type="url"
+            id="red-url"
+            required
+            placeholder="https://photos.app.goo.gl/..."
+            class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-lg border p-2.5 text-xs font-medium"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium active:scale-95 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all"
+      >
+        <span>➕</span> Přidat / Uložit přesměrování
+      </button>
+    </form>
+
+    <!-- Existing Redirects Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs">
+        <thead>
+          <tr class="border-b border-wedding-medium/20 text-wedding-medium font-bold uppercase">
+            <th class="py-2.5 px-3">Zkratka (URL)</th>
+            <th class="py-2.5 px-3">Cílová webová adresa</th>
+            <th class="py-2.5 px-3 text-right">Akce & QR</th>
+          </tr>
+        </thead>
+        <tbody id="redirects-table-body" class="divide-y divide-wedding-medium/10">
+          <tr>
+            <td colspan="3" class="py-4 text-center text-wedding-medium italic">Načítám přesměrování...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- QR Modal / Container -->
+  <div id="qr-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 hidden">
+    <div class="bg-wedding-light dark:bg-wedding-dark border-wedding-medium/30 max-w-sm w-full rounded-3xl border p-6 text-center shadow-2xl animate-fade-in-up">
+      <h3 id="qr-modal-title" class="text-wedding-dark font-bold text-lg mb-1">QR Kód</h3>
+      <p id="qr-modal-url" class="text-wedding-medium text-xs font-mono mb-4 break-all"></p>
+      
+      <div class="bg-white p-4 rounded-2xl inline-block shadow-inner mb-6">
+        <canvas id="qr-modal-canvas" class="w-48 h-48 mx-auto"></canvas>
+      </div>
+
+      <div class="flex gap-2">
+        <button
+          id="qr-download-btn"
+          class="flex-1 bg-wedding-dark text-wedding-light py-2.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider"
+        >
+          💾 Stáhnout PNG
+        </button>
+        <button
+          id="qr-close-btn"
+          class="bg-wedding-medium/20 text-wedding-dark py-2.5 px-4 rounded-xl font-bold text-xs"
+        >
+          Zavřít
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import QRCode from "qrcode";
+
+  let currentAdminToken = localStorage.getItem("dnes_admin_token") || "";
+
+  async function loadRedirects() {
+    try {
+      const res = await fetch("/svatba/dnes/api/data");
+      const data = await res.json();
+      const redirects = data.redirects || {};
+      const tbody = document.getElementById("redirects-table-body");
+      if (!tbody) return;
+
+      tbody.innerHTML = "";
+
+      const keys = Object.keys(redirects);
+      if (keys.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-wedding-medium italic">Žádné zkratky zatím nejsou vytvořeny.</td></tr>`;
+        return;
+      }
+
+      keys.forEach((slug) => {
+        const url = redirects[slug];
+        const shortUrl = `${window.location.origin}/svatba/${slug}`;
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td class="py-3 px-3">
+            <a href="${shortUrl}" target="_blank" class="font-mono font-bold text-wedding-dark hover:underline">
+              /svatba/${slug} ↗
+            </a>
+          </td>
+          <td class="py-3 px-3 max-w-[200px] truncate text-wedding-medium font-mono text-[11px]" title="${url}">
+            ${url || '<span class="text-rose-500 font-sans italic">Nenastaveno</span>'}
+          </td>
+          <td class="py-3 px-3 text-right space-x-2">
+            <button
+              data-slug="${slug}"
+              data-shorturl="${shortUrl}"
+              class="show-qr-btn bg-wedding-dark/10 hover:bg-wedding-dark hover:text-wedding-light text-wedding-dark font-bold px-2.5 py-1 rounded-lg text-[11px] transition-colors"
+            >
+              📱 QR kód
+            </button>
+            <button
+              data-slug="${slug}"
+              class="delete-red-btn bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-2.5 py-1 rounded-lg text-[11px] transition-colors"
+            >
+              🗑️
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      // Bind QR buttons
+      document.querySelectorAll(".show-qr-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const target = e.currentTarget as HTMLButtonElement;
+          const slug = target.getAttribute("data-slug") || "";
+          const shortUrl = target.getAttribute("data-shorturl") || "";
+          openQRModal(slug, shortUrl);
+        });
+      });
+
+      // Bind Delete buttons
+      document.querySelectorAll(".delete-red-btn").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+          const target = e.currentTarget as HTMLButtonElement;
+          const slug = target.getAttribute("data-slug") || "";
+          if (confirm(`Opravdu chcete smazat zkratku /svatba/${slug}?`)) {
+            await deleteRedirect(slug);
+          }
+        });
+      });
+    } catch (err) {
+      console.error("Failed to load redirects:", err);
+    }
+  }
+
+  async function deleteRedirect(slug: string) {
+    currentAdminToken = localStorage.getItem("dnes_admin_token") || "";
+    try {
+      const res = await fetch("/svatba/dnes/api/admin/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${currentAdminToken}`
+        },
+        body: JSON.stringify({ action: "delete_redirect", slug })
+      });
+      if (res.ok) loadRedirects();
+    } catch (e) {
+      alert("Chyba při mazání.");
+    }
+  }
+
+  async function openQRModal(slug: string, shortUrl: string) {
+    const modal = document.getElementById("qr-modal");
+    const titleEl = document.getElementById("qr-modal-title");
+    const urlEl = document.getElementById("qr-modal-url");
+    const canvas = document.getElementById("qr-modal-canvas") as HTMLCanvasElement;
+
+    if (!modal || !canvas) return;
+
+    if (titleEl) titleEl.textContent = `QR Kód pro /svatba/${slug}`;
+    if (urlEl) urlEl.textContent = shortUrl;
+
+    await QRCode.toCanvas(canvas, shortUrl, {
+      width: 200,
+      margin: 1,
+      color: { dark: "#2d3a2d", light: "#ffffff" }
+    });
+
+    modal.classList.remove("hidden");
+
+    document.getElementById("qr-download-btn")!.onclick = () => {
+      const link = document.createElement("a");
+      link.download = `qr-svatba-${slug}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    };
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadRedirects();
+
+    document.getElementById("add-redirect-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const slugInput = document.getElementById("red-slug") as HTMLInputElement;
+      const urlInput = document.getElementById("red-url") as HTMLInputElement;
+      currentAdminToken = localStorage.getItem("dnes_admin_token") || "";
+
+      try {
+        const res = await fetch("/svatba/dnes/api/admin/update", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${currentAdminToken}`
+          },
+          body: JSON.stringify({
+            action: "set_redirect",
+            slug: slugInput.value,
+            target_url: urlInput.value
+          })
+        });
+
+        if (res.ok) {
+          slugInput.value = "";
+          urlInput.value = "";
+          loadRedirects();
+        } else {
+          alert("Chyba při ukládání přesměrování.");
+        }
+      } catch (err) {
+        alert("Chyba přihlášení.");
+      }
+    });
+
+    document.getElementById("qr-close-btn")?.addEventListener("click", () => {
+      document.getElementById("qr-modal")?.classList.add("hidden");
+    });
+  });
+</script>

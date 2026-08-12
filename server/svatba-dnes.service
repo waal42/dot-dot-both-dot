@@ -1,0 +1,16 @@
+[Unit]
+Description=Wedding Day Companion App API (/svatba/dnes)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/svatba-dnes
+ExecStart=/usr/bin/python3 /opt/svatba-dnes/dnes_api.py
+Restart=always
+RestartSec=5
+Environment=PORT=8085
+Environment=DNES_DATA_PATH=/var/www/mywalove/svatba/dnes_data.json
+
+[Install]
+WantedBy=multi-user.target

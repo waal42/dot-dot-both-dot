@@ -1,0 +1,173 @@
+---
+// src/components/wedding-day/TransitDepartures.astro
+import saturdayData from "../../content/wedding/ids_jmk_saturday.json";
+---
+
+<div class="bg-wedding-light/50 dark:bg-wedding-dark/30 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm">
+  <div class="mb-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="bg-wedding-dark/10 dark:bg-wedding-light/10 text-wedding-dark flex h-10 w-10 items-center justify-center rounded-xl font-bold">
+        🚌
+      </div>
+      <div>
+        <h3 class="text-wedding-dark text-lg font-bold tracking-tight">Odjezdy MHD do Brna</h3>
+        <p class="text-wedding-medium text-xs font-medium">Oficiální GTFS jízdní řád IDS JMK (Sobota)</p>
+      </div>
+    </div>
+    <a
+      href="https://idos.cz/idsjmk/spojeni/vysledky/?f=%C5%A0lapanice&t=Brno"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-wedding-medium hover:text-wedding-dark flex items-center gap-1 text-xs font-semibold transition-colors"
+      title="Vyhledat v IDOS"
+    >
+      <span>🔍</span> IDOS.cz ↗
+    </a>
+  </div>
+
+  <div class="space-y-3">
+    <!-- Vlak S6 -->
+    <div class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs">
+      <div class="flex items-start justify-between">
+        <div class="flex items-start gap-3">
+          <span class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-700 font-extrabold text-white text-xs tracking-wider">
+            S6
+          </span>
+          <div>
+            <div class="text-wedding-dark font-bold text-sm">Vlak ze stanice Šlapanice</div>
+            <div class="text-wedding-medium text-xs">Směr Brno hl.n. (chůze 5 min od Sokecu)</div>
+          </div>
+        </div>
+        <div id="next-s6-box" class="text-right">
+          <span class="text-wedding-dark font-mono font-bold text-sm">Načítám...</span>
+        </div>
+      </div>
+      <div class="mt-2 border-t border-wedding-medium/10 pt-2 text-[11px] text-wedding-medium">
+        Sobotní odjezdy: <span class="font-mono font-semibold">{saturdayData.S6.map(d => d.time).join(", ")}</span>
+      </div>
+    </div>
+
+    <!-- Trolejbus 31 -->
+    <div class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs">
+      <div class="flex items-start justify-between">
+        <div class="flex items-start gap-3">
+          <span class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-red-600 font-extrabold text-white text-xs tracking-wider">
+            31
+          </span>
+          <div>
+            <div class="text-wedding-dark font-bold text-sm">Trolejbus ze zastávky Kalvodova</div>
+            <div class="text-wedding-medium text-xs">Směr Hlavní nádraží (chůze 15 min od Sokecu)</div>
+          </div>
+        </div>
+        <div id="next-31-box" class="text-right">
+          <span class="text-wedding-dark font-mono font-bold text-sm">Načítám...</span>
+        </div>
+      </div>
+      <div class="mt-2 border-t border-wedding-medium/10 pt-2 text-[11px] text-wedding-medium">
+        Odpolední spojení: <span class="font-mono font-semibold">každých 20 min (x:19, x:39, x:59)</span>
+      </div>
+    </div>
+
+    <!-- Noční rozjezd N96 -->
+    <div class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs">
+      <div class="flex items-start justify-between">
+        <div class="flex items-start gap-3">
+          <span class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-indigo-900 font-extrabold text-white text-xs tracking-wider">
+            N96
+          </span>
+          <div>
+            <div class="text-wedding-dark font-bold text-sm">Noční rozjezd ze zastávky Kalvodova</div>
+            <div class="text-wedding-medium text-xs">Přímé noční spojení ze Šlapanic do Brna</div>
+          </div>
+        </div>
+        <div id="next-n96-box" class="text-right">
+          <span class="text-indigo-900 dark:text-indigo-300 font-mono font-bold text-xs">22:32 / 23:02 / 23:32</span>
+        </div>
+      </div>
+      <div class="mt-2 border-t border-wedding-medium/10 pt-2 text-[11px] text-indigo-900 dark:text-indigo-300 font-semibold">
+        Noční odjezdy: <span class="font-mono">{saturdayData.N96.map(d => d.time).join(", ")}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 flex items-center justify-between border-t border-wedding-medium/15 pt-3 text-xs">
+    <span class="text-wedding-medium/80 italic">Data pochází z oficiálního GTFS jízdního řádu IDS JMK.</span>
+    <a
+      href="https://idos.cz/idsjmk/spojeni/vysledky/?f=%C5%A0lapanice&t=Brno"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-wedding-dark hover:underline font-bold"
+    >
+      Vyhledat v IDOS ↗
+    </a>
+  </div>
+</div>
+
+<script define:vars={{ saturdayData }}>
+  function updateNextDepartures() {
+    const now = new Date();
+    const currentMins = now.getHours() * 60 + now.getMinutes();
+
+    function getNextTwo(items) {
+      if (!items || !items.length) return [];
+      const upcoming = [];
+      for (const item of items) {
+        const [h, m] = item.time.split(":").map(Number);
+        const itemMins = h * 60 + m;
+        if (itemMins >= currentMins) {
+          const diff = itemMins - currentMins;
+          upcoming.push({ time: item.time, diff, isTomorrow: false });
+          if (upcoming.length === 2) break;
+        }
+      }
+      if (upcoming.length < 2 && items.length > 0) {
+        upcoming.push({ time: items[0].time, diff: null, isTomorrow: true });
+      }
+      return upcoming;
+    }
+
+    function renderBox(elementId, items) {
+      const box = document.getElementById(elementId);
+      if (!box) return;
+
+      const upcoming = getNextTwo(items);
+      if (upcoming.length === 0) {
+        box.innerHTML = `<span class="text-wedding-medium text-xs">--:--</span>`;
+        return;
+      }
+
+      const first = upcoming[0];
+      const second = upcoming.length > 1 ? upcoming[1] : null;
+
+      let html = `<div class="flex flex-col items-end gap-0.5">`;
+
+      if (first.isTomorrow) {
+        html += `<span class="text-wedding-dark font-mono font-bold text-sm">v ${first.time} (zítra)</span>`;
+      } else {
+        html += `
+          <div class="flex items-baseline gap-1.5">
+            <span class="text-emerald-700 dark:text-emerald-400 font-mono font-extrabold text-sm">v ${first.time}</span>
+            <span class="text-emerald-800 dark:text-emerald-300 font-bold text-[11px]">(za ${first.diff} min)</span>
+          </div>
+        `;
+      }
+
+      if (second) {
+        const secondLabel = second.isTomorrow ? `zítra v ${second.time}` : `další v ${second.time}`;
+        html += `<span class="text-wedding-medium text-[11px] font-mono">další: ${second.time}</span>`;
+      }
+
+      html += `</div>`;
+      box.innerHTML = html;
+    }
+
+    renderBox("next-s6-box", saturdayData.S6);
+    renderBox("next-31-box", saturdayData.T31);
+    renderBox("next-n96-box", saturdayData.N96);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateNextDepartures();
+    setInterval(updateNextDepartures, 30000);
+  });
+</script>

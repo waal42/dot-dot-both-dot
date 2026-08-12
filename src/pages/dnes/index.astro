@@ -1,0 +1,164 @@
+---
+// src/pages/dnes/index.astro
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import LockedTeaser from "../../components/wedding-day/LockedTeaser.astro";
+import LiveBanner from "../../components/wedding-day/LiveBanner.astro";
+import ScheduleTab from "../../components/wedding-day/ScheduleTab.astro";
+import PhotoTab from "../../components/wedding-day/PhotoTab.astro";
+import GuestbookTab from "../../components/wedding-day/GuestbookTab.astro";
+import InfoTab from "../../components/wedding-day/InfoTab.astro";
+import { getEntry } from "astro:content";
+
+const wedding = await getEntry("wedding", "info");
+const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka & Filip'}`;
+---
+
+<Layout title={metaTitle}>
+  <Header />
+
+  <!-- Locked Teaser (shown when app is time-locked for non-admins) -->
+  <div id="dnes-locked-view" class="hidden">
+    <LockedTeaser />
+  </div>
+
+  <!-- Unlocked Full Mobile App -->
+  <div id="dnes-app-view" class="mx-auto max-w-xl px-4 pt-4 pb-28">
+    <!-- Live Announcement Banner -->
+    <LiveBanner />
+
+    <!-- Tab Contents -->
+    <main id="dnes-tab-contents">
+      <section id="tab-schedule" class="tab-pane animate-fade-in-up">
+        <ScheduleTab />
+      </section>
+
+      <section id="tab-photos" class="tab-pane animate-fade-in-up hidden">
+        <PhotoTab />
+      </section>
+
+      <section id="tab-guestbook" class="tab-pane animate-fade-in-up hidden">
+        <GuestbookTab />
+      </section>
+
+      <section id="tab-info" class="tab-pane animate-fade-in-up hidden">
+        <InfoTab />
+      </section>
+    </main>
+
+    <!-- Bottom Navigation Bar for Mobile -->
+    <nav class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 fixed bottom-0 left-0 right-0 z-40 border-t backdrop-blur-md shadow-2xl">
+      <div class="mx-auto flex max-w-md justify-around py-2">
+        <button
+          data-target="tab-schedule"
+          class="nav-tab-btn text-wedding-dark flex flex-col items-center gap-1 p-2 text-xs font-bold transition-all"
+        >
+          <span class="text-xl">🕒</span>
+          <span>Program</span>
+        </button>
+
+        <button
+          data-target="tab-photos"
+          class="nav-tab-btn text-wedding-medium hover:text-wedding-dark flex flex-col items-center gap-1 p-2 text-xs font-bold transition-all"
+        >
+          <span class="text-xl">📸</span>
+          <span>Fotoalbum</span>
+        </button>
+
+        <button
+          data-target="tab-guestbook"
+          class="nav-tab-btn text-wedding-medium hover:text-wedding-dark flex flex-col items-center gap-1 p-2 text-xs font-bold transition-all"
+        >
+          <span class="text-xl">✉️</span>
+          <span>Vzkazník</span>
+        </button>
+
+        <button
+          data-target="tab-info"
+          class="nav-tab-btn text-wedding-medium hover:text-wedding-dark flex flex-col items-center gap-1 p-2 text-xs font-bold transition-all"
+        >
+          <span class="text-xl">🚌</span>
+          <span>Doprava</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</Layout>
+
+<script>
+  // Dynamic Tab Switcher & Lock Check
+  async function checkAppLock() {
+    const adminToken = localStorage.getItem("dnes_admin_token");
+    const lockedView = document.getElementById("dnes-locked-view");
+    const appView = document.getElementById("dnes-app-view");
+
+    try {
+      const res = await fetch("/svatba/dnes/api/data", {
+        headers: adminToken ? { "Authorization": `Bearer ${adminToken}` } : {}
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.is_locked && !data.is_admin) {
+          lockedView?.classList.remove("hidden");
+          appView?.classList.add("hidden");
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("API Lock check offline, unlocking by default");
+    }
+
+    lockedView?.classList.add("hidden");
+    appView?.classList.remove("hidden");
+  }
+
+  function initTabs() {
+    const tabBtns = document.querySelectorAll(".nav-tab-btn");
+    const tabPanes = document.querySelectorAll(".tab-pane");
+
+    function switchTab(targetId: string) {
+      tabPanes.forEach(pane => {
+        if (pane.id === targetId) {
+          pane.classList.remove("hidden");
+        } else {
+          pane.classList.add("hidden");
+        }
+      });
+
+      tabBtns.forEach(btn => {
+        const isTarget = btn.getAttribute("data-target") === targetId;
+        if (isTarget) {
+          btn.classList.remove("text-wedding-medium");
+          btn.classList.add("text-wedding-dark", "scale-105", "font-extrabold");
+        } else {
+          btn.classList.remove("text-wedding-dark", "scale-105", "font-extrabold");
+          btn.classList.add("text-wedding-medium");
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-target");
+        if (target) switchTab(target);
+      });
+    });
+
+    // Check hash URL (e.g. /svatba/dnes#vzkaznik)
+    const hash = window.location.hash.toLowerCase();
+    if (hash.includes("vzkaz") || hash.includes("guestbook")) {
+      switchTab("tab-guestbook");
+    } else if (hash.includes("fotky") || hash.includes("photo")) {
+      switchTab("tab-photos");
+    } else if (hash.includes("info") || hash.includes("doprava")) {
+      switchTab("tab-info");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    checkAppLock();
+    initTabs();
+  });
+</script>

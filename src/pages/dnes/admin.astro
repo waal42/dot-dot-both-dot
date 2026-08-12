@@ -1,0 +1,312 @@
+---
+// src/pages/dnes/admin.astro
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import RedirectManager from "../../components/wedding-day/RedirectManager.astro";
+import { getEntry } from "astro:content";
+
+const wedding = await getEntry("wedding", "info");
+const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || 'Hanka & Filip'}`;
+---
+
+<Layout title={metaTitle}>
+  <Header />
+
+  <div class="mx-auto max-w-xl px-4 py-8">
+    <!-- Admin Login Form (Shown when not authenticated) -->
+    <div id="admin-login-card" class="morse-border bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 animate-fade-in-up rounded-3xl border p-6 md:p-8 shadow-xl">
+      <div class="mb-6 text-center">
+        <div class="mb-2 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-wedding-dark/10 text-wedding-dark text-3xl dark:bg-wedding-light/10">
+          🔐
+        </div>
+        <h1 class="text-wedding-dark text-2xl font-bold">Přihlášení správy Dnu D</h1>
+        <p class="text-wedding-medium mt-1 text-xs">Vstup pro snoubence, svědky a koordinátory</p>
+      </div>
+
+      <form id="admin-login-form" class="space-y-4">
+        <div>
+          <label for="admin-user" class="text-wedding-dark mb-1 block font-bold text-xs uppercase tracking-wider">
+            Uživatelské jméno
+          </label>
+          <input
+            type="text"
+            id="admin-user"
+            required
+            placeholder="walove"
+            class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-xl border p-3.5 text-sm font-bold"
+          />
+        </div>
+
+        <div>
+          <label for="admin-pass" class="text-wedding-dark mb-1 block font-bold text-xs uppercase tracking-wider">
+            Heslo
+          </label>
+          <input
+            type="password"
+            id="admin-pass"
+            required
+            placeholder="••••••••"
+            class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-xl border p-3.5 text-sm font-bold"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium active:scale-95 mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-4 font-bold text-sm tracking-wider uppercase shadow-md transition-all"
+        >
+          <span>🔑</span> Přihlásit se
+        </button>
+      </form>
+    </div>
+
+    <!-- Admin Control Panel (Shown when authenticated) -->
+    <div id="admin-panel" class="space-y-6 hidden animate-fade-in-up">
+      <div class="bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 flex items-center justify-between rounded-2xl border p-5 shadow-sm">
+        <div>
+          <h1 class="text-wedding-dark text-xl font-bold">Správa Dnu D</h1>
+          <span class="text-emerald-700 dark:text-emerald-400 text-xs font-bold">● Přihlášen jako Admin</span>
+        </div>
+        <button
+          id="admin-logout-btn"
+          class="bg-rose-500/10 text-rose-700 hover:bg-rose-600 hover:text-white rounded-xl px-4 py-2 font-bold text-xs transition-colors"
+        >
+          Odhlásit se
+        </button>
+      </div>
+
+      <!-- Lock Toggle Control -->
+      <div class="bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm">
+        <h3 class="text-wedding-dark mb-1 font-bold text-base">🔐 Stav zámku pro svatebčany</h3>
+        <p class="text-wedding-medium mb-4 text-xs">
+          Automatické odemčení je nastaveno na sobotu 15.8. ve 13:00. Zde můžete aplikaci pro všechny ručně odemknout nebo zamknout.
+        </p>
+
+        <div class="flex flex-wrap gap-2">
+          <button
+            id="lock-auto-btn"
+            class="lock-btn flex-1 bg-wedding-dark/10 text-wedding-dark border-wedding-medium/30 rounded-xl border py-2.5 px-3 font-bold text-xs transition-all"
+          >
+            ⏰ Automaticky (15.8. 13:00)
+          </button>
+          <button
+            id="lock-unlock-btn"
+            class="lock-btn flex-1 bg-emerald-600 text-white rounded-xl py-2.5 px-3 font-bold text-xs shadow-2xs transition-all"
+          >
+            🔓 Odemknout všem
+          </button>
+          <button
+            id="lock-lock-btn"
+            class="lock-btn flex-1 bg-rose-600 text-white rounded-xl py-2.5 px-3 font-bold text-xs shadow-2xs transition-all"
+          >
+            🔒 Zamknout aplikaci
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Announcement Poster -->
+      <div class="bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm">
+        <h3 class="text-wedding-dark mb-1 font-bold text-base">📢 Publikovat bleskový oznam hostům</h3>
+        <p class="text-wedding-medium mb-3 text-xs">
+          Oznámení se okamžitě zobrazí na všech telefonů svatebčanů v horním banneru.
+        </p>
+
+        <form id="post-announcement-form" class="space-y-3">
+          <textarea
+            id="announcement-input"
+            required
+            rows="2"
+            placeholder="Napište krátké oznámení (např. Krájení dortu začíná za 5 minut!)..."
+            class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-xl border p-3 text-xs font-medium"
+          ></textarea>
+
+          <button
+            type="submit"
+            class="bg-amber-600 text-white hover:bg-amber-700 active:scale-95 inline-flex items-center gap-1.5 rounded-xl px-5 py-3 font-bold text-xs uppercase tracking-wider shadow-md transition-all"
+          >
+            <span>📢</span> Zveřejnit všem hostům
+          </button>
+        </form>
+
+        <div class="mt-5 border-t border-wedding-medium/15 pt-4">
+          <h4 class="text-wedding-dark mb-2 font-bold text-xs uppercase tracking-wider">Aktivní oznamy:</h4>
+          <div id="announcements-list" class="space-y-2 text-xs">
+            <!-- List items loaded dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Redirects Manager -->
+      <RedirectManager />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  let adminToken = localStorage.getItem("dnes_admin_token") || "";
+
+  async function checkAdminAuth() {
+    const loginCard = document.getElementById("admin-login-card");
+    const panel = document.getElementById("admin-panel");
+
+    if (!adminToken) {
+      loginCard?.classList.remove("hidden");
+      panel?.classList.add("hidden");
+      return;
+    }
+
+    try {
+      const res = await fetch("/svatba/dnes/api/data", {
+        headers: { "Authorization": `Bearer ${adminToken}` }
+      });
+      const data = await res.json();
+
+      if (data.is_admin) {
+        loginCard?.classList.add("hidden");
+        panel?.classList.remove("hidden");
+        loadAnnouncementsList(data.announcements || []);
+      } else {
+        localStorage.removeItem("dnes_admin_token");
+        adminToken = "";
+        loginCard?.classList.remove("hidden");
+        panel?.classList.add("hidden");
+      }
+    } catch (e) {
+      loginCard?.classList.remove("hidden");
+      panel?.classList.add("hidden");
+    }
+  }
+
+  function loadAnnouncementsList(list: any[]) {
+    const listEl = document.getElementById("announcements-list");
+    if (!listEl) return;
+
+    if (list.length === 0) {
+      listEl.innerHTML = `<p class="text-wedding-medium italic">Žádná aktivní oznámení.</p>`;
+      return;
+    }
+
+    listEl.innerHTML = list.map(item => `
+      <div class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/15 flex items-center justify-between rounded-xl border p-3">
+        <div>
+          <p class="font-bold text-wedding-dark">${item.text}</p>
+          <span class="text-[10px] text-wedding-medium font-mono">${item.timestamp ? new Date(item.timestamp).toLocaleTimeString("cs-CZ") : ""}</span>
+        </div>
+        <button data-id="${item.id}" class="delete-msg-btn bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-2.5 py-1 rounded-lg text-xs transition-colors">
+          🗑️ Smazat
+        </button>
+      </div>
+    `).join("");
+
+    document.querySelectorAll(".delete-msg-btn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const id = (e.currentTarget as HTMLButtonElement).getAttribute("data-id");
+        if (id) deleteAnnouncement(id);
+      });
+    });
+  }
+
+  async function deleteAnnouncement(id: string) {
+    try {
+      const res = await fetch("/svatba/dnes/api/admin/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${adminToken}`
+        },
+        body: JSON.stringify({ action: "delete_announcement", id })
+      });
+      if (res.ok) checkAdminAuth();
+    } catch (e) {
+      alert("Chyba při mazání zprávy.");
+    }
+  }
+
+  async function setLockState(override: boolean | null) {
+    try {
+      const res = await fetch("/svatba/dnes/api/admin/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${adminToken}`
+        },
+        body: JSON.stringify({ action: "toggle_lock", override })
+      });
+      if (res.ok) {
+        alert("Stav zámku byl aktualizován.");
+        checkAdminAuth();
+      }
+    } catch (e) {
+      alert("Chyba při změně zámku.");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    checkAdminAuth();
+
+    // Login Form Submit
+    document.getElementById("admin-login-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = (document.getElementById("admin-user") as HTMLInputElement).value;
+      const pass = (document.getElementById("admin-pass") as HTMLInputElement).value;
+
+      try {
+        const res = await fetch("/svatba/dnes/api/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: user, password: pass })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          adminToken = data.token;
+          localStorage.setItem("dnes_admin_token", token => data.token);
+          localStorage.setItem("dnes_admin_token", data.token);
+          checkAdminAuth();
+        } else {
+          alert(data.error || "Neplatné přihlašovací údaje.");
+        }
+      } catch (err) {
+        alert("Chyba spojení s serverem.");
+      }
+    });
+
+    // Logout Button
+    document.getElementById("admin-logout-btn")?.addEventListener("click", () => {
+      localStorage.removeItem("dnes_admin_token");
+      adminToken = "";
+      checkAdminAuth();
+    });
+
+    // Post Announcement Form Submit
+    document.getElementById("post-announcement-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const input = document.getElementById("announcement-input") as HTMLTextAreaElement;
+      if (!input.value.trim()) return;
+
+      try {
+        const res = await fetch("/svatba/dnes/api/admin/update", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${adminToken}`
+          },
+          body: JSON.stringify({ action: "add_announcement", text: input.value.trim() })
+        });
+
+        if (res.ok) {
+          input.value = "";
+          checkAdminAuth();
+        } else {
+          alert("Chyba při publikování zprávy.");
+        }
+      } catch (err) {
+        alert("Chyba při komunikaci s API.");
+      }
+    });
+
+    // Lock Buttons
+    document.getElementById("lock-auto-btn")?.addEventListener("click", () => setLockState(null));
+    document.getElementById("lock-unlock-btn")?.addEventListener("click", () => setLockState(false));
+    document.getElementById("lock-lock-btn")?.addEventListener("click", () => setLockState(true));
+  });
+</script>

@@ -1,0 +1,85 @@
+---
+// src/components/wedding-day/PhotoTab.astro
+---
+
+<div class="space-y-6">
+  <div class="text-center">
+    <div class="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-wedding-dark/10 text-wedding-dark text-2xl dark:bg-wedding-light/10">
+      📸
+    </div>
+    <h2 class="text-wedding-dark text-2xl font-bold tracking-tight">Sdílejte svoje momentky</h2>
+    <p class="text-wedding-medium mx-auto max-w-sm mt-1 text-xs leading-relaxed">
+      Naskenujte QR kód u stolu nebo klikněte níže a nahrajte fotky & videa přímo do našeho svatebního alba!
+    </p>
+  </div>
+
+  <!-- QR Code & Upload Card -->
+  <div class="morse-border bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-3xl border p-6 text-center shadow-lg">
+    <div class="mb-4 inline-block rounded-2xl bg-white p-4 shadow-md">
+      <canvas id="photo-tab-qrcode" class="mx-auto h-44 w-44"></canvas>
+    </div>
+
+    <div class="mb-6">
+      <span class="text-wedding-medium block text-xs font-semibold uppercase tracking-wider">Krátký odkaz pro tisk a sdílení</span>
+      <code id="photo-tab-shortlink" class="text-wedding-dark bg-wedding-dark/5 dark:bg-wedding-light/10 mt-1 inline-block rounded-lg px-3 py-1 font-mono font-bold text-sm">
+        mywalove.cz/svatba/fotky
+      </code>
+    </div>
+
+    <a
+      id="photo-tab-btn"
+      href="/svatba/fotky"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium active:scale-95 inline-flex w-full items-center justify-center gap-3 rounded-xl px-6 py-4 font-bold text-base tracking-wider uppercase shadow-md transition-all"
+    >
+      <span>📷</span> Otevřít sdílené fotoalbum
+    </a>
+  </div>
+
+  <!-- Instructions Grid -->
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div class="bg-wedding-light/50 dark:bg-wedding-dark/30 border-wedding-medium/15 rounded-2xl border p-4">
+      <span class="mb-2 block text-xl">💡</span>
+      <h3 class="text-wedding-dark font-bold text-sm">Co nahrávat?</h3>
+      <p class="text-wedding-medium mt-1 text-xs leading-relaxed">
+        Všechno! Momentky ze stolu, veselé fotky s novomanželi, taneční kreace i krátká videa z celého dne.
+      </p>
+    </div>
+
+    <div class="bg-wedding-light/50 dark:bg-wedding-dark/30 border-wedding-medium/15 rounded-2xl border p-4">
+      <span class="mb-2 block text-xl">✨</span>
+      <h3 class="text-wedding-dark font-bold text-sm">Kdy nahrávat?</h3>
+      <p class="text-wedding-medium mt-1 text-xs leading-relaxed">
+        Můžete nahrávat průběžně po celý svatební den i kdykoliv v následujících dnech po svatbě.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import QRCode from "qrcode";
+
+  async function initPhotoTabQR() {
+    const canvas = document.getElementById("photo-tab-qrcode") as HTMLCanvasElement;
+    if (!canvas) return;
+
+    // Use full absolute redirect URL or window.location origin
+    const redirectUrl = `${window.location.origin}/svatba/fotky`;
+
+    try {
+      await QRCode.toCanvas(canvas, redirectUrl, {
+        width: 180,
+        margin: 1,
+        color: {
+          dark: "#2d3a2d",
+          light: "#ffffff"
+        }
+      });
+    } catch (err) {
+      console.error("QR Code generation error:", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", initPhotoTabQR);
+</script>

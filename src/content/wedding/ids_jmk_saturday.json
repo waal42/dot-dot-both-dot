@@ -1,0 +1,333 @@
+{
+  "S6": [
+    {
+      "time": "04:30",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    },
+    {
+      "time": "05:30",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    },
+    {
+      "time": "06:30",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    },
+    {
+      "time": "08:00",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    },
+    {
+      "time": "09:30",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    },
+    {
+      "time": "11:30",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    },
+    {
+      "time": "13:30",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    },
+    {
+      "time": "17:30",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    },
+    {
+      "time": "19:30",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, železniční stanice"
+    }
+  ],
+  "T31": [
+    {
+      "time": "05:18",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "05:48",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "06:18",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "06:48",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "07:18",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "07:48",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "08:18",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "08:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "08:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "09:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "09:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "09:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "10:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "10:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "10:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "11:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "11:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "11:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "12:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "12:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "12:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "13:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "13:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "13:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "14:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "14:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "14:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "15:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "15:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "15:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "16:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "16:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "16:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "17:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "17:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "17:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "18:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "18:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "18:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "19:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "19:39",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "19:59",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "20:19",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "20:48",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "21:18",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "21:48",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "22:18",
+      "headsign": "Hlavní nádraží",
+      "stop": "Šlapanice, Kalvodova"
+    }
+  ],
+  "N96": [
+    {
+      "time": "00:02",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "00:32",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "01:32",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "02:32",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "03:32",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "04:32",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "22:32",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "23:02",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    },
+    {
+      "time": "23:32",
+      "headsign": "Bosonohy",
+      "stop": "Šlapanice, Kalvodova"
+    }
+  ]
+}

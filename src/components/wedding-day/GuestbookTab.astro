@@ -1,0 +1,174 @@
+---
+// src/components/wedding-day/GuestbookTab.astro
+import { getEntry } from "astro:content";
+
+const wedding = await getEntry("wedding", "info");
+const morseMsg = wedding?.data.morseMessage || {
+  title: "Vzkazník novomanželům",
+  description: "Napište nám vzkaz nebo přání přímo ze svatebního dne!",
+  placeholderName: "Tvoje jméno / podpis",
+  submitButtonText: "Poslat vzkaz novomanželům",
+  sendingText: "Odesílám...",
+  successMessage: "Vzkaz byl úspěšně doručen do naší mývalí schránky! Děkujeme.",
+  errorMessage: "Chyba při odesílání. Zkuste to prosím znovu."
+};
+---
+
+<div class="space-y-6">
+  <div class="text-center">
+    <div class="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-wedding-dark/10 text-wedding-dark text-2xl dark:bg-wedding-light/10">
+      ✉️
+    </div>
+    <h2 class="text-wedding-dark text-2xl font-bold tracking-tight">{morseMsg.title}</h2>
+    <p class="text-wedding-medium mx-auto max-w-sm mt-1 text-xs leading-relaxed">
+      {morseMsg.description}
+    </p>
+  </div>
+
+  <div id="guestbook-form-container" class="morse-border bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-3xl border p-6 shadow-lg">
+    <form id="dnes-guestbook-form" class="space-y-4">
+      <input type="hidden" name="form_type" value="message" />
+      <input type="text" name="website_hp" value="" class="hidden" tabindex="-1" autocomplete="off" />
+
+      <div>
+        <label for="dnes-gb-name" class="text-wedding-dark mb-1 block font-bold text-xs uppercase tracking-wider">
+          Vaše jméno / Podpis *
+        </label>
+        <input
+          type="text"
+          id="dnes-gb-name"
+          name="Jméno / Podpis"
+          required
+          placeholder={morseMsg.placeholderName}
+          class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-xl border p-3.5 text-sm font-medium transition-all"
+        />
+      </div>
+
+      <div>
+        <div class="mb-1 flex items-center justify-between">
+          <label for="dnes-gb-text" class="text-wedding-dark font-bold text-xs uppercase tracking-wider">
+            Zpráva / Přání novomanželům *
+          </label>
+          <span class="text-wedding-medium text-[11px] italic">Automatický překlad do Morseovky</span>
+        </div>
+        <textarea
+          id="dnes-gb-text"
+          name="Překlad"
+          required
+          rows="3"
+          placeholder="Napište cokoliv pěkného..."
+          class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-xl border p-3.5 text-sm font-medium transition-all"
+        ></textarea>
+      </div>
+
+      <!-- Live Morse Preview Box -->
+      <div id="morse-preview-box" class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/20 rounded-xl border p-3">
+        <span class="text-wedding-medium block text-[10px] font-bold uppercase tracking-wider">Náhled v morseovce:</span>
+        <div id="morse-preview-text" class="text-wedding-dark font-mono mt-1 text-xs tracking-widest break-all">
+          ·— / —· / ———
+        </div>
+        <input type="hidden" id="dnes-gb-morse-hidden" name="Morseovka" value="" />
+      </div>
+
+      <button
+        type="submit"
+        id="dnes-gb-submit"
+        class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium active:scale-95 mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-4 font-bold text-sm tracking-wider uppercase shadow-md transition-all"
+      >
+        <span>✉️</span> {morseMsg.submitButtonText}
+      </button>
+    </form>
+
+    <div id="guestbook-success" class="hidden py-8 text-center">
+      <div class="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 text-3xl">
+        🎉
+      </div>
+      <h3 class="text-wedding-dark text-xl font-bold">Děkujeme za vzkaz!</h3>
+      <p class="text-wedding-medium mt-2 text-xs leading-relaxed">
+        {morseMsg.successMessage}
+      </p>
+      <button
+        id="gb-send-another"
+        class="text-wedding-dark hover:underline mt-6 inline-block text-xs font-bold"
+      >
+        ➕ Poslat další vzkaz
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Morse translator with em-dashes U+2014
+  const MORSE_MAP: Record<string, string> = {
+    a: "·—", b: "—···", c: "—·—·", d: "—··", e: "·", f: "··—·", g: "——·",
+    h: "····", i: "··", j: "·———", k: "—·—", l: "·—··", m: "——", n: "—·",
+    o: "———", p: "·——·", q: "——·—", r: "·—·", s: "···", t: "—", u: "··—",
+    v: "···—", w: "·——", x: "—··—", y: "—·——", z: "——··",
+    "0": "—————", "1": "·————", "2": "··———", "3": "···——", "4": "····—",
+    "5": "·····", "6": "—····", "7": "——···", "8": "———··", "9": "————·"
+  };
+
+  function textToMorse(text: string): string {
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .split("")
+      .map(char => {
+        if (char === " ") return "/";
+        return MORSE_MAP[char] || char;
+      })
+      .join(" ");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const textInput = document.getElementById("dnes-gb-text") as HTMLTextAreaElement;
+    const morsePreview = document.getElementById("morse-preview-text");
+    const morseHidden = document.getElementById("dnes-gb-morse-hidden") as HTMLInputElement;
+    const form = document.getElementById("dnes-guestbook-form") as HTMLFormElement;
+
+    if (textInput && morsePreview && morseHidden) {
+      textInput.addEventListener("input", () => {
+        const morseStr = textToMorse(textInput.value);
+        morsePreview.textContent = morseStr || "·— / —· / ———";
+        morseHidden.value = morseStr;
+      });
+    }
+
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById("dnes-gb-submit") as HTMLButtonElement;
+        const successBox = document.getElementById("guestbook-success");
+        const formContainer = form;
+
+        if (submitBtn) submitBtn.disabled = true;
+
+        try {
+          const formData = new FormData(form);
+          const scriptUrl = import.meta.env.PUBLIC_GOOGLE_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbxu4pTV0kljCj2IxflZP-example/exec";
+
+          await fetch(scriptUrl, {
+            method: "POST",
+            body: formData,
+            mode: "no-cors"
+          });
+
+          formContainer.classList.add("hidden");
+          successBox?.classList.remove("hidden");
+        } catch (err) {
+          alert("Chyba při odesílání vzkazu. Zkuste to prosím znovu.");
+          if (submitBtn) submitBtn.disabled = false;
+        }
+      });
+
+      document.getElementById("gb-send-another")?.addEventListener("click", () => {
+        form.reset();
+        form.classList.remove("hidden");
+        document.getElementById("guestbook-success")?.classList.add("hidden");
+        const submitBtn = document.getElementById("dnes-gb-submit") as HTMLButtonElement;
+        if (submitBtn) submitBtn.disabled = false;
+      });
+    }
+  });
+</script>

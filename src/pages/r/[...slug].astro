@@ -1,0 +1,71 @@
+---
+// src/pages/r/[...slug].astro
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+
+export function getStaticPaths() {
+  return [
+    { params: { slug: "fotky" } },
+    { params: { slug: "disk" } },
+    { params: { slug: "vzkaznik" } },
+    { params: { slug: "program" } },
+    { params: { slug: "kviz" } }
+  ];
+}
+
+const { slug } = Astro.params;
+---
+
+<Layout title={`Přesměrování... | Svatba`}>
+  <Header />
+
+  <div class="flex min-h-[70vh] flex-col items-center justify-center px-4 py-12 text-center">
+    <div class="morse-border bg-wedding-light dark:bg-wedding-dark/95 border-wedding-dark/30 max-w-md rounded-3xl p-8 shadow-2xl">
+      <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-wedding-dark/10 text-wedding-dark text-3xl dark:bg-wedding-light/10">
+        🔗
+      </div>
+
+      <h1 class="text-wedding-dark mb-2 text-2xl font-bold">Přesměrovávám...</h1>
+      <p class="text-wedding-medium mb-6 text-xs">Probíhá přesměrování pro zkratku <code class="font-bold">/svatba/{slug}</code></p>
+
+      <div class="mb-6 flex justify-center">
+        <span class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-wedding-dark border-t-transparent"></span>
+      </div>
+
+      <a
+        id="manual-link-btn"
+        href="/svatba/dnes"
+        class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium active:scale-95 inline-flex w-full items-center justify-center gap-2 rounded-xl py-3.5 font-bold text-xs uppercase tracking-wider transition-all"
+      >
+        <span>📱</span> Přejít do aplikace Den D
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{ slug }}>
+  async function performSlugRedirect() {
+    try {
+      const res = await fetch("/svatba/dnes/api/data");
+      if (res.ok) {
+        const data = await res.json();
+        const redirects = data.redirects || {};
+        const targetUrl = redirects[slug];
+
+        if (targetUrl && targetUrl.startsWith("http")) {
+          window.location.replace(targetUrl);
+          return;
+        } else if (targetUrl) {
+          window.location.replace(targetUrl);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Redirect fetch failed", e);
+    }
+
+    window.location.replace("/svatba/dnes");
+  }
+
+  document.addEventListener("DOMContentLoaded", performSlugRedirect);
+</script>
