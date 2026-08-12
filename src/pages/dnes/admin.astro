@@ -240,7 +240,7 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || 'Hanka & Filip'}
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function initAdmin() {
     checkAdminAuth();
 
     // Login Form Submit
@@ -315,5 +315,11 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || 'Hanka & Filip'}
     document.getElementById("lock-auto-btn")?.addEventListener("click", () => setLockState(null));
     document.getElementById("lock-unlock-btn")?.addEventListener("click", () => setLockState(false));
     document.getElementById("lock-lock-btn")?.addEventListener("click", () => setLockState(true));
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAdmin);
+  } else {
+    initAdmin();
+  }
 </script>
