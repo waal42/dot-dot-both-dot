@@ -37,13 +37,6 @@ const whenWhere = wedding?.data.whenWhere;
       </div>
     </div>
 
-    <p class="text-wedding-medium mb-4 text-xs leading-relaxed">
-      {
-        whenWhere?.description ||
-          "Sokec je fajn restaurace pod Sokolovnou s dětským hřištěm a pláckem na oslavu."
-      }
-    </p>
-
     <a
       href={whenWhere?.googleMapsUrl ||
         "https://maps.app.goo.gl/AJ5MkMekiaeEhSGf6"}
@@ -53,54 +46,6 @@ const whenWhere = wedding?.data.whenWhere;
     >
       <span>🗺️</span> Otevřít v Google Mapách
     </a>
-  </div>
-
-  <!-- Quick Emergency Contacts -->
-  <div
-    class="bg-wedding-light/60 dark:bg-wedding-dark/40 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm"
-  >
-    <h3 class="text-wedding-dark mb-3 text-sm font-bold">
-      📞 Rychlé kontakty pro svatebčany
-    </h3>
-    <div class="space-y-2.5">
-      <div
-        class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 flex items-center justify-between rounded-xl border p-3"
-      >
-        <div>
-          <span class="text-wedding-dark block text-sm font-bold"
-            >Martin (Svědek)</span
-          >
-          <span class="text-wedding-medium block text-xs"
-            >Organizace, odvozy a koordinace</span
-          >
-        </div>
-        <a
-          href="tel:+420777123456"
-          class="inline-flex items-center gap-1 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-2xs transition-all hover:bg-emerald-700 active:scale-95"
-        >
-          <span>📞</span> Zavolat
-        </a>
-      </div>
-
-      <div
-        class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 flex items-center justify-between rounded-xl border p-3"
-      >
-        <div>
-          <span class="text-wedding-dark block text-sm font-bold"
-            >Katka (Svědkyně)</span
-          >
-          <span class="text-wedding-medium block text-xs"
-            >Program, hry a dotazy</span
-          >
-        </div>
-        <a
-          href="tel:+420777654321"
-          class="inline-flex items-center gap-1 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-2xs transition-all hover:bg-emerald-700 active:scale-95"
-        >
-          <span>📞</span> Zavolat
-        </a>
-      </div>
-    </div>
   </div>
 
   <!-- Parking Warning -->

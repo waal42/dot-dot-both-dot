@@ -7,45 +7,84 @@ interface Props {
 const { unlockTime = "2026-08-15T13:00:00+02:00" } = Astro.props;
 ---
 
-<div class="flex min-h-[80vh] flex-col items-center justify-center px-4 py-12 text-center">
-  <div class="morse-border bg-wedding-light dark:bg-wedding-dark/95 border-wedding-dark/30 animate-fade-in-up max-w-lg rounded-3xl p-8 shadow-2xl md:p-12">
-    <div class="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-wedding-dark/10 text-wedding-dark text-3xl dark:bg-wedding-light/10">
-      💍
-    </div>
-    
-    <h1 class="text-wedding-dark mb-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+<div
+  class="flex min-h-[80vh] flex-col items-center justify-center px-4 py-12 text-center"
+>
+  <div
+    class="morse-border bg-wedding-light dark:bg-wedding-dark/95 border-wedding-dark/30 animate-fade-in-up max-w-lg rounded-3xl p-8 shadow-2xl md:p-12"
+  >
+    <h1
+      class="text-wedding-dark mb-3 text-3xl font-extrabold tracking-tight md:text-4xl"
+    >
       Svatební Den D
     </h1>
-    <p class="text-wedding-medium mb-6 text-sm font-semibold uppercase tracking-widest">
+    <p
+      class="text-wedding-medium mb-6 text-sm font-semibold tracking-widest uppercase"
+    >
       Hanka & Filip | 15. srpna 2026
     </p>
 
-    <div class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/20 mb-8 rounded-2xl border p-6">
-      <p class="text-wedding-dark mb-4 text-base font-semibold leading-relaxed">
+    <div
+      class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/20 mb-8 rounded-2xl border p-6"
+    >
+      <p class="text-wedding-dark mb-4 text-base leading-relaxed font-semibold">
         Aplikace pro svatební Den D se otevře v sobotu 15. srpna ve 13:00!
       </p>
       <p class="text-wedding-medium text-xs">
-        Najdete zde živé oznamy, harmonogram, odjezdy MHD, fotoalbum a svatební vzkazník.
+        Najdete zde živé oznamy, harmonogram, odjezdy MHD, fotoalbum a svatební
+        vzkazník.
       </p>
     </div>
 
     <!-- Countdown Timer -->
     <div id="countdown-box" class="mb-2 flex justify-center gap-3 md:gap-4">
-      <div class="bg-wedding-dark text-wedding-light min-w-[64px] rounded-xl p-3 shadow-sm">
-        <span id="cd-days" class="block font-mono font-extrabold text-2xl md:text-3xl">--</span>
-        <span class="block text-[10px] font-bold uppercase opacity-80 tracking-wider">dní</span>
+      <div
+        class="bg-wedding-dark text-wedding-light min-w-16 rounded-xl p-3 shadow-sm"
+      >
+        <span
+          id="cd-days"
+          class="block font-mono text-2xl font-extrabold md:text-3xl">--</span
+        >
+        <span
+          class="block text-[10px] font-bold tracking-wider uppercase opacity-80"
+          >dní</span
+        >
       </div>
-      <div class="bg-wedding-dark text-wedding-light min-w-[64px] rounded-xl p-3 shadow-sm">
-        <span id="cd-hours" class="block font-mono font-extrabold text-2xl md:text-3xl">--</span>
-        <span class="block text-[10px] font-bold uppercase opacity-80 tracking-wider">hodin</span>
+      <div
+        class="bg-wedding-dark text-wedding-light min-w-16 rounded-xl p-3 shadow-sm"
+      >
+        <span
+          id="cd-hours"
+          class="block font-mono text-2xl font-extrabold md:text-3xl">--</span
+        >
+        <span
+          class="block text-[10px] font-bold tracking-wider uppercase opacity-80"
+          >hodin</span
+        >
       </div>
-      <div class="bg-wedding-dark text-wedding-light min-w-[64px] rounded-xl p-3 shadow-sm">
-        <span id="cd-mins" class="block font-mono font-extrabold text-2xl md:text-3xl">--</span>
-        <span class="block text-[10px] font-bold uppercase opacity-80 tracking-wider">minut</span>
+      <div
+        class="bg-wedding-dark text-wedding-light min-w-16 rounded-xl p-3 shadow-sm"
+      >
+        <span
+          id="cd-mins"
+          class="block font-mono text-2xl font-extrabold md:text-3xl">--</span
+        >
+        <span
+          class="block text-[10px] font-bold tracking-wider uppercase opacity-80"
+          >minut</span
+        >
       </div>
-      <div class="bg-wedding-dark text-wedding-light min-w-[64px] rounded-xl p-3 shadow-sm">
-        <span id="cd-secs" class="block font-mono font-extrabold text-2xl md:text-3xl">--</span>
-        <span class="block text-[10px] font-bold uppercase opacity-80 tracking-wider">sekund</span>
+      <div
+        class="bg-wedding-dark text-wedding-light min-w-16 rounded-xl p-3 shadow-sm"
+      >
+        <span
+          id="cd-secs"
+          class="block font-mono text-2xl font-extrabold md:text-3xl">--</span
+        >
+        <span
+          class="block text-[10px] font-bold tracking-wider uppercase opacity-80"
+          >sekund</span
+        >
       </div>
     </div>
   </div>
@@ -68,9 +107,18 @@ const { unlockTime = "2026-08-15T13:00:00+02:00" } = Astro.props;
     const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
     document.getElementById("cd-days").textContent = String(days);
-    document.getElementById("cd-hours").textContent = String(hours).padStart(2, "0");
-    document.getElementById("cd-mins").textContent = String(mins).padStart(2, "0");
-    document.getElementById("cd-secs").textContent = String(secs).padStart(2, "0");
+    document.getElementById("cd-hours").textContent = String(hours).padStart(
+      2,
+      "0",
+    );
+    document.getElementById("cd-mins").textContent = String(mins).padStart(
+      2,
+      "0",
+    );
+    document.getElementById("cd-secs").textContent = String(secs).padStart(
+      2,
+      "0",
+    );
   }
 
   setInterval(updateCountdown, 1000);

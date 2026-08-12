@@ -10,12 +10,14 @@ import InfoTab from "../../components/wedding-day/InfoTab.astro";
 import { getEntry } from "astro:content";
 
 const wedding = await getEntry("wedding", "info");
-const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka & Filip'}`;
+const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka & Filip"}`;
 ---
 
 <Layout title={metaTitle} showFooter={false}>
   <!-- Compact Standalone App Header -->
-  <header class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 sticky top-0 z-40 border-b px-4 py-3 shadow-xs backdrop-blur-md">
+  <header
+    class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 sticky top-0 z-40 border-b px-4 py-3 shadow-xs backdrop-blur-md"
+  >
     <div class="mx-auto flex max-w-xl items-center justify-between">
       <a
         href={import.meta.env.BASE_URL}
@@ -24,9 +26,13 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
         <span>←</span> Hlavní web
       </a>
       <div class="text-center">
-        <span class="text-wedding-dark font-extrabold text-sm tracking-tight">Svatební Den D 💍</span>
+        <span class="text-wedding-dark text-sm font-extrabold tracking-tight"
+          >Svatební Den D 💍</span
+        >
       </div>
-      <span class="text-wedding-medium text-xs font-semibold">Hanka & Filip</span>
+      <span class="text-wedding-medium text-xs font-semibold"
+        >Hanka & Filip</span
+      >
     </div>
   </header>
 
@@ -36,7 +42,7 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
   </div>
 
   <!-- Unlocked Full Mobile App -->
-  <div id="dnes-app-view" class="mx-auto max-w-xl px-4 pt-4 pb-28 hidden">
+  <div id="dnes-app-view" class="mx-auto hidden max-w-xl px-4 pt-4 pb-28">
     <!-- Live Announcement Banner -->
     <LiveBanner />
 
@@ -60,35 +66,37 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
     </main>
 
     <!-- Mobile Bottom Navigation Bar (Fixed at bottom) -->
-    <nav class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 fixed bottom-0 left-0 z-40 w-full border-t backdrop-blur-md">
-      <div class="mx-auto flex max-w-xl justify-around py-2 px-2">
+    <nav
+      class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 fixed bottom-0 left-0 z-40 w-full border-t backdrop-blur-md"
+    >
+      <div class="mx-auto flex max-w-xl justify-around px-2 py-2">
         <button
           data-target="tab-schedule"
-          class="nav-tab-btn text-wedding-dark scale-105 flex flex-1 flex-col items-center gap-1 py-1 text-center transition-all cursor-pointer font-extrabold"
+          class="nav-tab-btn text-wedding-dark flex flex-1 scale-105 cursor-pointer flex-col items-center gap-1 py-1 text-center font-extrabold transition-all"
         >
           <span class="text-lg">🕒</span>
-          <span class="text-[11px]">Program & MHD</span>
+          <span class="text-[11px]">Program</span>
         </button>
 
         <button
           data-target="tab-photos"
-          class="nav-tab-btn text-wedding-medium flex flex-1 flex-col items-center gap-1 py-1 text-center transition-all cursor-pointer"
+          class="nav-tab-btn text-wedding-medium flex flex-1 cursor-pointer flex-col items-center gap-1 py-1 text-center transition-all"
         >
           <span class="text-lg">📸</span>
-          <span class="text-[11px]">Fotoalbum</span>
+          <span class="text-[11px]">Fotky</span>
         </button>
 
         <button
           data-target="tab-guestbook"
-          class="nav-tab-btn text-wedding-medium flex flex-1 flex-col items-center gap-1 py-1 text-center transition-all cursor-pointer"
+          class="nav-tab-btn text-wedding-medium flex flex-1 cursor-pointer flex-col items-center gap-1 py-1 text-center transition-all"
         >
           <span class="text-lg">✍️</span>
-          <span class="text-[11px]">Vzkazník</span>
+          <span class="text-[11px]">Vzkazy</span>
         </button>
 
         <button
           data-target="tab-info"
-          class="nav-tab-btn text-wedding-medium flex flex-1 flex-col items-center gap-1 py-1 text-center transition-all cursor-pointer"
+          class="nav-tab-btn text-wedding-medium flex flex-1 cursor-pointer flex-col items-center gap-1 py-1 text-center transition-all"
         >
           <span class="text-lg">ℹ️</span>
           <span class="text-[11px]">Kontakty</span>
@@ -111,7 +119,7 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
 
     try {
       const res = await fetch("/svatba/dnes/api/data", {
-        headers: adminToken ? { "Authorization": `Bearer ${adminToken}` } : {}
+        headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
       });
       if (res.ok) {
         const data = await res.json();
@@ -139,7 +147,7 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
     const tabPanes = document.querySelectorAll(".tab-pane");
 
     function switchTab(targetId: string) {
-      tabPanes.forEach(pane => {
+      tabPanes.forEach((pane) => {
         if (pane.id === targetId) {
           pane.classList.remove("hidden");
         } else {
@@ -147,13 +155,17 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
         }
       });
 
-      tabBtns.forEach(btn => {
+      tabBtns.forEach((btn) => {
         const isTarget = btn.getAttribute("data-target") === targetId;
         if (isTarget) {
           btn.classList.remove("text-wedding-medium");
           btn.classList.add("text-wedding-dark", "scale-105", "font-extrabold");
         } else {
-          btn.classList.remove("text-wedding-dark", "scale-105", "font-extrabold");
+          btn.classList.remove(
+            "text-wedding-dark",
+            "scale-105",
+            "font-extrabold",
+          );
           btn.classList.add("text-wedding-medium");
         }
       });
@@ -161,7 +173,7 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    tabBtns.forEach(btn => {
+    tabBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const target = btn.getAttribute("data-target");
         if (target) switchTab(target);

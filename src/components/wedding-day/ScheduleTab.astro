@@ -9,40 +9,50 @@ const scheduleItems = wedding?.data.schedule.items || [];
 <div class="space-y-4">
   <div class="mb-4 flex items-center justify-between">
     <div>
-      <h2 class="text-wedding-dark text-xl font-bold tracking-tight">Svatební harmonogram</h2>
+      <h2 class="text-wedding-dark text-xl font-bold tracking-tight">
+        Svatební harmonogram
+      </h2>
       <p class="text-wedding-medium text-xs">Sobota 15. srpna 2026</p>
     </div>
-    <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-700 dark:text-emerald-400 font-bold text-xs">
-      <span class="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+    <span
+      class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 dark:text-emerald-400"
+    >
+      <span class="h-2 w-2 animate-ping rounded-full bg-emerald-500"></span>
       Živý sled událostí
     </span>
   </div>
 
   <div id="schedule-timeline" class="space-y-3">
-    {scheduleItems.map((item, idx) => (
-      <div
-        data-time={item.time}
-        id={`schedule-item-${idx}`}
-        class="schedule-card bg-wedding-light/80 dark:bg-wedding-dark/60 border-wedding-medium/20 relative rounded-2xl border p-4 transition-all duration-300 hover:shadow-md"
-      >
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <span class="bg-wedding-dark text-wedding-light font-mono font-extrabold text-sm rounded-xl px-3 py-1.5 shadow-2xs">
-              {item.time}
-            </span>
-            <div>
-              <h3 class="text-wedding-dark font-bold text-base">{item.title}</h3>
-              {item.description && (
-                <p class="text-wedding-medium mt-0.5 text-xs font-medium">{item.description}</p>
-              )}
+    {
+      scheduleItems.map((item, idx) => (
+        <div
+          data-time={item.time}
+          id={`schedule-item-${idx}`}
+          class="schedule-card bg-wedding-light/80 dark:bg-wedding-dark/60 border-wedding-medium/20 relative rounded-2xl border p-4 transition-all duration-300 hover:shadow-md"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="bg-wedding-dark text-wedding-light rounded-xl px-3 py-1.5 font-mono text-sm font-extrabold shadow-2xs">
+                {item.time}
+              </span>
+              <div>
+                <h3 class="text-wedding-dark text-base font-bold">
+                  {item.title}
+                </h3>
+                {item.description && (
+                  <p class="text-wedding-medium mt-0.5 text-xs font-medium">
+                    {item.description}
+                  </p>
+                )}
+              </div>
             </div>
+            <span class="status-badge hidden rounded-full bg-emerald-600 px-2.5 py-1 text-[10px] font-extrabold tracking-wider text-white uppercase shadow-2xs">
+              Právě probíhá
+            </span>
           </div>
-          <span class="status-badge hidden rounded-full bg-emerald-600 text-white font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 shadow-2xs">
-            Právě probíhá
-          </span>
         </div>
-      </div>
-    ))}
+      ))
+    }
   </div>
 </div>
 
@@ -70,10 +80,20 @@ const scheduleItems = wedding?.data.schedule.items || [];
     cards.forEach((card, idx) => {
       const badge = card.querySelector(".status-badge");
       if (idx === activeIdx) {
-        card.classList.add("border-emerald-500", "ring-2", "ring-emerald-500/30", "bg-emerald-500/5");
+        card.classList.add(
+          "border-emerald-500",
+          "ring-2",
+          "ring-emerald-500/30",
+          "bg-emerald-500/5",
+        );
         badge?.classList.remove("hidden");
       } else {
-        card.classList.remove("border-emerald-500", "ring-2", "ring-emerald-500/30", "bg-emerald-500/5");
+        card.classList.remove(
+          "border-emerald-500",
+          "ring-2",
+          "ring-emerald-500/30",
+          "bg-emerald-500/5",
+        );
         badge?.classList.add("hidden");
       }
     });

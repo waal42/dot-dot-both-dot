@@ -3,19 +3,31 @@
 ---
 
 <div id="live-announcement-container" class="mb-6 hidden">
-  <div class="morse-border bg-amber-500/10 dark:bg-amber-500/20 border-amber-600/40 text-wedding-dark animate-fade-in-up relative rounded-2xl p-4 md:p-5 shadow-md">
+  <div
+    class="morse-border text-wedding-dark animate-fade-in-up relative rounded-2xl border-amber-600/40 bg-amber-500/10 p-4 shadow-md md:p-5 dark:bg-amber-500/20"
+  >
     <div class="flex items-start gap-3">
-      <span class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white font-extrabold text-sm shadow-sm animate-pulse">
+      <span
+        class="inline-flex h-8 w-8 shrink-0 animate-pulse items-center justify-center rounded-xl bg-amber-500 text-sm font-extrabold text-white shadow-sm"
+      >
         📢
       </span>
       <div class="flex-1">
         <div class="flex items-center justify-between gap-2">
-          <span class="text-amber-800 dark:text-amber-300 font-extrabold text-xs uppercase tracking-wider">
-            Aktuální oznam z dnu D
+          <span
+            class="text-xs font-extrabold tracking-wider text-amber-800 uppercase dark:text-amber-300"
+          >
+            Aktuální zpráva
           </span>
-          <span id="announcement-time" class="text-wedding-medium font-mono text-[11px]"></span>
+          <span
+            id="announcement-time"
+            class="text-wedding-medium font-mono text-[11px]"></span>
         </div>
-        <p id="announcement-text" class="text-wedding-dark mt-1 text-sm font-bold leading-relaxed md:text-base"></p>
+        <p
+          id="announcement-text"
+          class="text-wedding-dark mt-1 text-sm leading-relaxed font-bold md:text-base"
+        >
+        </p>
       </div>
     </div>
   </div>
@@ -29,7 +41,7 @@
       const res = await fetch("/svatba/dnes/api/data");
       if (!res.ok) return;
       const data = await res.json();
-      
+
       const container = document.getElementById("live-announcement-container");
       const textEl = document.getElementById("announcement-text");
       const timeEl = document.getElementById("announcement-time");
@@ -43,7 +55,10 @@
 
         if (latest.timestamp) {
           const dt = new Date(latest.timestamp);
-          timeEl.textContent = dt.toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" });
+          timeEl.textContent = dt.toLocaleTimeString("cs-CZ", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
         } else {
           timeEl.textContent = "";
         }

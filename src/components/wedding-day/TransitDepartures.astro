@@ -3,15 +3,23 @@
 import saturdayData from "../../content/wedding/ids_jmk_saturday.json";
 ---
 
-<div class="bg-wedding-light/50 dark:bg-wedding-dark/30 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm">
+<div
+  class="bg-wedding-light/50 dark:bg-wedding-dark/30 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm"
+>
   <div class="mb-4 flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <div class="bg-wedding-dark/10 dark:bg-wedding-light/10 text-wedding-dark flex h-10 w-10 items-center justify-center rounded-xl font-bold">
+      <div
+        class="bg-wedding-dark/10 dark:bg-wedding-light/10 text-wedding-dark flex h-10 w-10 items-center justify-center rounded-xl font-bold"
+      >
         🚌
       </div>
       <div>
-        <h3 class="text-wedding-dark text-lg font-bold tracking-tight">Odjezdy MHD do Brna</h3>
-        <p class="text-wedding-medium text-xs font-medium">Oficiální GTFS jízdní řád IDS JMK (Sobota)</p>
+        <h3 class="text-wedding-dark text-lg font-bold tracking-tight">
+          Odjezdy MHD do Brna
+        </h3>
+        <p class="text-wedding-medium text-xs font-medium">
+          Jízdní řády IDS JMK na sobotu
+        </p>
       </div>
     </div>
     <a
@@ -27,76 +35,123 @@ import saturdayData from "../../content/wedding/ids_jmk_saturday.json";
 
   <div class="space-y-3">
     <!-- Vlak S6 -->
-    <div class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs">
+    <div
+      class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs"
+    >
       <div class="flex items-start justify-between">
         <div class="flex items-start gap-3">
-          <span class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-700 font-extrabold text-white text-xs tracking-wider">
+          <span
+            class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-700 text-xs font-extrabold tracking-wider text-white"
+          >
             S6
           </span>
           <div>
-            <div class="text-wedding-dark font-bold text-sm">Vlak ze stanice Šlapanice</div>
-            <div class="text-wedding-medium text-xs">Směr Brno hl.n. (chůze 5 min od Sokecu)</div>
+            <div class="text-wedding-dark text-sm font-bold">
+              Vlak ze stanice Šlapanice
+            </div>
+            <div class="text-wedding-medium text-xs">
+              Směr Brno hl.n. (chůze 5 min od Sokecu)
+            </div>
           </div>
         </div>
         <div id="next-s6-box" class="text-right">
-          <span class="text-wedding-dark font-mono font-bold text-sm">Načítám...</span>
+          <span class="text-wedding-dark font-mono text-sm font-bold"
+            >Načítám...</span
+          >
         </div>
       </div>
-      <div class="mt-2 border-t border-wedding-medium/10 pt-2 text-[11px] text-wedding-medium">
-        Sobotní odjezdy: <span class="font-mono font-semibold">{saturdayData.S6.map(d => d.time).join(", ")}</span>
+      <div
+        class="border-wedding-medium/10 text-wedding-medium mt-2 border-t pt-2 text-[11px]"
+      >
+        Sobotní odjezdy: <span class="font-mono font-semibold"
+          >{saturdayData.S6.map((d) => d.time).join(", ")}</span
+        >
       </div>
     </div>
 
     <!-- Trolejbus 31 -->
-    <div class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs">
+    <div
+      class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs"
+    >
       <div class="flex items-start justify-between">
         <div class="flex items-start gap-3">
-          <span class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-red-600 font-extrabold text-white text-xs tracking-wider">
+          <span
+            class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-red-600 text-xs font-extrabold tracking-wider text-white"
+          >
             31
           </span>
           <div>
-            <div class="text-wedding-dark font-bold text-sm">Trolejbus ze zastávky Kalvodova</div>
-            <div class="text-wedding-medium text-xs">Směr Hlavní nádraží (chůze 15 min od Sokecu)</div>
+            <div class="text-wedding-dark text-sm font-bold">
+              Trolejbus ze zastávky Šlapanice, Kalvodova
+            </div>
+            <div class="text-wedding-medium text-xs">
+              Směr Hlavní nádraží (chůze 15 min od Sokecu)
+            </div>
           </div>
         </div>
         <div id="next-31-box" class="text-right">
-          <span class="text-wedding-dark font-mono font-bold text-sm">Načítám...</span>
+          <span class="text-wedding-dark font-mono text-sm font-bold"
+            >Načítám...</span
+          >
         </div>
       </div>
-      <div class="mt-2 border-t border-wedding-medium/10 pt-2 text-[11px] text-wedding-medium">
-        Odpolední spojení: <span class="font-mono font-semibold">každých 20 min (x:19, x:39, x:59)</span>
+      <div
+        class="border-wedding-medium/10 text-wedding-medium mt-2 border-t pt-2 text-[11px]"
+      >
+        Odpolední spojení: <span class="font-mono font-semibold"
+          >každých 20 min (x:19, x:39, x:59)</span
+        >
       </div>
     </div>
 
     <!-- Noční rozjezd N96 -->
-    <div class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs">
+    <div
+      class="bg-wedding-light dark:bg-wedding-dark/80 border-wedding-medium/15 rounded-xl border p-3.5 shadow-2xs"
+    >
       <div class="flex items-start justify-between">
         <div class="flex items-start gap-3">
-          <span class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-indigo-900 font-extrabold text-white text-xs tracking-wider">
+          <span
+            class="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded-lg bg-indigo-900 text-xs font-extrabold tracking-wider text-white"
+          >
             N96
           </span>
           <div>
-            <div class="text-wedding-dark font-bold text-sm">Noční rozjezd ze zastávky Kalvodova</div>
-            <div class="text-wedding-medium text-xs">Přímé noční spojení ze Šlapanic do Brna</div>
+            <div class="text-wedding-dark text-sm font-bold">
+              Noční rozjezd ze zastávky Šlapanice, Kalvodova
+            </div>
+            <div class="text-wedding-medium text-xs">
+              Směr Hlavní nádraží (chůze 15 min od Sokecu)
+            </div>
           </div>
         </div>
         <div id="next-n96-box" class="text-right">
-          <span class="text-indigo-900 dark:text-indigo-300 font-mono font-bold text-xs">22:32 / 23:02 / 23:32</span>
+          <span
+            class="font-mono text-xs font-bold text-indigo-900 dark:text-indigo-300"
+            >22:32 / 23:02 / 23:32</span
+          >
         </div>
       </div>
-      <div class="mt-2 border-t border-wedding-medium/10 pt-2 text-[11px] text-indigo-900 dark:text-indigo-300 font-semibold">
-        Noční odjezdy: <span class="font-mono">{saturdayData.N96.map(d => d.time).join(", ")}</span>
+      <div
+        class="border-wedding-medium/10 mt-2 border-t pt-2 text-[11px] font-semibold text-indigo-900 dark:text-indigo-300"
+      >
+        Noční odjezdy: <span class="font-mono"
+          >{saturdayData.N96.map((d) => d.time).join(", ")}</span
+        >
       </div>
     </div>
   </div>
 
-  <div class="mt-4 flex items-center justify-between border-t border-wedding-medium/15 pt-3 text-xs">
-    <span class="text-wedding-medium/80 italic">Data pochází z oficiálního GTFS jízdního řádu IDS JMK.</span>
+  <div
+    class="border-wedding-medium/15 mt-4 flex items-center justify-between border-t pt-3 text-xs"
+  >
+    <span class="text-wedding-medium/80 italic"
+      >Data pochází z veřejně veřejně přístupných dat jízdních řádů IDS JMK.</span
+    >
     <a
       href="https://idos.cz/idsjmk/spojeni/vysledky/?f=%C5%A0lapanice&t=Brno"
       target="_blank"
       rel="noopener noreferrer"
-      class="text-wedding-dark hover:underline font-bold"
+      class="text-wedding-dark font-bold hover:underline"
     >
       Vyhledat v IDOS ↗
     </a>
@@ -153,7 +208,9 @@ import saturdayData from "../../content/wedding/ids_jmk_saturday.json";
       }
 
       if (second) {
-        const secondLabel = second.isTomorrow ? `zítra v ${second.time}` : `další v ${second.time}`;
+        const secondLabel = second.isTomorrow
+          ? `zítra v ${second.time}`
+          : `další v ${second.time}`;
         html += `<span class="text-wedding-medium text-[11px] font-mono">další: ${second.time}</span>`;
       }
 
