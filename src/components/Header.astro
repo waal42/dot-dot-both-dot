@@ -9,7 +9,7 @@ import Navigation from "./Navigation.astro";
   <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
     <div class="flex shrink-0 items-center">
       <a
-        href="#top"
+        href={import.meta.env.BASE_URL}
         id="logo-link"
         class="group flex items-center gap-4 text-xl font-bold whitespace-nowrap md:text-2xl"
       >
@@ -55,15 +55,19 @@ import Navigation from "./Navigation.astro";
   const navMenu = document.getElementById("nav-menu");
   const menuSpans = menuToggle?.querySelectorAll("span");
 
-  // Smooth scroll for logo
+  // Smooth scroll for logo or navigate back to homepage if on sub-page
   const logoLink = document.getElementById("logo-link");
   logoLink?.addEventListener("click", (e) => {
+    const isSubPage = window.location.pathname.includes("/dnes") || window.location.pathname.includes("/r/") || window.location.pathname.includes("/fotky");
+    if (isSubPage) {
+      // Allow standard link navigation back to homepage
+      return;
+    }
     e.preventDefault();
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-    // Update URL without reload
     history.pushState(null, "", import.meta.env.BASE_URL);
   });
 
