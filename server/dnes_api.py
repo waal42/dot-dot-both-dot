@@ -143,6 +143,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
                 "is_admin": is_admin,
                 "unlock_time": unlock_str,
                 "announcements": data.get("announcements", []),
+                "program_items": data.get("program_items", []),
                 "schedule_overrides": data.get("schedule_overrides", {}),
                 "redirects": data.get("redirects", {}),
                 "now": now_iso
@@ -219,6 +220,34 @@ class APIRequestHandler(BaseHTTPRequestHandler):
             elif action == 'delete_announcement':
                 msg_id = payload.get('id')
                 data["announcements"] = [m for m in data.get("announcements", []) if m.get("id") != msg_id]
+                write_data(data)
+                return self._send_json({"result": "success"})
+
+            elif action == 'add_program_item':
+                time_val = payload.get('time', '').strip()
+                title = payload.get('title', '').strip()
+                location = payload.get('location', '').strip()
+                description = payload.get('description', '').strip()
+                icon = payload.get('icon', '📌').strip()
+
+                if title:
+                    new_prog = {
+                        "id": f"prog-{secrets.token_hex(4)}",
+                        "time": time_val or "Průběžně",
+                        "title": title,
+                        "location": location,
+                        "description": description,
+                        "icon": icon or "📌",
+                        "timestamp": datetime.now(timezone.utc).isoformat()
+                    }
+                    data.setdefault("program_items", []).append(new_prog)
+                    write_data(data)
+                    return self._send_json({"result": "success", "item": new_prog})
+                return self._send_error("Chybí název programu")
+
+            elif action == 'delete_program_item':
+                prog_id = payload.get('id')
+                data["program_items"] = [p for p in data.get("program_items", []) if p.get("id") != prog_id]
                 write_data(data)
                 return self._send_json({"result": "success"})
 

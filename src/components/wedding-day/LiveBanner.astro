@@ -4,7 +4,9 @@
 
 <div id="live-announcement-container" class="mb-6 hidden">
   <div
-    class="morse-border text-wedding-dark animate-fade-in-up relative rounded-2xl border-amber-600/40 bg-amber-500/10 p-4 shadow-md md:p-5 dark:bg-amber-500/20"
+    id="live-banner-card"
+    class="morse-border text-wedding-dark animate-fade-in-up relative cursor-pointer rounded-2xl border-amber-600/40 bg-amber-500/10 p-4 shadow-md transition-all hover:bg-amber-500/15 md:p-5 dark:bg-amber-500/20"
+    title="Kliknutím zobrazíte všechny zprávy"
   >
     <div class="flex items-start gap-3">
       <span
@@ -14,27 +16,56 @@
       </span>
       <div class="flex-1">
         <div class="flex items-center justify-between gap-2">
-          <span
-            class="text-xs font-extrabold tracking-wider text-amber-800 uppercase dark:text-amber-300"
-          >
-            Aktuální zpráva
-          </span>
-          <span
-            id="announcement-time"
-            class="text-wedding-medium font-mono text-[11px]"></span>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-extrabold tracking-wider text-amber-800 uppercase dark:text-amber-300">
+              Nejnovější zpráva
+            </span>
+            <span id="announcements-count-badge" class="hidden rounded-full bg-amber-600 px-2 py-0.5 font-mono text-[10px] font-bold text-white">
+              1 z 1
+            </span>
+          </div>
+          <span id="announcement-time" class="text-wedding-medium font-mono text-[11px]"></span>
         </div>
         <p
           id="announcement-text"
           class="text-wedding-dark mt-1 text-sm leading-relaxed font-bold md:text-base"
         >
         </p>
+
+        <div id="announcement-history-hint" class="mt-2 hidden text-right text-[11px] font-bold text-amber-800 hover:underline dark:text-amber-300">
+          Zobrazit historii všech zpráv ▾
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- History Modal / Container for all announcements -->
+  <div id="announcements-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 hidden">
+    <div class="bg-wedding-light dark:bg-wedding-dark border-wedding-medium/30 max-w-md w-full rounded-3xl border p-6 shadow-2xl animate-fade-in-up">
+      <div class="flex items-center justify-between mb-4 border-b border-wedding-medium/15 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📋</span>
+          <h3 class="text-wedding-dark font-bold text-base">Historie zpráv ze svatby</h3>
+        </div>
+        <button id="close-history-modal-btn" class="text-wedding-medium hover:text-wedding-dark font-bold text-sm p-1">
+          ✕
+        </button>
+      </div>
+
+      <div id="history-modal-list" class="max-h-[60vh] overflow-y-auto space-y-3 pr-1">
+        <!-- Loaded dynamically -->
+      </div>
+
+      <button id="close-history-modal-bottom-btn" class="mt-5 w-full bg-wedding-dark text-wedding-light py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider">
+        Zavřít
+      </button>
     </div>
   </div>
 </div>
 
 <script>
   let lastSeenId = "";
+  let activeAnnouncements: any[] = [];
 
   async function fetchAnnouncements() {
     try {
@@ -45,12 +76,14 @@
       const container = document.getElementById("live-announcement-container");
       const textEl = document.getElementById("announcement-text");
       const timeEl = document.getElementById("announcement-time");
+      const badge = document.getElementById("announcements-count-badge");
+      const hint = document.getElementById("announcement-history-hint");
 
       if (!container || !textEl || !timeEl) return;
 
-      const announcements = data.announcements || [];
-      if (announcements.length > 0) {
-        const latest = announcements[0];
+      activeAnnouncements = data.announcements || [];
+      if (activeAnnouncements.length > 0) {
+        const latest = activeAnnouncements[0];
         textEl.textContent = latest.text;
 
         if (latest.timestamp) {
@@ -63,10 +96,20 @@
           timeEl.textContent = "";
         }
 
+        if (activeAnnouncements.length > 1) {
+          if (badge) {
+            badge.textContent = `Celkem: ${activeAnnouncements.length}`;
+            badge.classList.remove("hidden");
+          }
+          if (hint) hint.classList.remove("hidden");
+        } else {
+          if (badge) badge.classList.add("hidden");
+          if (hint) hint.classList.add("hidden");
+        }
+
         container.classList.remove("hidden");
 
         if (lastSeenId && lastSeenId !== latest.id) {
-          // Play slide/pulse animation for new message
           container.firstElementChild?.classList.add("animate-bounce");
           setTimeout(() => {
             container.firstElementChild?.classList.remove("animate-bounce");
@@ -80,6 +123,44 @@
       console.warn("Polling error:", e);
     }
   }
+
+  function openHistoryModal() {
+    const modal = document.getElementById("announcements-modal");
+    const listEl = document.getElementById("history-modal-list");
+    if (!modal || !listEl) return;
+
+    if (activeAnnouncements.length === 0) {
+      listEl.innerHTML = `<p class="text-wedding-medium italic text-center py-4">Žádné zprávy.</p>`;
+    } else {
+      listEl.innerHTML = activeAnnouncements.map((item, idx) => {
+        const timeStr = item.timestamp
+          ? new Date(item.timestamp).toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" })
+          : "";
+        return `
+          <div class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/15 rounded-2xl border p-3.5">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-amber-800 dark:text-amber-300 font-extrabold text-[10px] uppercase">
+                ${idx === 0 ? "🔥 Nejnovější" : `Zpráva #${activeAnnouncements.length - idx}`}
+              </span>
+              <span class="text-wedding-medium font-mono text-[11px]">${timeStr}</span>
+            </div>
+            <p class="text-wedding-dark font-bold text-xs leading-relaxed">${item.text}</p>
+          </div>
+        `;
+      }).join("");
+    }
+
+    modal.classList.remove("hidden");
+  }
+
+  function closeHistoryModal() {
+    const modal = document.getElementById("announcements-modal");
+    modal?.classList.add("hidden");
+  }
+
+  document.getElementById("live-banner-card")?.addEventListener("click", openHistoryModal);
+  document.getElementById("close-history-modal-btn")?.addEventListener("click", closeHistoryModal);
+  document.getElementById("close-history-modal-bottom-btn")?.addEventListener("click", closeHistoryModal);
 
   document.addEventListener("DOMContentLoaded", () => {
     fetchAnnouncements();

@@ -3,104 +3,142 @@
 import { getEntry } from "astro:content";
 
 const wedding = await getEntry("wedding", "info");
-const scheduleItems = wedding?.data.schedule.items || [];
+const staticScheduleItems = wedding?.data.schedule.items || [];
 ---
 
-<div class="space-y-4">
-  <div class="mb-4 flex items-center justify-between">
-    <div>
-      <h2 class="text-wedding-dark text-xl font-bold tracking-tight">
-        Svatební harmonogram
-      </h2>
-      <p class="text-wedding-medium text-xs">Sobota 15. srpna 2026</p>
-    </div>
-    <span
-      class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 dark:text-emerald-400"
-    >
-      <span class="h-2 w-2 animate-ping rounded-full bg-emerald-500"></span>
-      Živý sled událostí
-    </span>
-  </div>
-
-  <div id="schedule-timeline" class="space-y-3">
-    {
-      scheduleItems.map((item, idx) => (
-        <div
-          data-time={item.time}
-          id={`schedule-item-${idx}`}
-          class="schedule-card bg-wedding-light/80 dark:bg-wedding-dark/60 border-wedding-medium/20 relative rounded-2xl border p-4 transition-all duration-300 hover:shadow-md"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <span class="bg-wedding-dark text-wedding-light rounded-xl px-3 py-1.5 font-mono text-sm font-extrabold shadow-2xs">
-                {item.time}
-              </span>
-              <div>
-                <h3 class="text-wedding-dark text-base font-bold">
-                  {item.title}
-                </h3>
-                {item.description && (
-                  <p class="text-wedding-medium mt-0.5 text-xs font-medium">
-                    {item.description}
-                  </p>
-                )}
-              </div>
-            </div>
-            <span class="status-badge hidden rounded-full bg-emerald-600 px-2.5 py-1 text-[10px] font-extrabold tracking-wider text-white uppercase shadow-2xs">
-              Právě probíhá
-            </span>
-          </div>
+<div class="space-y-6">
+  <!-- Program & Activities Section -->
+  <div class="bg-wedding-light/80 dark:bg-wedding-dark/60 border-wedding-medium/20 rounded-2xl border p-5 shadow-xs">
+    <div class="mb-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-wedding-dark/10 dark:bg-wedding-light/10 text-wedding-dark flex h-10 w-10 items-center justify-center rounded-xl text-xl font-bold">
+          🎯
         </div>
-      ))
-    }
+        <div>
+          <h2 class="text-wedding-dark text-xl font-bold tracking-tight">Program & Co kde dělat</h2>
+          <p class="text-wedding-medium text-xs">Aktivity, stanoviště a zábava pro svatebčany</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container for dynamic admin-added program activities -->
+    <div id="dynamic-program-feed" class="space-y-3 mb-4">
+      <div class="py-4 text-center text-wedding-medium italic text-xs">
+        Načítám program...
+      </div>
+    </div>
+
+    <!-- Collapsible Static Schedule Baseline -->
+    <div class="mt-6 border-t border-wedding-medium/15 pt-4">
+      <button
+        id="toggle-static-schedule-btn"
+        type="button"
+        class="flex w-full items-center justify-between text-left cursor-pointer"
+      >
+        <div class="flex items-center gap-2">
+          <span class="text-xs">🕒</span>
+          <span class="text-wedding-dark font-bold text-xs">Zobrazit orientační harmonogram Dne D</span>
+        </div>
+        <span id="static-schedule-chevron" class="text-wedding-medium text-[11px] font-bold">
+          Rozbalit ▾
+        </span>
+      </button>
+
+      <div id="static-schedule-content" class="mt-3 hidden space-y-2">
+        {staticScheduleItems.map((item) => (
+          <div class="flex items-start gap-3 rounded-xl bg-wedding-light/90 dark:bg-wedding-dark/80 p-3 border border-wedding-medium/10 text-xs">
+            <span class="bg-wedding-dark text-wedding-light rounded-lg px-2.5 py-1 font-mono text-[11px] font-extrabold shrink-0">
+              {item.time}
+            </span>
+            <div>
+              <h4 class="text-wedding-dark font-bold">{item.title}</h4>
+              {item.description && (
+                <p class="text-wedding-medium mt-0.5 text-[11px] leading-relaxed">{item.description}</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-  function highlightCurrentEvent() {
-    const cards = document.querySelectorAll(".schedule-card");
-    if (!cards.length) return;
+  async function loadProgramFeed() {
+    const feedContainer = document.getElementById("dynamic-program-feed");
+    if (!feedContainer) return;
 
-    const now = new Date();
-    const currentMins = now.getHours() * 60 + now.getMinutes();
+    try {
+      const res = await fetch("/svatba/dnes/api/data");
+      if (!res.ok) return;
+      const data = await res.json();
+      const items = data.program_items || [];
 
-    let activeIdx = -1;
-
-    cards.forEach((card, idx) => {
-      const timeStr = card.getAttribute("data-time") || "";
-      if (!timeStr) return;
-      const [h, m] = timeStr.split(":").map(Number);
-      const eventMins = h * 60 + m;
-
-      if (currentMins >= eventMins) {
-        activeIdx = idx;
+      if (items.length === 0) {
+        feedContainer.innerHTML = `
+          <div class="bg-wedding-dark/5 dark:bg-wedding-light/5 rounded-2xl p-5 text-center">
+            <span class="text-2xl block mb-2">🎈</span>
+            <p class="text-wedding-dark font-bold text-sm mb-1">Všechny aktivity připraveny!</p>
+            <p class="text-wedding-medium text-xs leading-relaxed max-w-sm mx-auto">
+              Postupně zde budeme přidávat stanoviště a info o tom, co a kde můžete na svatbě vyzkoušet.
+            </p>
+          </div>
+        `;
+        return;
       }
-    });
 
-    cards.forEach((card, idx) => {
-      const badge = card.querySelector(".status-badge");
-      if (idx === activeIdx) {
-        card.classList.add(
-          "border-emerald-500",
-          "ring-2",
-          "ring-emerald-500/30",
-          "bg-emerald-500/5",
-        );
-        badge?.classList.remove("hidden");
-      } else {
-        card.classList.remove(
-          "border-emerald-500",
-          "ring-2",
-          "ring-emerald-500/30",
-          "bg-emerald-500/5",
-        );
-        badge?.classList.add("hidden");
-      }
-    });
+      feedContainer.innerHTML = items.map((item: any) => {
+        return `
+          <div class="bg-wedding-light dark:bg-wedding-dark/90 border-wedding-medium/20 rounded-2xl border p-4 shadow-2xs hover:shadow-xs transition-all">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-start gap-3">
+                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-wedding-dark/10 dark:bg-wedding-light/10 text-base font-bold">
+                  ${item.icon || "📌"}
+                </span>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="bg-wedding-dark text-wedding-light font-mono font-extrabold text-[11px] px-2.5 py-0.5 rounded-lg">
+                      ${item.time || "Průběžně"}
+                    </span>
+                    <h3 class="text-wedding-dark font-extrabold text-sm">${item.title}</h3>
+                  </div>
+                  ${item.location ? `
+                    <div class="mt-1 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                      📍 ${item.location}
+                    </div>
+                  ` : ''}
+                  ${item.description ? `
+                    <p class="text-wedding-medium mt-2 text-xs leading-relaxed font-medium">${item.description}</p>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    } catch (e) {
+      console.warn("Error loading program items feed:", e);
+    }
   }
 
+  // Toggle static schedule
+  const toggleBtn = document.getElementById("toggle-static-schedule-btn");
+  const content = document.getElementById("static-schedule-content");
+  const chevron = document.getElementById("static-schedule-chevron");
+
+  toggleBtn?.addEventListener("click", () => {
+    const isHidden = content?.classList.contains("hidden");
+    if (isHidden) {
+      content?.classList.remove("hidden");
+      if (chevron) chevron.textContent = "Skrýt ▴";
+    } else {
+      content?.classList.add("hidden");
+      if (chevron) chevron.textContent = "Rozbalit ▾";
+    }
+  });
+
   document.addEventListener("DOMContentLoaded", () => {
-    highlightCurrentEvent();
-    setInterval(highlightCurrentEvent, 60000);
+    loadProgramFeed();
+    setInterval(loadProgramFeed, 30000);
   });
 </script>
