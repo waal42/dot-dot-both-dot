@@ -18,12 +18,12 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
   <Header />
 
   <!-- Locked Teaser (shown when app is time-locked for non-admins) -->
-  <div id="dnes-locked-view" class="hidden">
+  <div id="dnes-locked-view" class="">
     <LockedTeaser />
   </div>
 
   <!-- Unlocked Full Mobile App -->
-  <div id="dnes-app-view" class="mx-auto max-w-xl px-4 pt-4 pb-28">
+  <div id="dnes-app-view" class="mx-auto max-w-xl px-4 pt-4 pb-28 hidden">
     <!-- Live Announcement Banner -->
     <LiveBanner />
 
@@ -92,24 +92,34 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
     const lockedView = document.getElementById("dnes-locked-view");
     const appView = document.getElementById("dnes-app-view");
 
+    // Client-side date + time check for 15. August 2026 13:00 CEST
+    const unlockTime = new Date("2026-08-15T13:00:00+02:00").getTime();
+    const now = new Date().getTime();
+    let isLocked = now < unlockTime;
+
     try {
       const res = await fetch("/svatba/dnes/api/data", {
         headers: adminToken ? { "Authorization": `Bearer ${adminToken}` } : {}
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.is_locked && !data.is_admin) {
-          lockedView?.classList.remove("hidden");
-          appView?.classList.add("hidden");
-          return;
+        if (data.is_admin) {
+          isLocked = false;
+        } else if (data.is_locked !== undefined) {
+          isLocked = data.is_locked;
         }
       }
     } catch (e) {
-      console.warn("API Lock check offline, unlocking by default");
+      console.warn("API Lock check offline, using static date/time lock state");
     }
 
-    lockedView?.classList.add("hidden");
-    appView?.classList.remove("hidden");
+    if (isLocked) {
+      lockedView?.classList.remove("hidden");
+      appView?.classList.add("hidden");
+    } else {
+      lockedView?.classList.add("hidden");
+      appView?.classList.remove("hidden");
+    }
   }
 
   function initTabs() {
