@@ -95,11 +95,13 @@ class APIRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def _send_json(self, data, status=200):
+        body = json.dumps(data, ensure_ascii=False).encode('utf-8')
         self.send_response(status)
         self._set_cors_headers()
         self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
         self.end_headers()
-        self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+        self.wfile.write(body)
 
     def _send_error(self, message, status=400):
         self._send_json({"error": message}, status=status)
