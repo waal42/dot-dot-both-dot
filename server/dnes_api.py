@@ -102,7 +102,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
     def _send_error(self, message, status=400):
         self._send_json({"error": message}, status=status)
 
-    def _is_authenticated((self)):
+    def _is_authenticated(self):
         auth_header = self.headers.get('Authorization', '')
         token_header = self.headers.get('X-Admin-Token', '')
         token = auth_header.replace('Bearer ', '').strip() if auth_header else token_header.strip()
