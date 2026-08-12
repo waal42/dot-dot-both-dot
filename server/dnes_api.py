@@ -187,8 +187,10 @@ class APIRequestHandler(BaseHTTPRequestHandler):
             if username and password and username == ADMIN_USER and password == ADMIN_PASS:
                 token = secrets.token_hex(24)
                 ACTIVE_SESSIONS.add(token)
+                print(f"LOGIN SUCCESS: user '{username}'", file=sys.stderr)
                 return self._send_json({"result": "success", "token": token})
             else:
+                print(f"LOGIN FAILED: user received='{username}' (expected '{ADMIN_USER}'), pass_len received={len(password)} (expected {len(ADMIN_PASS)})", file=sys.stderr)
                 return self._send_error("Neplatné uživatelské jméno nebo heslo", 401)
 
         elif path.endswith('/admin/update') or path.endswith('/update'):
