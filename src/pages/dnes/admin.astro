@@ -9,7 +9,7 @@ const wedding = await getEntry("wedding", "info");
 const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || 'Hanka & Filip'}`;
 ---
 
-<Layout title={metaTitle}>
+<Layout title={metaTitle} showFooter={false}>
   <Header />
 
   <div class="mx-auto max-w-xl px-4 py-8">

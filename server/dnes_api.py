@@ -90,6 +90,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Admin-Token')
 
     def do_OPTIONS(self):
+        print(f"INCOMING OPTIONS: {self.path}", file=sys.stderr)
         self.send_response(200)
         self._set_cors_headers()
         self.end_headers()
@@ -113,6 +114,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
         return token in ACTIVE_SESSIONS and len(token) > 0
 
     def do_GET(self):
+        print(f"INCOMING GET: {self.path}", file=sys.stderr)
         parsed = urlparse(self.path)
         path = parsed.path.rstrip('/')
 
@@ -166,6 +168,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
             self._send_error("Not found", 404)
 
     def do_POST(self):
+        print(f"INCOMING POST: {self.path}", file=sys.stderr)
         parsed = urlparse(self.path)
         path = parsed.path.rstrip('/')
 

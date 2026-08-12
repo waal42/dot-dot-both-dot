@@ -1,7 +1,6 @@
 ---
 // src/pages/dnes/index.astro
 import Layout from "../../layouts/Layout.astro";
-import Header from "../../components/Header.astro";
 import LockedTeaser from "../../components/wedding-day/LockedTeaser.astro";
 import LiveBanner from "../../components/wedding-day/LiveBanner.astro";
 import ScheduleTab from "../../components/wedding-day/ScheduleTab.astro";
@@ -14,8 +13,22 @@ const wedding = await getEntry("wedding", "info");
 const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka & Filip'}`;
 ---
 
-<Layout title={metaTitle}>
-  <Header />
+<Layout title={metaTitle} showFooter={false}>
+  <!-- Compact Standalone App Header -->
+  <header class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 sticky top-0 z-40 border-b px-4 py-3 shadow-xs backdrop-blur-md">
+    <div class="mx-auto flex max-w-xl items-center justify-between">
+      <a
+        href={import.meta.env.BASE_URL}
+        class="text-wedding-medium hover:text-wedding-dark inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
+      >
+        <span>←</span> Hlavní web
+      </a>
+      <div class="text-center">
+        <span class="text-wedding-dark font-extrabold text-sm tracking-tight">Svatební Den D 💍</span>
+      </div>
+      <span class="text-wedding-medium text-xs font-semibold">Hanka & Filip</span>
+    </div>
+  </header>
 
   <!-- Locked Teaser (shown when app is time-locked for non-admins) -->
   <div id="dnes-locked-view" class="">
@@ -24,19 +37,6 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
 
   <!-- Unlocked Full Mobile App -->
   <div id="dnes-app-view" class="mx-auto max-w-xl px-4 pt-4 pb-28 hidden">
-    <!-- Back to Main Site Navigation -->
-    <div class="mb-4 flex items-center justify-between">
-      <a
-        href={import.meta.env.BASE_URL}
-        class="text-wedding-medium hover:text-wedding-dark inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
-      >
-        <span>←</span> Zpět na hlavní web
-      </a>
-      <span class="text-wedding-medium text-[11px] font-semibold opacity-70">
-        Hanka & Filip 💍
-      </span>
-    </div>
-
     <!-- Live Announcement Banner -->
     <LiveBanner />
 
@@ -59,39 +59,39 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
       </section>
     </main>
 
-    <!-- Bottom Navigation Bar for Mobile -->
-    <nav class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 fixed bottom-0 left-0 right-0 z-40 border-t backdrop-blur-md shadow-2xl">
-      <div class="mx-auto flex max-w-md justify-around py-2">
+    <!-- Mobile Bottom Navigation Bar (Fixed at bottom) -->
+    <nav class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 fixed bottom-0 left-0 z-40 w-full border-t backdrop-blur-md">
+      <div class="mx-auto flex max-w-xl justify-around py-2 px-2">
         <button
           data-target="tab-schedule"
-          class="nav-tab-btn text-wedding-dark flex flex-col items-center gap-1 p-2 text-xs font-bold transition-all"
+          class="nav-tab-btn text-wedding-dark scale-105 flex flex-1 flex-col items-center gap-1 py-1 text-center transition-all cursor-pointer font-extrabold"
         >
-          <span class="text-xl">🕒</span>
-          <span>Program</span>
+          <span class="text-lg">🕒</span>
+          <span class="text-[11px]">Program & MHD</span>
         </button>
 
         <button
           data-target="tab-photos"
-          class="nav-tab-btn text-wedding-medium hover:text-wedding-dark flex flex-col items-center gap-1 p-2 text-xs font-bold transition-all"
+          class="nav-tab-btn text-wedding-medium flex flex-1 flex-col items-center gap-1 py-1 text-center transition-all cursor-pointer"
         >
-          <span class="text-xl">📸</span>
-          <span>Fotoalbum</span>
+          <span class="text-lg">📸</span>
+          <span class="text-[11px]">Fotoalbum</span>
         </button>
 
         <button
           data-target="tab-guestbook"
-          class="nav-tab-btn text-wedding-medium hover:text-wedding-dark flex flex-col items-center gap-1 p-2 text-xs font-bold transition-all"
+          class="nav-tab-btn text-wedding-medium flex flex-1 flex-col items-center gap-1 py-1 text-center transition-all cursor-pointer"
         >
-          <span class="text-xl">✉️</span>
-          <span>Vzkazník</span>
+          <span class="text-lg">✍️</span>
+          <span class="text-[11px]">Vzkazník</span>
         </button>
 
         <button
           data-target="tab-info"
-          class="nav-tab-btn text-wedding-medium hover:text-wedding-dark flex flex-col items-center gap-1 p-2 text-xs font-bold transition-all"
+          class="nav-tab-btn text-wedding-medium flex flex-1 flex-col items-center gap-1 py-1 text-center transition-all cursor-pointer"
         >
-          <span class="text-xl">🚌</span>
-          <span>Doprava</span>
+          <span class="text-lg">ℹ️</span>
+          <span class="text-[11px]">Kontakty</span>
         </button>
       </div>
     </nav>
@@ -99,7 +99,6 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
 </Layout>
 
 <script>
-  // Dynamic Tab Switcher & Lock Check
   async function checkAppLock() {
     const adminToken = localStorage.getItem("dnes_admin_token");
     const lockedView = document.getElementById("dnes-locked-view");
@@ -169,19 +168,22 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || 'Hanka
       });
     });
 
-    // Check hash URL (e.g. /svatba/dnes#vzkaznik)
-    const hash = window.location.hash.toLowerCase();
-    if (hash.includes("vzkaz") || hash.includes("guestbook")) {
-      switchTab("tab-guestbook");
-    } else if (hash.includes("fotky") || hash.includes("photo")) {
-      switchTab("tab-photos");
-    } else if (hash.includes("info") || hash.includes("doprava")) {
-      switchTab("tab-info");
+    // Handle hash links (e.g. #vzkaznik)
+    if (window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      if (hash === "vzkaznik") switchTab("tab-guestbook");
+      if (hash === "fotky") switchTab("tab-photos");
+      if (hash === "kontakty") switchTab("tab-info");
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAppLock();
+      initTabs();
+    });
+  } else {
     checkAppLock();
     initTabs();
-  });
+  }
 </script>

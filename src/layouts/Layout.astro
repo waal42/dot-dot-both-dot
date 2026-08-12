@@ -11,9 +11,10 @@ import { getEntry } from "astro:content";
 
 interface Props {
   title: string;
+  showFooter?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, showFooter = true } = Astro.props;
 const wedding = await getEntry("wedding", "info");
 if (!wedding) {
   throw new Error("Wedding content 'info' not found");
@@ -135,7 +136,7 @@ const { metaDescription } = wedding.data;
     </button>
 
     <slot />
-    <Footer />
+    {showFooter && <Footer />}
 
     <script>
       import { playMorse, stopMorse, unlockAudioContext } from "../scripts/morseAudio";
