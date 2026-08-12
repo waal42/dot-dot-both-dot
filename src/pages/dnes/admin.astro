@@ -259,14 +259,13 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || 'Hanka & Filip'}
 
         if (res.ok && data.token) {
           adminToken = data.token;
-          localStorage.setItem("dnes_admin_token", token => data.token);
           localStorage.setItem("dnes_admin_token", data.token);
           checkAdminAuth();
         } else {
           alert(data.error || "Neplatné přihlašovací údaje.");
         }
       } catch (err) {
-        alert("Chyba spojení s serverem.");
+        alert("Chyba spojení s serverem (" + err + "). Zkontrolujte přihlašovací údaje v .env a restartujte svatba-dnes.service na VPS.");
       }
     });
 

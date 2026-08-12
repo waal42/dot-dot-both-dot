@@ -110,9 +110,9 @@ class APIRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         parsed = urlparse(self.path)
-        path = parsed.path
+        path = parsed.path.rstrip('/')
 
-        if path in ['/svatba/dnes/api/data', '/api/data']:
+        if path.endswith('/data') or path.endswith('/api/data'):
             data = read_data()
             is_admin = self._is_authenticated()
             
@@ -143,7 +143,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
             }
             return self._send_json(res)
 
-        elif path.startswith('/svatba/dnes/api/redirect/') or path.startswith('/api/redirect/'):
+        elif '/redirect/' in path:
             slug = path.split('/')[-1]
             data = read_data()
             redirects = data.get("redirects", {})
@@ -163,7 +163,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         parsed = urlparse(self.path)
-        path = parsed.path
+        path = parsed.path.rstrip('/')
 
         length = int(self.headers.get('Content-Length', 0))
         body_bytes = self.rfile.read(length) if length > 0 else b'{}'
@@ -172,7 +172,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
         except Exception:
             payload = {}
 
-        if path in ['/svatba/dnes/api/admin/login', '/api/admin/login']:
+        if path.endswith('/admin/login') or path.endswith('/login'):
             username = payload.get('username', '').strip()
             password = payload.get('password', '').strip()
 
@@ -187,7 +187,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
             else:
                 return self._send_error("Neplatné uživatelské jméno nebo heslo", 401)
 
-        elif path in ['/svatba/dnes/api/admin/update', '/api/admin/update']:
+        elif path.endswith('/admin/update') or path.endswith('/update'):
             if not self._is_authenticated():
                 return self._send_error("Neautorizovaný přístup", 401)
 
