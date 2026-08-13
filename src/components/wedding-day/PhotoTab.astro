@@ -9,8 +9,10 @@
     >
       📸
     </div>
-    <h2 class="text-wedding-dark text-2xl font-bold tracking-tight">
-      Sdílejte svoje momentky
+    <h2 class="text-wedding-dark flex items-center justify-center gap-3 text-2xl font-bold tracking-tight">
+      <span class="morse-decoder text-wedding-medium cursor-help text-sm tracking-tighter opacity-40 hover:opacity-100 transition-opacity" data-decoded="FOTKY">··—· ——— — —·— —·——</span>
+      <span>Sdílejte svoje momentky</span>
+      <span class="morse-decoder text-wedding-medium cursor-help text-sm tracking-tighter opacity-40 hover:opacity-100 transition-opacity" data-decoded="F">··—·</span>
     </h2>
     <p
       class="text-wedding-medium mx-auto mt-1 max-w-sm text-xs leading-relaxed"
@@ -46,7 +48,7 @@
       href="/svatba/fotky"
       target="_blank"
       rel="noopener noreferrer"
-      class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium inline-flex w-full items-center justify-center gap-3 rounded-xl px-6 py-4 text-base font-bold tracking-wider uppercase shadow-md transition-all active:scale-95"
+      class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl px-6 py-4 text-base font-bold tracking-wider uppercase shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
     >
       <span>📷</span> Otevřít sdílené fotoalbum
     </a>
@@ -90,13 +92,17 @@
     // Use full absolute redirect URL or window.location origin
     const redirectUrl = `${window.location.origin}/svatba/fotky`;
 
+    const computed = getComputedStyle(document.documentElement);
+    const darkColor = computed.getPropertyValue("--theme-dark").trim() || "#2d3a2d";
+    const lightColor = computed.getPropertyValue("--theme-light").trim() || "#ffffff";
+
     try {
       await QRCode.toCanvas(canvas, redirectUrl, {
-        width: 180,
+        width: 176,
         margin: 1,
         color: {
-          dark: "#2d3a2d",
-          light: "#ffffff",
+          dark: darkColor,
+          light: lightColor,
         },
       });
     } catch (err) {
@@ -104,5 +110,9 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", initPhotoTabQR);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPhotoTabQR);
+  } else {
+    initPhotoTabQR();
+  }
 </script>

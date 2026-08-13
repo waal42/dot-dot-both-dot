@@ -335,10 +335,10 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
 
     const createCustomIcon = (type: string, isWedding = false) => {
       const size = isWedding ? 40 : 32;
-      const color = isWedding ? "#2d3a2d" : "#9a91a4";
+      const color = isWedding ? "var(--theme-dark, #2d3a2d)" : "var(--theme-medium, #5c5266)";
       return L.divIcon({
         className: "custom-map-icon",
-        html: `<div style="background-color: white; width: ${size}px; height: ${size}px; border: 2px solid ${color}; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px -4px rgb(0 0 0 / 0.1); color: ${color}; padding: 6px;">${icons[type] || ""}</div>`,
+        html: `<div style="background-color: var(--theme-light, #f1f3eb); width: ${size}px; height: ${size}px; border: 2px solid ${color}; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px -4px rgb(0 0 0 / 0.1); color: ${color}; padding: 6px;">${icons[type] || ""}</div>`,
         iconSize: [size, size],
         iconAnchor: [size / 2, size / 2],
       });
@@ -411,7 +411,8 @@ const guestGoogleUrl = generateGoogleUrl(calendar.guest);
 <style is:global>
   .leaflet-popup-content-wrapper {
     border-radius: 0 !important;
-    border: 1px solid #9a91a433;
+    border: 1px solid var(--theme-medium, #5c5266);
+    opacity: 0.95;
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
   }
   .leaflet-popup-tip {

@@ -16,7 +16,7 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
 <Layout title={metaTitle} showFooter={false}>
   <!-- Compact Standalone App Header -->
   <header
-    class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 sticky top-0 z-40 border-b px-4 py-3 shadow-xs backdrop-blur-md"
+    class="bg-wedding-light/95 border-wedding-medium/20 sticky top-0 z-40 border-b px-4 py-3 shadow-xs backdrop-blur-md"
   >
     <div class="mx-auto flex max-w-xl items-center justify-between">
       <a
@@ -30,9 +30,20 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
           >Svatbinfo</span
         >
       </div>
-      <span class="text-wedding-medium text-xs font-semibold"
-        >Hanka & Filip</span
-      >
+      <div class="flex items-center gap-3">
+        <span class="text-wedding-medium hidden text-xs font-semibold sm:inline"
+          >Hanka & Filip</span
+        >
+        <button
+          id="theme-toggle"
+          class="text-wedding-medium hover:text-wedding-dark hover:bg-wedding-medium/10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-colors"
+          aria-label="Přepnout tmavý/světlý režim"
+          title="Přepnout tmavý/světlý režim"
+        >
+          <span class="dark:hidden">🌙</span>
+          <span class="hidden dark:inline">☀️</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -48,29 +59,35 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
 
     <!-- Tab Contents -->
     <main id="dnes-tab-contents">
-      <section id="tab-schedule" class="tab-pane animate-fade-in-up">
+      <section id="tab-schedule" class="tab-pane animate-fade-in-up" role="tabpanel" aria-labelledby="tab-schedule-btn">
         <ScheduleTab />
       </section>
 
-      <section id="tab-photos" class="tab-pane animate-fade-in-up hidden">
+      <section id="tab-photos" class="tab-pane animate-fade-in-up hidden" role="tabpanel" aria-labelledby="tab-photos-btn">
         <PhotoTab />
       </section>
 
-      <section id="tab-guestbook" class="tab-pane animate-fade-in-up hidden">
+      <section id="tab-guestbook" class="tab-pane animate-fade-in-up hidden" role="tabpanel" aria-labelledby="tab-guestbook-btn">
         <GuestbookTab />
       </section>
 
-      <section id="tab-info" class="tab-pane animate-fade-in-up hidden">
+      <section id="tab-info" class="tab-pane animate-fade-in-up hidden" role="tabpanel" aria-labelledby="tab-info-btn">
         <InfoTab />
       </section>
     </main>
 
     <!-- Mobile Bottom Navigation Bar (Fixed at bottom) -->
     <nav
-      class="bg-wedding-light/95 dark:bg-wedding-dark/95 border-wedding-medium/20 fixed bottom-0 left-0 z-40 w-full border-t backdrop-blur-md"
+      role="tablist"
+      aria-label="Navigace Dne D"
+      class="bg-wedding-light/95 border-wedding-medium/20 fixed bottom-0 left-0 z-40 w-full border-t pb-safe backdrop-blur-md"
     >
       <div class="mx-auto flex max-w-xl justify-around px-2 py-2">
         <button
+          id="tab-schedule-btn"
+          role="tab"
+          aria-selected="true"
+          aria-controls="tab-schedule"
           data-target="tab-schedule"
           class="nav-tab-btn text-wedding-dark flex flex-1 scale-105 cursor-pointer flex-col items-center gap-1 py-1 text-center font-extrabold transition-all"
         >
@@ -79,6 +96,10 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
         </button>
 
         <button
+          id="tab-photos-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="tab-photos"
           data-target="tab-photos"
           class="nav-tab-btn text-wedding-medium flex flex-1 cursor-pointer flex-col items-center gap-1 py-1 text-center transition-all"
         >
@@ -87,6 +108,10 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
         </button>
 
         <button
+          id="tab-guestbook-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="tab-guestbook"
           data-target="tab-guestbook"
           class="nav-tab-btn text-wedding-medium flex flex-1 cursor-pointer flex-col items-center gap-1 py-1 text-center transition-all"
         >
@@ -95,6 +120,10 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
         </button>
 
         <button
+          id="tab-info-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="tab-info"
           data-target="tab-info"
           class="nav-tab-btn text-wedding-medium flex flex-1 cursor-pointer flex-col items-center gap-1 py-1 text-center transition-all"
         >
@@ -189,12 +218,24 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
     }
   }
 
+  function initThemeToggle() {
+    const themeBtn = document.getElementById("theme-toggle");
+    const toggleTheme = () => {
+      const isDark = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    };
+    (window as any).toggleTheme = toggleTheme;
+    themeBtn?.addEventListener("click", toggleTheme);
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
+      initThemeToggle();
       checkAppLock();
       initTabs();
     });
   } else {
+    initThemeToggle();
     checkAppLock();
     initTabs();
   }

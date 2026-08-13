@@ -6,8 +6,9 @@
   <div
     class="bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm"
   >
-    <h3 class="text-wedding-dark mb-1 text-lg font-bold">
-      🔗 Správce přesměrování & QR kódů pro tisk
+    <h3 class="text-wedding-dark mb-1 flex items-center justify-between text-lg font-bold">
+      <span>🔗 Správce přesměrování & QR kódů pro tisk</span>
+      <span class="morse-decoder text-wedding-medium cursor-help text-xs font-mono opacity-40 hover:opacity-100 transition-opacity" data-decoded="QR">——·— ·—·</span>
     </h3>
     <p class="text-wedding-medium mb-4 text-xs">
       Založte si libovolnou novou zkratku (např. <code
@@ -59,7 +60,7 @@
 
       <button
         type="submit"
-        class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold tracking-wider uppercase transition-all active:scale-95"
+        class="bg-wedding-dark text-wedding-light hover:bg-wedding-medium inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-95"
       >
         <span>➕</span> Přidat / Uložit přesměrování
       </button>
@@ -115,13 +116,13 @@
       <div class="flex gap-2">
         <button
           id="qr-download-btn"
-          class="bg-wedding-dark text-wedding-light flex-1 rounded-xl px-4 py-2.5 text-xs font-bold tracking-wider uppercase"
+          class="bg-wedding-dark text-wedding-light flex-1 cursor-pointer rounded-xl px-4 py-2.5 text-xs font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-95"
         >
           💾 Stáhnout PNG
         </button>
         <button
           id="qr-close-btn"
-          class="bg-wedding-medium/20 text-wedding-dark rounded-xl px-4 py-2.5 text-xs font-bold"
+          class="bg-wedding-medium/20 text-wedding-dark cursor-pointer rounded-xl px-4 py-2.5 text-xs font-bold transition-all duration-300 hover:bg-wedding-medium/30 hover:scale-105 active:scale-95"
         >
           Zavřít
         </button>
@@ -134,6 +135,11 @@
   import QRCode from "qrcode";
 
   let currentAdminToken = localStorage.getItem("dnes_admin_token") || "";
+
+  function closeModal() {
+    const modal = document.getElementById("qr-modal");
+    modal?.classList.add("hidden");
+  }
 
   async function loadRedirects() {
     try {
@@ -169,13 +175,13 @@
             <button
               data-slug="${slug}"
               data-shorturl="${shortUrl}"
-              class="show-qr-btn bg-wedding-dark/10 hover:bg-wedding-dark hover:text-wedding-light text-wedding-dark font-bold px-2.5 py-1 rounded-lg text-[11px] transition-colors"
+              class="show-qr-btn bg-wedding-dark/10 hover:bg-wedding-dark hover:text-wedding-light text-wedding-dark font-bold px-2.5 py-1 rounded-lg text-[11px] hover:scale-105 duration-300 cursor-pointer transition-all active:scale-95"
             >
               📱 QR kód
             </button>
             <button
               data-slug="${slug}"
-              class="delete-red-btn bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-2.5 py-1 rounded-lg text-[11px] transition-colors"
+              class="delete-red-btn bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-2.5 py-1 rounded-lg text-[11px] hover:scale-105 duration-300 cursor-pointer transition-all active:scale-95"
             >
               🗑️
             </button>
@@ -183,27 +189,6 @@
         `;
 
         tbody.appendChild(tr);
-      });
-
-      // Bind QR buttons
-      document.querySelectorAll(".show-qr-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          const target = e.currentTarget as HTMLButtonElement;
-          const slug = target.getAttribute("data-slug") || "";
-          const shortUrl = target.getAttribute("data-shorturl") || "";
-          openQRModal(slug, shortUrl);
-        });
-      });
-
-      // Bind Delete buttons
-      document.querySelectorAll(".delete-red-btn").forEach((btn) => {
-        btn.addEventListener("click", async (e) => {
-          const target = e.currentTarget as HTMLButtonElement;
-          const slug = target.getAttribute("data-slug") || "";
-          if (confirm(`Opravdu chcete smazat zkratku /svatba/${slug}?`)) {
-            await deleteRedirect(slug);
-          }
-        });
       });
     } catch (err) {
       console.error("Failed to load redirects:", err);
@@ -240,10 +225,14 @@
     if (titleEl) titleEl.textContent = `QR Kód pro /svatba/${slug}`;
     if (urlEl) urlEl.textContent = shortUrl;
 
+    const computed = getComputedStyle(document.documentElement);
+    const darkColor = computed.getPropertyValue("--theme-dark").trim() || "#2d3a2d";
+    const lightColor = computed.getPropertyValue("--theme-light").trim() || "#ffffff";
+
     await QRCode.toCanvas(canvas, shortUrl, {
       width: 200,
       margin: 1,
-      color: { dark: "#2d3a2d", light: "#ffffff" },
+      color: { dark: darkColor, light: lightColor },
     });
 
     modal.classList.remove("hidden");
@@ -256,8 +245,24 @@
     };
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function initRedirectManager() {
     loadRedirects();
+
+    const tbody = document.getElementById("redirects-table-body");
+    tbody?.addEventListener("click", async (e) => {
+      const target = (e.target as HTMLElement).closest("button");
+      if (!target) return;
+      if (target.classList.contains("show-qr-btn")) {
+        const slug = target.getAttribute("data-slug") || "";
+        const shortUrl = target.getAttribute("data-shorturl") || "";
+        openQRModal(slug, shortUrl);
+      } else if (target.classList.contains("delete-red-btn")) {
+        const slug = target.getAttribute("data-slug") || "";
+        if (confirm(`Opravdu chcete smazat zkratku /svatba/${slug}?`)) {
+          await deleteRedirect(slug);
+        }
+      }
+    });
 
     document
       .getElementById("add-redirect-form")
@@ -295,8 +300,23 @@
         }
       });
 
-    document.getElementById("qr-close-btn")?.addEventListener("click", () => {
-      document.getElementById("qr-modal")?.classList.add("hidden");
+    const modal = document.getElementById("qr-modal");
+    document.getElementById("qr-close-btn")?.addEventListener("click", closeModal);
+
+    modal?.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
     });
-  });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) {
+        closeModal();
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initRedirectManager);
+  } else {
+    initRedirectManager();
+  }
 </script>

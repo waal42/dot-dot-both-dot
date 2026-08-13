@@ -11,7 +11,7 @@ const { unlockTime = "2026-08-15T13:00:00+02:00" } = Astro.props;
   class="flex min-h-[80vh] flex-col items-center justify-center px-4 py-12 text-center"
 >
   <div
-    class="morse-border bg-wedding-light dark:bg-wedding-dark/95 border-wedding-dark/30 animate-fade-in-up max-w-lg rounded-3xl p-8 shadow-2xl md:p-12"
+    class="morse-border bg-wedding-light dark:bg-wedding-dark/95 border-wedding-dark/30 animate-fade-in-up max-w-lg rounded-3xl p-4 sm:p-8 md:p-12 shadow-2xl"
   >
     <h1
       class="text-wedding-dark mb-3 text-3xl font-extrabold tracking-tight md:text-4xl"
@@ -37,52 +37,52 @@ const { unlockTime = "2026-08-15T13:00:00+02:00" } = Astro.props;
     </div>
 
     <!-- Countdown Timer -->
-    <div id="countdown-box" class="mb-2 flex justify-center gap-3 md:gap-4">
+    <div id="countdown-box" class="mb-2 grid grid-cols-4 gap-1.5 sm:gap-3">
       <div
-        class="bg-wedding-dark text-wedding-light min-w-16 rounded-xl p-3 shadow-sm"
+        class="bg-wedding-dark text-wedding-light min-w-0 w-full rounded-xl p-2.5 sm:p-3 shadow-sm"
       >
         <span
           id="cd-days"
-          class="block font-mono text-2xl font-extrabold md:text-3xl">--</span
+          class="block font-mono text-xl font-extrabold sm:text-2xl md:text-3xl">--</span
         >
         <span
-          class="block text-[10px] font-bold tracking-wider uppercase opacity-80"
+          class="block text-[9px] sm:text-[10px] font-bold tracking-wider uppercase opacity-80"
           >dní</span
         >
       </div>
       <div
-        class="bg-wedding-dark text-wedding-light min-w-16 rounded-xl p-3 shadow-sm"
+        class="bg-wedding-dark text-wedding-light min-w-0 w-full rounded-xl p-2.5 sm:p-3 shadow-sm"
       >
         <span
           id="cd-hours"
-          class="block font-mono text-2xl font-extrabold md:text-3xl">--</span
+          class="block font-mono text-xl font-extrabold sm:text-2xl md:text-3xl">--</span
         >
         <span
-          class="block text-[10px] font-bold tracking-wider uppercase opacity-80"
+          class="block text-[9px] sm:text-[10px] font-bold tracking-wider uppercase opacity-80"
           >hodin</span
         >
       </div>
       <div
-        class="bg-wedding-dark text-wedding-light min-w-16 rounded-xl p-3 shadow-sm"
+        class="bg-wedding-dark text-wedding-light min-w-0 w-full rounded-xl p-2.5 sm:p-3 shadow-sm"
       >
         <span
           id="cd-mins"
-          class="block font-mono text-2xl font-extrabold md:text-3xl">--</span
+          class="block font-mono text-xl font-extrabold sm:text-2xl md:text-3xl">--</span
         >
         <span
-          class="block text-[10px] font-bold tracking-wider uppercase opacity-80"
+          class="block text-[9px] sm:text-[10px] font-bold tracking-wider uppercase opacity-80"
           >minut</span
         >
       </div>
       <div
-        class="bg-wedding-dark text-wedding-light min-w-16 rounded-xl p-3 shadow-sm"
+        class="bg-wedding-dark text-wedding-light min-w-0 w-full rounded-xl p-2.5 sm:p-3 shadow-sm"
       >
         <span
           id="cd-secs"
-          class="block font-mono text-2xl font-extrabold md:text-3xl">--</span
+          class="block font-mono text-xl font-extrabold sm:text-2xl md:text-3xl">--</span
         >
         <span
-          class="block text-[10px] font-bold tracking-wider uppercase opacity-80"
+          class="block text-[9px] sm:text-[10px] font-bold tracking-wider uppercase opacity-80"
           >sekund</span
         >
       </div>

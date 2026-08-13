@@ -22,14 +22,16 @@ const morseMsg = wedding?.data.morseMessage || {
     >
       ✉️
     </div>
-    <h2 class="text-wedding-dark text-2xl font-bold tracking-tight">
-      Napište nám vzkaz
+    <h2 class="text-wedding-dark flex items-center justify-center gap-3 text-2xl font-bold tracking-tight">
+      <span class="morse-decoder text-wedding-medium cursor-help text-lg tracking-tighter opacity-30 hover:opacity-100 transition-opacity" data-decoded="V">···—</span>
+      <span>Napište nám vzkaz</span>
+      <span class="morse-decoder text-wedding-medium cursor-help text-lg tracking-tighter opacity-30 hover:opacity-100 transition-opacity" data-decoded="Z">——··</span>
     </h2>
     <p
       class="text-wedding-medium mx-auto mt-1 max-w-sm text-xs leading-relaxed"
     >
       Tady nám můžete napsat něco, co nám nechcete říct, ale chcete, abychom to
-      věděli. My si to pak v klidu přečteme.
+      věěli. My si to pak v klidu přečteme.
     </p>
   </div>
 
@@ -65,6 +67,8 @@ const morseMsg = wedding?.data.morseMessage || {
         />
       </div>
 
+      <input type="hidden" id="dnes-gb-morse-hidden" name="Morse" value="" />
+
       <div>
         <div class="mb-1 flex items-center justify-between">
           <label
@@ -82,12 +86,17 @@ const morseMsg = wedding?.data.morseMessage || {
           placeholder="Napište cokoliv pěkného..."
           class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-xl border p-3.5 text-sm font-medium transition-all"
         ></textarea>
+        <!-- Dynamic Morse Code Preview -->
+        <div class="mt-2 border-t border-wedding-medium/10 pt-2 flex items-center justify-between text-[11px] text-wedding-medium">
+          <span>Svatební telegrafie (Morseovka):</span>
+          <span id="morse-preview-text" class="font-mono font-bold tracking-widest text-wedding-dark">·— / —· / ———</span>
+        </div>
       </div>
 
       <button
         type="submit"
         id="dnes-gb-submit"
-        class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl py-4 text-sm font-bold tracking-wider uppercase shadow-md transition-all active:scale-95"
+        class="morse-border text-wedding-light bg-wedding-dark hover:bg-wedding-medium mt-2 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-4 text-sm font-bold tracking-wider uppercase shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
       >
         <span>✉️</span>
         {morseMsg.submitButtonText}
@@ -106,7 +115,7 @@ const morseMsg = wedding?.data.morseMessage || {
       </p>
       <button
         id="gb-send-another"
-        class="text-wedding-dark mt-6 inline-block text-xs font-bold hover:underline"
+        class="text-wedding-dark mt-6 inline-flex cursor-pointer items-center gap-1.5 text-xs font-bold transition-all duration-300 hover:scale-105 hover:underline active:scale-95"
       >
         ➕ Poslat další vzkaz
       </button>
@@ -168,7 +177,7 @@ const morseMsg = wedding?.data.morseMessage || {
       .join(" ");
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function initGuestbook() {
     const textInput = document.getElementById(
       "dnes-gb-text",
     ) as HTMLTextAreaElement;
@@ -195,7 +204,6 @@ const morseMsg = wedding?.data.morseMessage || {
           "dnes-gb-submit",
         ) as HTMLButtonElement;
         const successBox = document.getElementById("guestbook-success");
-        const formContainer = form;
 
         if (submitBtn) submitBtn.disabled = true;
 
@@ -211,7 +219,7 @@ const morseMsg = wedding?.data.morseMessage || {
             mode: "no-cors",
           });
 
-          formContainer.classList.add("hidden");
+          form.classList.add("hidden");
           successBox?.classList.remove("hidden");
         } catch (err) {
           alert("Chyba při odesílání vzkazu. Zkuste to prosím znovu.");
@@ -231,5 +239,11 @@ const morseMsg = wedding?.data.morseMessage || {
           if (submitBtn) submitBtn.disabled = false;
         });
     }
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initGuestbook);
+  } else {
+    initGuestbook();
+  }
 </script>

@@ -9,10 +9,12 @@ const whenWhere = wedding?.data.whenWhere;
 
 <div class="space-y-6">
   <div>
-    <h2 class="text-wedding-dark text-xl font-bold tracking-tight">
-      Informace & Kontakty
+    <h2 class="text-wedding-dark flex items-center gap-2.5 text-xl font-bold tracking-tight">
+      <span class="morse-decoder text-wedding-medium text-base tracking-tighter opacity-30 hover:opacity-100 transition-opacity" data-decoded="I">··</span>
+      <span>Informace & Kontakty</span>
+      <span class="morse-decoder text-wedding-medium text-base tracking-tighter opacity-30 hover:opacity-100 transition-opacity" data-decoded="K">—·—</span>
     </h2>
-    <p class="text-wedding-medium text-xs">Vše důležité na jednom místě</p>
+    <p class="text-wedding-medium text-xs mt-0.5">Vše důležité na jednom místě</p>
   </div>
 
   <!-- Venue & Map Card -->
@@ -42,7 +44,7 @@ const whenWhere = wedding?.data.whenWhere;
         "https://maps.app.goo.gl/AJ5MkMekiaeEhSGf6"}
       target="_blank"
       rel="noopener noreferrer"
-      class="text-wedding-dark border-wedding-dark/40 hover:bg-wedding-dark hover:text-wedding-light inline-flex w-full items-center justify-center gap-2 rounded-xl border p-3 text-xs font-bold tracking-wider uppercase transition-all active:scale-95"
+      class="morse-border text-wedding-dark border-wedding-dark/40 hover:bg-wedding-dark hover:text-wedding-light inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border p-3 text-xs font-bold tracking-wider uppercase transition-all duration-300 hover:scale-105 active:scale-95"
     >
       <span>🗺️</span> Otevřít v Google Mapách
     </a>

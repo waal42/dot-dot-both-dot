@@ -9,7 +9,7 @@ const staticScheduleItems = wedding?.data.schedule.items || [];
 <div class="space-y-6">
   <!-- Program & Activities Section -->
   <div
-    class="bg-wedding-light/80 dark:bg-wedding-dark/60 border-wedding-medium/20 rounded-2xl border p-5 shadow-xs"
+    class="morse-border bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm"
   >
     <div class="mb-5 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -19,10 +19,12 @@ const staticScheduleItems = wedding?.data.schedule.items || [];
           🎯
         </div>
         <div>
-          <h2 class="text-wedding-dark text-xl font-bold tracking-tight">
-            Program
+          <h2 class="text-wedding-dark flex items-center gap-2.5 text-xl font-bold tracking-tight">
+            <span class="morse-decoder text-wedding-medium text-base tracking-tighter opacity-30 hover:opacity-100 transition-opacity" data-decoded="P">·——·</span>
+            <span>Program</span>
+            <span class="morse-decoder text-wedding-medium text-base tracking-tighter opacity-30 hover:opacity-100 transition-opacity" data-decoded="R">·—·</span>
           </h2>
-          <p class="text-wedding-medium text-xs">
+          <p class="text-wedding-medium text-xs mt-0.5">
             Aktivity, stanoviště a zábava
           </p>
         </div>
@@ -41,7 +43,7 @@ const staticScheduleItems = wedding?.data.schedule.items || [];
       <button
         id="toggle-static-schedule-btn"
         type="button"
-        class="flex w-full cursor-pointer items-center justify-between text-left"
+        class="flex w-full cursor-pointer items-center justify-between text-left transition-all duration-200 hover:opacity-80 active:scale-[0.99]"
       >
         <div class="flex items-center gap-2">
           <span class="text-xs">🕒</span>
@@ -148,24 +150,30 @@ const staticScheduleItems = wedding?.data.schedule.items || [];
     }
   }
 
-  // Toggle static schedule
-  const toggleBtn = document.getElementById("toggle-static-schedule-btn");
-  const content = document.getElementById("static-schedule-content");
-  const chevron = document.getElementById("static-schedule-chevron");
+  function initScheduleTab() {
+    // Toggle static schedule
+    const toggleBtn = document.getElementById("toggle-static-schedule-btn");
+    const content = document.getElementById("static-schedule-content");
+    const chevron = document.getElementById("static-schedule-chevron");
 
-  toggleBtn?.addEventListener("click", () => {
-    const isHidden = content?.classList.contains("hidden");
-    if (isHidden) {
-      content?.classList.remove("hidden");
-      if (chevron) chevron.textContent = "Skrýt ▴";
-    } else {
-      content?.classList.add("hidden");
-      if (chevron) chevron.textContent = "Rozbalit ▾";
-    }
-  });
+    toggleBtn?.addEventListener("click", () => {
+      const isHidden = content?.classList.contains("hidden");
+      if (isHidden) {
+        content?.classList.remove("hidden");
+        if (chevron) chevron.textContent = "Skrýt ▴";
+      } else {
+        content?.classList.add("hidden");
+        if (chevron) chevron.textContent = "Rozbalit ▾";
+      }
+    });
 
-  document.addEventListener("DOMContentLoaded", () => {
     loadProgramFeed();
     setInterval(loadProgramFeed, 30000);
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initScheduleTab);
+  } else {
+    initScheduleTab();
+  }
 </script>
