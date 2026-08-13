@@ -27,7 +27,7 @@ const morseMsg = wedding?.data.morseMessage || {
     >
       <span
         class="morse-decoder text-wedding-medium cursor-help text-lg tracking-tighter opacity-30 transition-opacity hover:opacity-100"
-        data-decoded="V">···—</span
+        data-decoded="N">—·</span
       >
       <span>Napište nám vzkaz</span>
       <span
@@ -94,17 +94,6 @@ const morseMsg = wedding?.data.morseMessage || {
           placeholder="Napište cokoliv pěkného..."
           class="focus-ring-premium border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark text-wedding-dark w-full rounded-xl border p-3.5 text-sm font-medium transition-all"
         ></textarea>
-        <!-- Dynamic Morse Code Preview -->
-        <div
-          class="border-wedding-medium/10 text-wedding-medium mt-2 flex items-center justify-between border-t pt-2 text-[11px]"
-        >
-          <span>Svatební telegrafie (Morseovka):</span>
-          <span
-            id="morse-preview-text"
-            class="text-wedding-dark font-mono font-bold tracking-widest"
-            >·— / —· / ———</span
-          >
-        </div>
       </div>
 
       <button
