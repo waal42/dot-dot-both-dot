@@ -54,34 +54,63 @@ DEFAULT_DATA = {
             "timestamp": "2026-08-15T13:00:00+02:00"
         }
     ],
+    "program_items": [],
     "schedule_overrides": {},
     "redirects": {
         "fotky": "https://photos.google.com",
         "disk": "",
         "vzkaznik": "/svatba/dnes#vzkaznik"
-    }
+    },
+    "active_sessions": []
 }
 
 def read_data():
+    global TARGET_DATA_PATH
+    # If target path does not exist, check fallback
+    if not os.path.exists(TARGET_DATA_PATH):
+        fallback_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dnes_data.json')
+        if os.path.exists(fallback_path):
+            TARGET_DATA_PATH = fallback_path
+
     if not os.path.exists(TARGET_DATA_PATH):
         write_data(DEFAULT_DATA)
         return DEFAULT_DATA
+
     try:
         with open(TARGET_DATA_PATH, 'r', encoding='utf-8') as f:
             data = json.load(f)
-            # Ensure keys exist
+            # Ensure missing default keys exist
             for k, v in DEFAULT_DATA.items():
                 if k not in data:
                     data[k] = v
             return data
     except Exception as e:
-        print(f"Error reading JSON data: {e}", file=sys.stderr)
+        print(f"Error reading JSON data from {TARGET_DATA_PATH}: {e}", file=sys.stderr)
         return DEFAULT_DATA
 
 def write_data(data):
-    os.makedirs(os.path.dirname(TARGET_DATA_PATH), exist_ok=True)
-    with open(TARGET_DATA_PATH, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    global TARGET_DATA_PATH
+    try:
+        dir_name = os.path.dirname(TARGET_DATA_PATH)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
+        with open(TARGET_DATA_PATH, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        print(f"[DATA PERSISTED] Saved JSON data to {TARGET_DATA_PATH}", file=sys.stderr)
+    except Exception as e:
+        print(f"[DATA WRITE ERROR] Failed writing to {TARGET_DATA_PATH}: {e}", file=sys.stderr)
+        # Fallback to local file in script directory
+        fallback_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dnes_data.json')
+        try:
+            with open(fallback_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            TARGET_DATA_PATH = fallback_path
+            print(f"[DATA PERSISTED FALLBACK] Saved JSON data to fallback {fallback_path}", file=sys.stderr)
+        except Exception as e2:
+            print(f"[DATA CRITICAL ERROR] Fallback save failed: {e2}", file=sys.stderr)
+
+# Ensure data file exists at startup
+read_data()
 
 class APIRequestHandler(BaseHTTPRequestHandler):
     def _set_cors_headers(self):
@@ -111,7 +140,11 @@ class APIRequestHandler(BaseHTTPRequestHandler):
         auth_header = self.headers.get('Authorization', '')
         token_header = self.headers.get('X-Admin-Token', '')
         token = auth_header.replace('Bearer ', '').strip() if auth_header else token_header.strip()
-        return token in ACTIVE_SESSIONS and len(token) > 0
+        if not token:
+            return False
+        data = read_data()
+        sessions = data.get("active_sessions", [])
+        return token in ACTIVE_SESSIONS or token in sessions
 
     def do_GET(self):
         print(f"INCOMING GET: {self.path}", file=sys.stderr)
@@ -191,6 +224,9 @@ class APIRequestHandler(BaseHTTPRequestHandler):
             if username and password and username == ADMIN_USER and password == ADMIN_PASS:
                 token = secrets.token_hex(24)
                 ACTIVE_SESSIONS.add(token)
+                data = read_data()
+                data.setdefault("active_sessions", []).append(token)
+                write_data(data)
                 print(f"LOGIN SUCCESS: user '{username}'", file=sys.stderr)
                 return self._send_json({"result": "success", "token": token})
             else:
