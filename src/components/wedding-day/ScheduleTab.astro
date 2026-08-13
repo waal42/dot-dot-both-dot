@@ -7,30 +7,35 @@ const staticScheduleItems = wedding?.data.schedule.items || [];
 ---
 
 <div class="space-y-6">
+  <div class="text-center">
+    <div
+      class="bg-wedding-dark/10 text-wedding-dark dark:bg-wedding-light/10 mb-2 inline-flex h-12 w-12 items-center justify-center rounded-2xl text-2xl"
+    >
+      🎯
+    </div>
+    <h2
+      class="text-wedding-dark flex items-center justify-center gap-3 text-2xl font-bold tracking-tight"
+    >
+      <span
+        class="morse-decoder text-wedding-medium text-base tracking-tighter opacity-30 transition-opacity hover:opacity-100"
+        data-decoded="P">·——·</span
+      >
+      <span>Program</span>
+      <span
+        class="morse-decoder text-wedding-medium text-base tracking-tighter opacity-30 transition-opacity hover:opacity-100"
+        data-decoded="M">——</span
+      >
+    </h2>
+    <p
+      class="text-wedding-medium mx-auto mt-1 max-w-sm text-xs leading-relaxed"
+    >
+      Aktivity a zábava
+    </p>
+  </div>
   <!-- Program & Activities Section -->
   <div
     class="morse-border bg-wedding-light/90 dark:bg-wedding-dark/80 border-wedding-medium/20 rounded-2xl border p-5 shadow-sm"
   >
-    <div class="mb-5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div
-          class="bg-wedding-dark/10 dark:bg-wedding-light/10 text-wedding-dark flex h-10 w-10 items-center justify-center rounded-xl text-xl font-bold"
-        >
-          🎯
-        </div>
-        <div>
-          <h2 class="text-wedding-dark flex items-center gap-2.5 text-xl font-bold tracking-tight">
-            <span class="morse-decoder text-wedding-medium text-base tracking-tighter opacity-30 hover:opacity-100 transition-opacity" data-decoded="P">·——·</span>
-            <span>Program</span>
-            <span class="morse-decoder text-wedding-medium text-base tracking-tighter opacity-30 hover:opacity-100 transition-opacity" data-decoded="R">·—·</span>
-          </h2>
-          <p class="text-wedding-medium text-xs mt-0.5">
-            Aktivity, stanoviště a zábava
-          </p>
-        </div>
-      </div>
-    </div>
-
     <!-- Container for dynamic admin-added program activities -->
     <div id="dynamic-program-feed" class="mb-4 space-y-3">
       <div class="text-wedding-medium py-4 text-center text-xs italic">

@@ -9,10 +9,18 @@
     >
       📸
     </div>
-    <h2 class="text-wedding-dark flex items-center justify-center gap-3 text-2xl font-bold tracking-tight">
-      <span class="morse-decoder text-wedding-medium cursor-help text-sm tracking-tighter opacity-40 hover:opacity-100 transition-opacity" data-decoded="FOTKY">··—· ——— — —·— —·——</span>
-      <span>Sdílejte svoje momentky</span>
-      <span class="morse-decoder text-wedding-medium cursor-help text-sm tracking-tighter opacity-40 hover:opacity-100 transition-opacity" data-decoded="F">··—·</span>
+    <h2
+      class="text-wedding-dark flex items-center justify-center gap-3 text-2xl font-bold tracking-tight"
+    >
+      <span
+        class="morse-decoder text-wedding-medium cursor-help text-lg tracking-tighter opacity-30 transition-opacity hover:opacity-100"
+        data-decoded="S">···</span
+      >
+      <span>Sdílejte svoje fotky</span>
+      <span
+        class="morse-decoder text-wedding-medium cursor-help text-lg tracking-tighter opacity-30 transition-opacity hover:opacity-100"
+        data-decoded="Y">—·——</span
+      >
     </h2>
     <p
       class="text-wedding-medium mx-auto mt-1 max-w-sm text-xs leading-relaxed"
@@ -93,8 +101,10 @@
     const redirectUrl = `${window.location.origin}/svatba/fotky`;
 
     const computed = getComputedStyle(document.documentElement);
-    const darkColor = computed.getPropertyValue("--theme-dark").trim() || "#2d3a2d";
-    const lightColor = computed.getPropertyValue("--theme-light").trim() || "#ffffff";
+    const darkColor =
+      computed.getPropertyValue("--theme-dark").trim() || "#2d3a2d";
+    const lightColor =
+      computed.getPropertyValue("--theme-light").trim() || "#ffffff";
 
     try {
       await QRCode.toCanvas(canvas, redirectUrl, {
