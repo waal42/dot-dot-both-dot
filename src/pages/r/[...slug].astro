@@ -67,5 +67,9 @@ const { slug } = Astro.params;
     window.location.replace("/svatba/dnes");
   }
 
-  document.addEventListener("DOMContentLoaded", performSlugRedirect);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", performSlugRedirect);
+  } else {
+    performSlugRedirect();
+  }
 </script>

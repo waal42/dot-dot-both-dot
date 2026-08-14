@@ -166,6 +166,8 @@ class APIRequestHandler(BaseHTTPRequestHandler):
             else:
                 try:
                     unlock_dt = datetime.fromisoformat(unlock_str)
+                    if unlock_dt.tzinfo is None:
+                        unlock_dt = unlock_dt.replace(tzinfo=timezone(timedelta(hours=2)))
                     now_dt = datetime.now(timezone.utc)
                     is_locked = now_dt < unlock_dt
                 except Exception:
@@ -173,6 +175,7 @@ class APIRequestHandler(BaseHTTPRequestHandler):
 
             res = {
                 "is_locked": is_locked and not is_admin,
+                "is_locked_override": override,
                 "is_admin": is_admin,
                 "unlock_time": unlock_str,
                 "announcements": data.get("announcements", []),
@@ -225,7 +228,10 @@ class APIRequestHandler(BaseHTTPRequestHandler):
                 token = secrets.token_hex(24)
                 ACTIVE_SESSIONS.add(token)
                 data = read_data()
-                data.setdefault("active_sessions", []).append(token)
+                sessions = data.setdefault("active_sessions", [])
+                sessions.append(token)
+                # Keep last 15 active sessions
+                data["active_sessions"] = sessions[-15:]
                 write_data(data)
                 print(f"LOGIN SUCCESS: user '{username}'", file=sys.stderr)
                 return self._send_json({"result": "success", "token": token})

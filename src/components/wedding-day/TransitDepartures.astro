@@ -150,6 +150,8 @@ import saturdayData from "../../content/wedding/ids_jmk_saturday.json";
     function getNextTwo(items) {
       if (!items || !items.length) return [];
       const upcoming = [];
+
+      // 1. Check today's departures remaining
       for (const item of items) {
         const [h, m] = item.time.split(":").map(Number);
         const itemMins = h * 60 + m;
@@ -159,8 +161,22 @@ import saturdayData from "../../content/wedding/ids_jmk_saturday.json";
           if (upcoming.length === 2) break;
         }
       }
+
+      // 2. If we need more upcoming departures and are past evening (or night line), wrap to next morning
       if (upcoming.length < 2 && items.length > 0) {
-        upcoming.push({ time: items[0].time, diff: null, isTomorrow: true });
+        for (const item of items) {
+          const [h, m] = item.time.split(":").map(Number);
+          const itemMins = h * 60 + m;
+          const diff = (itemMins + 1440) - currentMins;
+          // If within next 6 hours (e.g. after midnight trips)
+          const isSoon = diff <= 360;
+          upcoming.push({
+            time: item.time,
+            diff: isSoon ? diff : null,
+            isTomorrow: !isSoon
+          });
+          if (upcoming.length === 2) break;
+        }
       }
       return upcoming;
     }
@@ -192,10 +208,10 @@ import saturdayData from "../../content/wedding/ids_jmk_saturday.json";
       }
 
       if (second) {
-        const secondLabel = second.isTomorrow
-          ? `zítra v ${second.time}`
-          : `další v ${second.time}`;
-        html += `<span class="text-wedding-medium text-[11px] font-mono">další: ${second.time}</span>`;
+        const secondText = second.diff !== null && !second.isTomorrow
+          ? `další: ${second.time} (za ${second.diff} min)`
+          : `další: ${second.time}`;
+        html += `<span class="text-wedding-medium text-[11px] font-mono">${secondText}</span>`;
       }
 
       html += `</div>`;
@@ -207,8 +223,14 @@ import saturdayData from "../../content/wedding/ids_jmk_saturday.json";
     renderBox("next-n96-box", saturdayData.N96);
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function initTransit() {
     updateNextDepartures();
     setInterval(updateNextDepartures, 30000);
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTransit);
+  } else {
+    initTransit();
+  }
 </script>

@@ -5,7 +5,11 @@
 <div id="live-announcement-container" class="mb-6 hidden">
   <div
     id="live-banner-card"
-    class="morse-border text-wedding-dark animate-fade-in-up relative cursor-pointer rounded-2xl border-amber-600/40 bg-amber-500/10 p-4 shadow-md transition-all hover:bg-amber-500/15 md:p-5 dark:bg-amber-500/20"
+    role="button"
+    tabindex="0"
+    aria-haspopup="dialog"
+    aria-label="Zobrazit historii zpráv ze svatby"
+    class="morse-border text-wedding-dark animate-fade-in-up relative cursor-pointer rounded-2xl border-amber-600/40 bg-amber-500/10 p-4 shadow-md transition-all hover:bg-amber-500/15 md:p-5 dark:bg-amber-500/20 focus-ring-premium"
     title="Kliknutím zobrazíte všechny zprávy"
   >
     <div class="flex items-start gap-3">
@@ -40,14 +44,27 @@
   </div>
 
   <!-- History Modal / Container for all announcements -->
-  <div id="announcements-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 hidden">
-    <div class="bg-wedding-light dark:bg-wedding-dark border-wedding-medium/30 max-w-md w-full rounded-3xl border p-6 shadow-2xl animate-fade-in-up">
+  <div
+    id="announcements-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="history-modal-title"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 hidden"
+  >
+    <div
+      id="announcements-modal-dialog"
+      class="bg-wedding-light dark:bg-wedding-dark border-wedding-medium/30 max-w-md w-full rounded-3xl border p-6 shadow-2xl animate-fade-in-up"
+    >
       <div class="flex items-center justify-between mb-4 border-b border-wedding-medium/15 pb-3">
         <div class="flex items-center gap-2">
           <span class="text-xl">📋</span>
-          <h3 class="text-wedding-dark font-bold text-base">Historie zpráv ze svatby</h3>
+          <h3 id="history-modal-title" class="text-wedding-dark font-bold text-base">Historie zpráv ze svatby</h3>
         </div>
-        <button id="close-history-modal-btn" class="text-wedding-medium hover:text-wedding-dark font-bold text-sm p-1">
+        <button
+          id="close-history-modal-btn"
+          aria-label="Zavřít historii zpráv"
+          class="text-wedding-medium hover:text-wedding-dark font-bold text-sm p-1 cursor-pointer"
+        >
           ✕
         </button>
       </div>
@@ -56,7 +73,11 @@
         <!-- Loaded dynamically -->
       </div>
 
-      <button id="close-history-modal-bottom-btn" class="mt-5 w-full bg-wedding-dark text-wedding-light py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider">
+      <button
+        id="close-history-modal-bottom-btn"
+        aria-label="Zavřít"
+        class="mt-5 w-full bg-wedding-dark text-wedding-light py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer active:scale-95 transition-transform"
+      >
         Zavřít
       </button>
     </div>
@@ -158,12 +179,40 @@
     modal?.classList.add("hidden");
   }
 
-  document.getElementById("live-banner-card")?.addEventListener("click", openHistoryModal);
-  document.getElementById("close-history-modal-btn")?.addEventListener("click", closeHistoryModal);
-  document.getElementById("close-history-modal-bottom-btn")?.addEventListener("click", closeHistoryModal);
+  function initLiveBanner() {
+    const bannerCard = document.getElementById("live-banner-card");
+    bannerCard?.addEventListener("click", openHistoryModal);
+    bannerCard?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openHistoryModal();
+      }
+    });
 
-  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("close-history-modal-btn")?.addEventListener("click", closeHistoryModal);
+    document.getElementById("close-history-modal-bottom-btn")?.addEventListener("click", closeHistoryModal);
+
+    // Backdrop click dismiss
+    document.getElementById("announcements-modal")?.addEventListener("click", (e) => {
+      if (e.target === document.getElementById("announcements-modal")) {
+        closeHistoryModal();
+      }
+    });
+
+    // Escape key dismiss
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeHistoryModal();
+      }
+    });
+
     fetchAnnouncements();
     setInterval(fetchAnnouncements, 30000);
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLiveBanner);
+  } else {
+    initLiveBanner();
+  }
 </script>

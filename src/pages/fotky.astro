@@ -57,5 +57,9 @@ const metaTitle = `Fotoalbum | ${wedding?.data.metaTitle || 'Hanka & Filip'}`;
     window.location.replace("/svatba/dnes#fotky");
   }
 
-  document.addEventListener("DOMContentLoaded", performPhotoRedirect);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", performPhotoRedirect);
+  } else {
+    performPhotoRedirect();
+  }
 </script>

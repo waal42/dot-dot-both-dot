@@ -106,7 +106,7 @@ const morseMsg = wedding?.data.morseMessage || {
       </button>
     </form>
 
-    <div id="guestbook-success" class="hidden py-8 text-center">
+    <div id="guestbook-success" role="status" aria-live="polite" class="hidden py-8 text-center">
       <div
         class="mb-3 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 text-3xl text-emerald-600"
       >
@@ -192,17 +192,24 @@ const morseMsg = wedding?.data.morseMessage || {
       "dnes-guestbook-form",
     ) as HTMLFormElement;
 
-    if (textInput && morsePreview && morseHidden) {
-      textInput.addEventListener("input", () => {
+    if (textInput && morseHidden) {
+      const updateMorse = () => {
         const morseStr = textToMorse(textInput.value);
-        morsePreview.textContent = morseStr || "·— / —· / ———";
+        if (morsePreview) {
+          morsePreview.textContent = morseStr || "·— / —· / ———";
+        }
         morseHidden.value = morseStr;
-      });
+      };
+      textInput.addEventListener("input", updateMorse);
+      textInput.addEventListener("change", updateMorse);
     }
 
     if (form) {
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        if (textInput && morseHidden) {
+          morseHidden.value = textToMorse(textInput.value);
+        }
         const submitBtn = document.getElementById(
           "dnes-gb-submit",
         ) as HTMLButtonElement;

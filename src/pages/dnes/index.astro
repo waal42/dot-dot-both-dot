@@ -186,6 +186,7 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
 
       tabBtns.forEach((btn) => {
         const isTarget = btn.getAttribute("data-target") === targetId;
+        btn.setAttribute("aria-selected", isTarget ? "true" : "false");
         if (isTarget) {
           btn.classList.remove("text-wedding-medium");
           btn.classList.add("text-wedding-dark", "scale-105", "font-extrabold");
