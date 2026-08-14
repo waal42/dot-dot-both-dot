@@ -32,7 +32,7 @@ jobs:
       - name: Deploy to VPS
         uses: Burnett01/rsync-deployments@5.2.1
         with:
-          switches: -avzr --delete
+          switches: -avzr --delete --exclude=dnes_data.json
           path: dist/ # Složka, kterou vygenerovalo Astro
           remote_path: /var/www/mywalove/svatba/
           remote_host: ${{ secrets.VPS_HOST }}
@@ -65,7 +65,7 @@ jobs:
       - name: Deploy D-Day API Script to VPS
         uses: Burnett01/rsync-deployments@5.2.1
         with:
-          switches: -avzr
+          switches: -avzr --exclude=dnes_data.json --exclude=data/
           path: server/
           remote_path: /opt/svatba-dnes/
           remote_host: ${{ secrets.VPS_HOST }}

@@ -34,7 +34,7 @@ load_env()
 
 ADMIN_USER = os.environ.get("DNES_ADMIN_USER", "").strip()
 ADMIN_PASS = os.environ.get("DNES_ADMIN_PASS", "").strip()
-TARGET_DATA_PATH = os.environ.get("DNES_DATA_PATH", "/var/www/mywalove/svatba/dnes_data.json")
+TARGET_DATA_PATH = os.environ.get("DNES_DATA_PATH", "/opt/svatba-dnes/dnes_data.json")
 
 # Fallback path if running locally or permissions differ
 if not os.path.exists(os.path.dirname(TARGET_DATA_PATH)):

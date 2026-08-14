@@ -12,9 +12,10 @@ import { getEntry } from "astro:content";
 interface Props {
   title: string;
   showFooter?: boolean;
+  forceLightMode?: boolean;
 }
 
-const { title, showFooter = true } = Astro.props;
+const { title, showFooter = true, forceLightMode = false } = Astro.props;
 const wedding = await getEntry("wedding", "info");
 if (!wedding) {
   throw new Error("Wedding content 'info' not found");
@@ -79,8 +80,12 @@ const { metaDescription } = wedding.data;
     />
 
     <title>{title}</title>
-    <script is:inline>
+    <script is:inline define:vars={{ forceLightMode }}>
       (function () {
+        if (forceLightMode) {
+          document.documentElement.classList.remove("dark");
+          return;
+        }
         const storedTheme = localStorage.getItem("theme");
         if (
           storedTheme === "dark" ||

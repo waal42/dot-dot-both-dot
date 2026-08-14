@@ -13,7 +13,7 @@ const wedding = await getEntry("wedding", "info");
 const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka & Filip"}`;
 ---
 
-<Layout title={metaTitle} showFooter={false}>
+<Layout title={metaTitle} showFooter={false} forceLightMode={true}>
   <!-- Compact Standalone App Header -->
   <header
     class="bg-wedding-light/95 border-wedding-medium/20 sticky top-0 z-40 border-b px-4 py-3 shadow-xs backdrop-blur-md"
@@ -30,20 +30,9 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
           >Svatbinfo</span
         >
       </div>
-      <div class="flex items-center gap-3">
-        <span class="text-wedding-medium hidden text-xs font-semibold sm:inline"
-          >Hanka & Filip</span
-        >
-        <button
-          id="theme-toggle"
-          class="text-wedding-medium hover:text-wedding-dark hover:bg-wedding-medium/10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-colors"
-          aria-label="Přepnout tmavý/světlý režim"
-          title="Přepnout tmavý/světlý režim"
-        >
-          <span class="dark:hidden">🌙</span>
-          <span class="hidden dark:inline">☀️</span>
-        </button>
-      </div>
+      <span class="text-wedding-medium text-xs font-semibold"
+        >Hanka & Filip</span
+      >
     </div>
   </header>
 
@@ -219,24 +208,12 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
     }
   }
 
-  function initThemeToggle() {
-    const themeBtn = document.getElementById("theme-toggle");
-    const toggleTheme = () => {
-      const isDark = document.documentElement.classList.toggle("dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-    };
-    (window as any).toggleTheme = toggleTheme;
-    themeBtn?.addEventListener("click", toggleTheme);
-  }
-
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      initThemeToggle();
       checkAppLock();
       initTabs();
     });
   } else {
-    initThemeToggle();
     checkAppLock();
     initTabs();
   }
