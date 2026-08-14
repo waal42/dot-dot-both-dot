@@ -287,6 +287,36 @@ class APIRequestHandler(BaseHTTPRequestHandler):
                     return self._send_json({"result": "success", "item": new_prog})
                 return self._send_error("Chybí název programu")
 
+            elif action == 'edit_program_item':
+                prog_id = payload.get('id', '').strip()
+                time_val = payload.get('time', '').strip()
+                title = payload.get('title', '').strip()
+                location = payload.get('location', '').strip()
+                description = payload.get('description', '').strip()
+                icon = payload.get('icon', '').strip()
+
+                if not prog_id or not title:
+                    return self._send_error("Chybí ID nebo název položky")
+
+                program_items = data.get("program_items", [])
+                updated = False
+                for item in program_items:
+                    if item.get("id") == prog_id:
+                        item["time"] = time_val or "Průběžně"
+                        item["title"] = title
+                        item["location"] = location
+                        item["description"] = description
+                        if icon:
+                            item["icon"] = icon
+                        item["updated_at"] = datetime.now(timezone.utc).isoformat()
+                        updated = True
+                        break
+
+                if updated:
+                    write_data(data)
+                    return self._send_json({"result": "success", "program_items": program_items})
+                return self._send_error("Položka nebyla nalezena", 404)
+
             elif action == 'delete_program_item':
                 prog_id = payload.get('id')
                 data["program_items"] = [p for p in data.get("program_items", []) if p.get("id") != prog_id]

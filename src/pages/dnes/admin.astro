@@ -168,16 +168,23 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
         <h3 class="text-wedding-dark mb-1 text-base font-bold">
           🎯 Správa svatebního programu & aktivit
         </h3>
-        <p class="text-wedding-medium mb-4 text-xs">
-          Vkládejte informace o tom, co a kde se dá na svatbě dělat (např.
-          Fotokoutek, Prskavky, Kvíz, Vodní dýmky). Zobrazí se v hlavním
-          programu.
-        </p>
+        <div class="mb-3 flex items-center justify-between">
+          <p class="text-wedding-medium text-xs">
+            Vkládejte informace o tom, co a kde se dá na svatbě dělat (např.
+            Fotokoutek, Prskavky, Kvíz, Vodní dýmky). Zobrazí se v hlavním
+            programu.
+          </p>
+          <span id="prog-form-badge" class="shrink-0 text-emerald-800 dark:text-emerald-300 font-extrabold text-[10px] uppercase bg-emerald-500/10 px-2 py-0.5 rounded">
+            Nová položka
+          </span>
+        </div>
 
         <form
           id="post-program-form"
-          class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/15 space-y-3 rounded-xl border p-4"
+          class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/15 space-y-3 rounded-xl border p-4 transition-all"
         >
+          <input type="hidden" id="prog-edit-id" value="" />
+
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div>
               <label
@@ -235,12 +242,22 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
             />
           </div>
 
-          <button
-            type="submit"
-            class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-4 py-2.5 text-xs font-bold tracking-wider text-white uppercase shadow-sm transition-all hover:bg-emerald-800 active:scale-95"
-          >
-            <span>➕</span> Přidat do programu
-          </button>
+          <div class="flex items-center gap-2">
+            <button
+              type="submit"
+              id="prog-submit-btn"
+              class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-emerald-700 px-4 py-2.5 text-xs font-bold tracking-wider text-white uppercase shadow-sm transition-all hover:bg-emerald-800 active:scale-95"
+            >
+              <span id="prog-submit-icon">➕</span> <span id="prog-submit-label">Přidat do programu</span>
+            </button>
+            <button
+              type="button"
+              id="prog-cancel-btn"
+              class="hidden cursor-pointer items-center gap-1 rounded-lg border border-wedding-medium/30 bg-wedding-light dark:bg-wedding-dark px-3 py-2.5 text-xs font-bold text-wedding-medium hover:text-wedding-dark transition-all active:scale-95"
+            >
+              ✕ Zrušit úpravu
+            </button>
+          </div>
         </form>
 
         <div class="border-wedding-medium/15 mt-5 border-t pt-4">
@@ -361,21 +378,50 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
       .map(
         (item) => `
       <div class="bg-wedding-dark/5 dark:bg-wedding-light/5 border-wedding-medium/15 flex items-center justify-between rounded-xl border p-3">
-        <div>
-          <div class="flex items-center gap-2">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
             <span class="bg-wedding-dark text-wedding-light font-mono font-bold px-1.5 py-0.5 rounded text-[10px]">${item.time || "Průběžně"}</span>
-            <p class="font-bold text-wedding-dark">${item.title}</p>
+            <p class="font-bold text-wedding-dark text-xs">${item.title}</p>
           </div>
           ${item.location ? `<p class="text-wedding-medium text-[11px] font-semibold mt-0.5">📍 ${item.location}</p>` : ""}
-          ${item.description ? `<p class="text-wedding-medium text-[11px] mt-0.5">${item.description}</p>` : ""}
+          ${item.description ? `<p class="text-wedding-medium text-[11px] mt-0.5 leading-relaxed">${item.description}</p>` : ""}
         </div>
-        <button data-id="${item.id}" class="delete-prog-btn bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-2.5 py-1 rounded-lg text-xs transition-colors shrink-0 ml-2">
-          🗑️ Smazat
-        </button>
+        <div class="flex items-center gap-1.5 shrink-0 ml-2">
+          <button
+            data-id="${item.id}"
+            data-time="${item.time || ''}"
+            data-title="${encodeURIComponent(item.title || '')}"
+            data-location="${encodeURIComponent(item.location || '')}"
+            data-description="${encodeURIComponent(item.description || '')}"
+            class="edit-prog-btn bg-wedding-dark/10 hover:bg-wedding-dark hover:text-wedding-light text-wedding-dark font-bold px-2.5 py-1 rounded-lg text-xs transition-all cursor-pointer active:scale-95"
+            aria-label="Upravit položku ${item.title}"
+          >
+            ✏️ Upravit
+          </button>
+          <button
+            data-id="${item.id}"
+            class="delete-prog-btn bg-rose-500/10 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-2.5 py-1 rounded-lg text-xs transition-all cursor-pointer active:scale-95"
+            aria-label="Smazat položku ${item.title}"
+          >
+            🗑️ Smazat
+          </button>
+        </div>
       </div>
     `,
       )
       .join("");
+
+    document.querySelectorAll(".edit-prog-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const target = e.currentTarget as HTMLButtonElement;
+        const id = target.getAttribute("data-id") || "";
+        const time = target.getAttribute("data-time") || "";
+        const title = decodeURIComponent(target.getAttribute("data-title") || "");
+        const location = decodeURIComponent(target.getAttribute("data-location") || "");
+        const description = decodeURIComponent(target.getAttribute("data-description") || "");
+        startEditProgramItem({ id, time, title, location, description });
+      });
+    });
 
     document.querySelectorAll(".delete-prog-btn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
@@ -385,6 +431,63 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
         if (id) deleteProgramItem(id);
       });
     });
+  }
+
+  function startEditProgramItem(item: { id: string; time: string; title: string; location: string; description: string }) {
+    const editIdInput = document.getElementById("prog-edit-id") as HTMLInputElement;
+    const timeInput = document.getElementById("prog-time") as HTMLInputElement;
+    const titleInput = document.getElementById("prog-title") as HTMLInputElement;
+    const locationInput = document.getElementById("prog-location") as HTMLInputElement;
+    const descInput = document.getElementById("prog-description") as HTMLInputElement;
+
+    if (editIdInput) editIdInput.value = item.id;
+    if (timeInput) timeInput.value = item.time === "Průběžně" ? "" : item.time;
+    if (titleInput) titleInput.value = item.title;
+    if (locationInput) locationInput.value = item.location;
+    if (descInput) descInput.value = item.description;
+
+    const label = document.getElementById("prog-submit-label");
+    const icon = document.getElementById("prog-submit-icon");
+    const badge = document.getElementById("prog-form-badge");
+    const cancelBtn = document.getElementById("prog-cancel-btn");
+
+    if (label) label.textContent = "Uložit změny";
+    if (icon) icon.textContent = "💾";
+    if (badge) {
+      badge.textContent = "Úprava položky";
+      badge.className = "shrink-0 text-amber-800 dark:text-amber-300 font-extrabold text-[10px] uppercase bg-amber-500/10 px-2 py-0.5 rounded";
+    }
+    cancelBtn?.classList.remove("hidden");
+
+    document.getElementById("post-program-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    titleInput?.focus();
+  }
+
+  function resetProgramForm() {
+    const editIdInput = document.getElementById("prog-edit-id") as HTMLInputElement;
+    const timeInput = document.getElementById("prog-time") as HTMLInputElement;
+    const titleInput = document.getElementById("prog-title") as HTMLInputElement;
+    const locationInput = document.getElementById("prog-location") as HTMLInputElement;
+    const descInput = document.getElementById("prog-description") as HTMLInputElement;
+
+    if (editIdInput) editIdInput.value = "";
+    if (timeInput) timeInput.value = "";
+    if (titleInput) titleInput.value = "";
+    if (locationInput) locationInput.value = "";
+    if (descInput) descInput.value = "";
+
+    const label = document.getElementById("prog-submit-label");
+    const icon = document.getElementById("prog-submit-icon");
+    const badge = document.getElementById("prog-form-badge");
+    const cancelBtn = document.getElementById("prog-cancel-btn");
+
+    if (label) label.textContent = "Přidat do programu";
+    if (icon) icon.textContent = "➕";
+    if (badge) {
+      badge.textContent = "Nová položka";
+      badge.className = "shrink-0 text-emerald-800 dark:text-emerald-300 font-extrabold text-[10px] uppercase bg-emerald-500/10 px-2 py-0.5 rounded";
+    }
+    cancelBtn?.classList.add("hidden");
   }
 
   async function deleteProgramItem(id: string) {
@@ -508,11 +611,14 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
         }
       });
 
-    // Post Program Item Form Submit
+    // Post Program Item Form Submit (Add or Edit)
     document
       .getElementById("post-program-form")
       ?.addEventListener("submit", async (e) => {
         e.preventDefault();
+        const editId = (
+          document.getElementById("prog-edit-id") as HTMLInputElement
+        ).value.trim();
         const timeInput = (
           document.getElementById("prog-time") as HTMLInputElement
         ).value;
@@ -528,6 +634,16 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
 
         if (!titleInput.trim()) return;
 
+        const action = editId ? "edit_program_item" : "add_program_item";
+        const payload: Record<string, string> = {
+          action,
+          time: timeInput.trim(),
+          title: titleInput.trim(),
+          location: locationInput.trim(),
+          description: descInput.trim(),
+        };
+        if (editId) payload.id = editId;
+
         try {
           const res = await fetch("/svatba/dnes/api/admin/update", {
             method: "POST",
@@ -535,32 +651,24 @@ const metaTitle = `Správa Dne D | ${wedding?.data.metaTitle || "Hanka & Filip"}
               "Content-Type": "application/json",
               Authorization: `Bearer ${adminToken}`,
             },
-            body: JSON.stringify({
-              action: "add_program_item",
-              time: timeInput.trim(),
-              title: titleInput.trim(),
-              location: locationInput.trim(),
-              description: descInput.trim(),
-            }),
+            body: JSON.stringify(payload),
           });
 
           if (res.ok) {
-            (document.getElementById("prog-title") as HTMLInputElement).value =
-              "";
-            (
-              document.getElementById("prog-location") as HTMLInputElement
-            ).value = "";
-            (
-              document.getElementById("prog-description") as HTMLInputElement
-            ).value = "";
+            resetProgramForm();
             checkAdminAuth();
           } else {
-            alert("Chyba při přidávání položky programu.");
+            alert(editId ? "Chyba při úpravě položky programu." : "Chyba při přidávání položky programu.");
           }
         } catch (err) {
           alert("Chyba při komunikaci s API.");
         }
       });
+
+    // Cancel Edit Button
+    document
+      .getElementById("prog-cancel-btn")
+      ?.addEventListener("click", resetProgramForm);
 
     // Lock Buttons
     document
