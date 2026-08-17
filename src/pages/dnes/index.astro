@@ -37,12 +37,12 @@ const metaTitle = `Živý průvodce dnem D | ${wedding?.data.metaTitle || "Hanka
   </header>
 
   <!-- Locked Teaser (shown when app is time-locked for non-admins) -->
-  <div id="dnes-locked-view" class="">
+  <div id="dnes-locked-view" class="hidden">
     <LockedTeaser />
   </div>
 
   <!-- Unlocked Full Mobile App -->
-  <div id="dnes-app-view" class="mx-auto hidden max-w-xl px-4 pt-4 pb-28">
+  <div id="dnes-app-view" class="mx-auto max-w-xl px-4 pt-4 pb-28">
     <!-- Live Announcement Banner -->
     <LiveBanner />
 

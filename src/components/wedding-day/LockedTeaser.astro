@@ -91,13 +91,19 @@ const { unlockTime = "2026-08-15T13:00:00+02:00" } = Astro.props;
 </div>
 
 <script define:vars={{ unlockTime }}>
+  let countdownInterval;
+
   function updateCountdown() {
     const targetDate = new Date(unlockTime).getTime();
     const now = new Date().getTime();
     const diff = targetDate - now;
 
     if (diff <= 0) {
-      window.location.reload();
+      if (countdownInterval) clearInterval(countdownInterval);
+      const lockedView = document.getElementById("dnes-locked-view");
+      const appView = document.getElementById("dnes-app-view");
+      lockedView?.classList.add("hidden");
+      appView?.classList.remove("hidden");
       return;
     }
 
@@ -106,21 +112,17 @@ const { unlockTime = "2026-08-15T13:00:00+02:00" } = Astro.props;
     const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-    document.getElementById("cd-days").textContent = String(days);
-    document.getElementById("cd-hours").textContent = String(hours).padStart(
-      2,
-      "0",
-    );
-    document.getElementById("cd-mins").textContent = String(mins).padStart(
-      2,
-      "0",
-    );
-    document.getElementById("cd-secs").textContent = String(secs).padStart(
-      2,
-      "0",
-    );
+    const daysEl = document.getElementById("cd-days");
+    const hoursEl = document.getElementById("cd-hours");
+    const minsEl = document.getElementById("cd-mins");
+    const secsEl = document.getElementById("cd-secs");
+
+    if (daysEl) daysEl.textContent = String(days);
+    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
+    if (minsEl) minsEl.textContent = String(mins).padStart(2, "0");
+    if (secsEl) secsEl.textContent = String(secs).padStart(2, "0");
   }
 
-  setInterval(updateCountdown, 1000);
+  countdownInterval = setInterval(updateCountdown, 1000);
   updateCountdown();
 </script>
